@@ -1,7 +1,11 @@
 # *Goden Entertainment APS* 
 ## Project Manager Application
 
-> Vores [Github Link][githublink]
+### Links
+* Vores [Github Link][githublink]
+* Eksempel link
+* endnu et
+* osv
 
 
 ## Introduktion
@@ -17,7 +21,7 @@ I dette repository har vi til opgave at udføre et program der har til formål a
 ## Teknologier 
 
 
-## Opretter af produktet
+## Opretterer af produktet
 Denne projekt er lavet af følgende personer:
 * [Marco][marcoLink]
 * [Yacqub][yacLink]
