@@ -1,6 +1,5 @@
 # *Goden Entertainment APS* 
 ### Project Manager Application
-### _August, Yacqub, Rune og Marco_.
 
 > Vores [Github Link][githublink]
 
