@@ -24,6 +24,7 @@ Denne projekt er lavet af følgende personer:
 * [Yacqub][yacLink]
 * [Rune][runeLink]
 * [August][augustLink]
+> Link til [contributing fil][conLink]
 
 
 ## To Do List - README.md fil.
@@ -47,3 +48,4 @@ Denne projekt er lavet af følgende personer:
 [yacLink]: https://github.com/yacqubjad
 [augustLink]: https://github.com/lornst
 [marcoLink]: https://github.com/mstor332
+[conLink]: https://github.com/Goden-Entertainment/ProjectManager/blob/main/CONTRIBUTING.md
