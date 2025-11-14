@@ -1,5 +1,5 @@
 # *Goden Entertainment APS* 
-### Project Manager Application
+## Project Manager Application
 
 > Vores [Github Link][githublink]
 
