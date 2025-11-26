@@ -2,10 +2,14 @@ package org.example.projectmanager.controller;
 
 import jakarta.websocket.Session;
 import org.example.projectmanager.model.User;
+import org.example.projectmanager.model.devType;
+import org.example.projectmanager.model.userType;
 import org.example.projectmanager.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -27,6 +31,25 @@ public class UserController {
         model.addAttribute("userList", userList);
         return "adminProfile";
     }
+
+    @GetMapping("/addNewUser")
+    public String addNewUser(Session session, Model model) {
+        User user = new User();
+        model.addAttribute("userType", userType.values());
+        model.addAttribute("devType", devType.values());
+        model.addAttribute("newUser", user);
+
+        return "addNewUserForm";
+    }
+
+    @PostMapping("/addNewUser")
+    public String createUser(@ModelAttribute User user) {
+        userService.createUser(user);
+        return "redirect:/profile";
+    }
 }
+
+
+
 
 

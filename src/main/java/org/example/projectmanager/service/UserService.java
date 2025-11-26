@@ -11,6 +11,11 @@ public class UserService {
 
     public List<User> getUsers(){
         return  userRepository.getUsers();
-
     }
+
+    public User createUser(User user){
+       return userRepository.createUser(user);
+    }
+
 }
+
