@@ -5,6 +5,20 @@
     <title>Title</title>
 </head>
 <body>
-
+    <h1>
+        Admin profile
+    </h1>
+    <h3>Active users</h3>
+<!--    Div felt til gruppering af flere user felter-->
+    <div>
+<!--        Div felt til gruppering af user felt-->
+        <div th:each="user : ${userList}">
+            <p th:text="${user.getUsername()}">Name</p>
+            <a th:href="@{user/editUser/{userId}(userId=${user.getId()})}"><button>edit</button></a>
+            <a th:href="@{user/deleteUser/{userId}(userId=${user.getId()})}"><button>delete</button></a>
+        </div>
+    </div>
+    <a href=""><button>Cancel</button></a>
+    <a href=""><button>Add user</button></a>
 </body>
 </html>
