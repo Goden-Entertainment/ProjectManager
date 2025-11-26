@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <h1>
+    Add User
+  </h1>
+  <!--    Div felt til formen-->
+  <div>
+    <form th:action="@{/user/addNewUser}" th:object="${newUser}" method="post">
+      <p>Email</p>
+      <input type="email" th:field="*{email}" required>
+
+      <p>Username</p>
+      <input type="text" th:field="*{username}" required>
+
+      <p>Password</p>
+      <input type="password" th:field="*{password}" required>
+
+      <p>User type</p>
+      <select th:field="*{userType}" required>
+        <option value="" disabled selected>Select user type</option>
+        <option th:each="type : ${userTypes}"
+                th:value="${type}"
+                th:text="${type}">
+        </option>
+      </select>
+
+      <p>Developer type</p>
+      <select th:field="*{devType}">
+        <option value="" disabled selected>Select developer type</option>
+        <option th:each="type : ${devTypes}"
+                th:value="${type}"
+                th:text="${type}">
+        </option>
+      </select>
+
+      <br><br>
+      <button type="submit">Add user</button>
+      <a href="/user/profile"><button type="button">Cancel</button></a>
+    </form>
+  </div>
+</body>
+</html>
