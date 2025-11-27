@@ -21,5 +21,9 @@ public class UserService {
        return userRepository.createUser(user);
     }
 
+    public void editUser(User user){
+        userRepository.editUser(user);
+    }
+
 }
 

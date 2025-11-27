@@ -43,4 +43,15 @@ public class UserRepository {
                 );
         return user;
     }
+    public void editUser(User user){
+        String sqlEdit = "UPDATE USER SET userName = ?, userEmail = ?, userPassword = ?, userType = ?, devType = ?, workTime = ? WHERE user_id = ?";
+        jdbcTemplate.query(sqlEdit, (rs, rowNum) ->
+                user.getUsername(),
+                user.getPassword(),
+                user.getEmail(),
+                user.getUserType().name(),
+                user.getDevType().name(),
+                user.getWorkTime()
+        );
+    }
 }
