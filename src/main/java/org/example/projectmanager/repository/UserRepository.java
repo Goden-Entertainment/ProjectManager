@@ -24,8 +24,8 @@ public class UserRepository {
                         rs.getString("userName"),
                         rs.getString("userPassword"),
                         rs.getString("userEmail"),
-                        userType.valueOf(rs.getString("userType")),
-                        devType.valueOf(rs.getString("devType")),
+                        rs.getString("userType") != null ? userType.valueOf(rs.getString("userType")) : null,
+                        rs.getString("devType") != null ? devType.valueOf(rs.getString("devType")) : null,
                         rs.getInt("workTime")
 
                 ));

@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public String profile(HttpSession session, Model model) {
+    public String profile(Model model) {
         List<User> userList = userService.getUsers();
         model.addAttribute("userList", userList);
         return "adminProfile";

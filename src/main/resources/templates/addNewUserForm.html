@@ -38,6 +38,9 @@
         </option>
       </select>
 
+      <p>Worktime per day</p>
+      <input type="number" th:field="*{workTime}" min="0" max="24">
+
       <br><br>
       <button type="submit">Add user</button>
       <a href="/user/profile"><button type="button">Cancel</button></a>
