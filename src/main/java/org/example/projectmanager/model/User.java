@@ -50,6 +50,7 @@ public class User {
         return devType;
     }
     public void setDevType(devType devType) {
+        this.devType = devType;
     }
     public Enum getUserType() {
         return userType;

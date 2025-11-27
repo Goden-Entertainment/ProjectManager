@@ -37,13 +37,10 @@ public class UserRepository {
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
-                user.getUserType(),
-                user.getDevType(),
+                user.getUserType().name(),
+                user.getDevType().name(),
                 user.getWorkTime()
                 );
         return user;
     }
-
-
-
 }
