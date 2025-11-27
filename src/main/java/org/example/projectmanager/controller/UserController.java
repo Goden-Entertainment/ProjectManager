@@ -1,6 +1,6 @@
 package org.example.projectmanager.controller;
 
-import jakarta.websocket.Session;
+import jakarta.servlet.http.HttpSession;
 import org.example.projectmanager.model.User;
 import org.example.projectmanager.model.devType;
 import org.example.projectmanager.model.userType;
@@ -23,20 +23,21 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+
     }
 
     @GetMapping("/profile")
-    public String profile(Session session, Model model) {
+    public String profile(HttpSession session, Model model) {
         List<User> userList = userService.getUsers();
         model.addAttribute("userList", userList);
         return "adminProfile";
     }
 
     @GetMapping("/addNewUser")
-    public String addNewUser(Session session, Model model) {
+    public String addNewUser(HttpSession session, Model model) {
         User user = new User();
-        model.addAttribute("userType", userType.values());
-        model.addAttribute("devType", devType.values());
+        model.addAttribute("userTypeEnums", userType.values());
+        model.addAttribute("devTypeEnums", devType.values());
         model.addAttribute("newUser", user);
 
         return "addNewUserForm";
