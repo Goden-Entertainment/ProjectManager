@@ -37,8 +37,8 @@ public class UserRepository {
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
-                user.getUserType().name(),
-                user.getDevType().name(),
+                user.getUserType() != null ? user.getUserType().name() : null,
+                user.getDevType() != null ? user.getDevType().name() : null,
                 user.getWorkTime()
                 );
         return user;
