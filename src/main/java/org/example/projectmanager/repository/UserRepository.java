@@ -11,7 +11,11 @@ import java.util.List;
 @Repository
 public class UserRepository {
     JdbcTemplate jdbcTemplate;
-    
+
+    public UserRepository(JdbcTemplate jdbcTemplate){
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     public List<User> getUsers() {
         String sql = "SELECT * FROM USER";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
