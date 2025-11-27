@@ -4,9 +4,11 @@ import org.example.projectmanager.model.User;
 import org.example.projectmanager.model.devType;
 import org.example.projectmanager.model.userType;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class UserRepository {
     JdbcTemplate jdbcTemplate;
     
