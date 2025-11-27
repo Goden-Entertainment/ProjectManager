@@ -20,10 +20,10 @@ public class UserRepository {
         String sql = "SELECT * FROM USER";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                 new User(
-                        rs.getInt("id"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("email"),
+                        rs.getInt("user_id"),
+                        rs.getString("userName"),
+                        rs.getString("userPassword"),
+                        rs.getString("userEmail"),
                         userType.valueOf(rs.getString("userType")),
                         devType.valueOf(rs.getString("devType")),
                         rs.getInt("workTime")
@@ -32,7 +32,7 @@ public class UserRepository {
     }
 
     public User createUser(User user){
-        String sql = "INSERT INTO USER (username, password, email, userType, devType, workTime) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO USER (userName, userPassword, userEmail, userType, devType, workTime) VALUES (?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,
                 user.getUsername(),
                 user.getPassword(),

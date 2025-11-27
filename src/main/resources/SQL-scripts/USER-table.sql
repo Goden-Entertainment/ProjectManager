@@ -3,11 +3,11 @@ CREATE TABLE IF NOT EXISTS USER (
     userName VARCHAR(255) UNIQUE NOT NULL,
     userEmail VARCHAR(255) UNIQUE,
     userPassword VARCHAR(255) NOT NULL,
-    userRole ENUM('ADMIN', 'PROJECTMANAGER', 'DEV') NOT NULL DEFAULT 'DEV',
+    userType ENUM('ADMIN', 'PROJECTMANAGER', 'DEV') NOT NULL DEFAULT 'DEV',
     devType ENUM('FRONTEND', 'BACKEND', 'FULLSTACK'),
     workTime INT
 );
 
-INSERT INTO USER (userName, userPassword, userRole)
+INSERT INTO USER (userName, userPassword, userType)
 VALUES ('ADMIN', 'admin123', 'ADMIN')
 ON DUPLICATE KEY UPDATE userName = userName;
