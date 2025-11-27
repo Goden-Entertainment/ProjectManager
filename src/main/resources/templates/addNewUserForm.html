@@ -23,7 +23,7 @@
       <p>User type</p>
       <select th:field="*{userType}" required>
         <option value="" disabled selected>Select user type</option>
-        <option th:each="type : ${userTypes}"
+        <option th:each="type : ${userTypeEnums}"
                 th:value="${type}"
                 th:text="${type}">
         </option>
@@ -32,7 +32,7 @@
       <p>Developer type</p>
       <select th:field="*{devType}">
         <option value="" disabled selected>Select developer type</option>
-        <option th:each="type : ${devTypes}"
+        <option th:each="type : ${devTypeEnums}"
                 th:value="${type}"
                 th:text="${type}">
         </option>
