@@ -43,4 +43,9 @@ public class UserRepository {
                 );
         return user;
     }
+
+    public void deleteUser(int userId) {
+        String sql = "delete from user where user_id = ?";
+        jdbcTemplate.update(sql, userId);
+    }
 }

@@ -7,10 +7,7 @@ import org.example.projectmanager.model.userType;
 import org.example.projectmanager.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -46,6 +43,12 @@ public class UserController {
     @PostMapping("/addNewUser")
     public String createUser(@ModelAttribute User user) {
         userService.createUser(user);
+        return "redirect:/user/profile";
+    }
+
+    @GetMapping("/deleteUser/{userId}")
+    public String deleteUser(@PathVariable int userId){
+        userService.deleteUser(userId);
         return "redirect:/user/profile";
     }
 }

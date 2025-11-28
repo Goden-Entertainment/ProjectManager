@@ -14,8 +14,8 @@
 <!--        Div felt til gruppering af user felt-->
         <div th:each="user : ${userList}">
             <p th:text="${user.getUsername()}">Name</p>
-            <a th:href="@{user/editUser/{userId}(userId=${user.getUserId()})}"><button>edit</button></a>
-            <a th:href="@{user/deleteUser/{userId}(userId=${user.getUserId()})}"><button>delete</button></a>
+            <a th:href="@{editUser/{userId}(userId=${user.getUserId()})}"><button>edit</button></a>
+            <a th:href="@{deleteUser/{userId}(userId=${user.getUserId()})}"><button>delete</button></a>
         </div>
     </div>
     <a th:href="@{/}"><button>Cancel</button></a>
