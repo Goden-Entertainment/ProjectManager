@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS USER (
 CREATE TABLE IF NOT EXISTS PROJECT (
     project_id INT AUTO_INCREMENT PRIMARY KEY,
     projectName VARCHAR(255) UNIQUE NOT NULL,
-    description VARCHAR(255),
+    projectDescription VARCHAR(255),
     estimatedTime INT,
     actualTime INT
 );
