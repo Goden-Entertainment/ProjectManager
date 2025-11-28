@@ -9,5 +9,5 @@ CREATE TABLE IF NOT EXISTS USER (
 );
 
 INSERT INTO USER (userName, userPassword, userType)
-VALUES ('ADMIN', 'admin123', 'ADMIN')
-ON DUPLICATE KEY UPDATE userName = userName;
+SELECT 'ADMIN', 'admin123', 'ADMIN'
+WHERE NOT EXISTS (SELECT 1 FROM USER WHERE userName = 'ADMIN');

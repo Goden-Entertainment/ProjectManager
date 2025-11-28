@@ -37,8 +37,8 @@ public class UserRepository {
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
-                user.getUserType().name(),
-                user.getDevType().name(),
+                user.getUserType() != null ? user.getUserType().name() : null,
+                user.getDevType() != null ? user.getDevType().name() : null,
                 user.getWorkTime()
                 );
         return user;
@@ -74,5 +74,10 @@ public class UserRepository {
                         rs.getString("devType") != null ? devType.valueOf(rs.getString("devType")) : null,
                         rs.getInt("workTime")
                 ));
+    }
+
+    public void deleteUser(int userId) {
+        String sql = "delete from user where user_id = ?";
+        jdbcTemplate.update(sql, userId);
     }
 }

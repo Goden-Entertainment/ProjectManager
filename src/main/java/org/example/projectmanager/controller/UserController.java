@@ -62,6 +62,12 @@ public class UserController {
         userService.editUser(user);
         return "redirect:/user/profile";
     }
+
+    @GetMapping("/deleteUser/{userId}")
+    public String deleteUser(@PathVariable int userId){
+        userService.deleteUser(userId);
+        return "redirect:/user/profile";
+    }
 }
 
 

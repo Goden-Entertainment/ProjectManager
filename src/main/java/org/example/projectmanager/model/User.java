@@ -18,9 +18,7 @@ public class User {
         this.devType = devType;
         this.workTime = workTime;
     }
-    public User(){
-
-    }
+    public User(){}
 
 
     public String getUsername() {
