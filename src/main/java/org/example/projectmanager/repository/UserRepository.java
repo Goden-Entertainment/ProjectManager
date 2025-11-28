@@ -3,16 +3,18 @@ package org.example.projectmanager.repository;
 import org.example.projectmanager.model.User;
 import org.example.projectmanager.model.devType;
 import org.example.projectmanager.model.userType;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class UserRepository {
     JdbcTemplate jdbcTemplate;
 
-    public UserRepository(JdbcTemplate jdbcTemplate){
+    public UserRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -31,7 +33,7 @@ public class UserRepository {
                 ));
     }
 
-    public User createUser(User user){
+    public User createUser(User user) {
         String sql = "INSERT INTO USER (userName, userPassword, userEmail, userType, devType, workTime) VALUES (?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,
                 user.getUsername(),
@@ -40,11 +42,11 @@ public class UserRepository {
                 user.getUserType() != null ? user.getUserType().name() : null,
                 user.getDevType() != null ? user.getDevType().name() : null,
                 user.getWorkTime()
-                );
+        );
         return user;
     }
 
-    public void editUser(User user){
+    public void editUser(User user) {
         String sqlEdit = "UPDATE USER SET userName = ?, userEmail = ?, userPassword = ?, userType = ?, devType = ?, workTime = ? WHERE user_id = ?";
 
         jdbcTemplate.update(
@@ -61,7 +63,7 @@ public class UserRepository {
 
 
     //Henter enkel bruger fra databasen, *Husk at skrive det samme rækkefølge som dette*
-    public User findUser(int userId){
+    public User findUser(int userId) {
         String sqlFindUser = "SELECT * FROM USER WHERE user_id = ?";
 
         return jdbcTemplate.queryForObject(sqlFindUser, new Object[]{userId}, (rs, rowNum) ->
@@ -77,11 +79,65 @@ public class UserRepository {
     }
 
 
-
-    public int deleteUser(int user_id){
+    public int deleteUser(int user_id) {
         String sql = "DELETE FROM user where user_id = ?";
 
         return jdbcTemplate.update(sql, user_id);
 
     }
+
+//    public User findUser(String username, String password, int userId) {
+//        String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
+//
+//        try {
+//            return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+//                User user = new User();
+//                user.setUserId(rs.getInt("id"));
+//                user.setUsername(rs.getString("username"));
+//                user.setPassword(rs.getString("password"));
+//                // Tilføj flere felter efter behov
+//                return user;
+//            }, username, password);
+//        } catch (EmptyResultDataAccessException e) {
+//            return null;
+//        }
+//    }
+
+
+    public User findUser(String username) {
+
+        String sql = "SELECT * FROM user WHERE username = ?";
+
+        try{
+            return jdbcTemplate.queryForObject(sql, (rs, rowNum) ->
+                    new User(
+                            rs.getInt("user_id"),
+                            rs.getString("userName"),
+                            rs.getString("userPassword"),
+                            rs.getString("userEmail"),
+                            rs.getString("userType") != null ? userType.valueOf(rs.getString("userType")) : null,
+                            rs.getString("devType") != null ? devType.valueOf(rs.getString("devType")) : null,
+                            rs.getInt("workTime")
+
+                    ),
+                    username
+            );
+
+        } catch (org.springframework.dao.EmptyResultDataAccessException e) {
+            // Ingen bruger fundet returner null
+            return null;
+        }
+
+
+//        List<User> users = jdbcTemplate.queryForObject(sql, new Object[]{username}, (rs, rowNum) ->
+//
+//
+//        for (User user : users) {
+//            if (user.getUsername().equals(username))
+//
+//                return user;
+//        }
+//        return null;
+    }
+
 }

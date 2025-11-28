@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @GetMapping("/editUser/{userId}")
-    public String editUser(@PathVariable int userId, Model model){
+    public String editUser(@PathVariable int userId, Model model) {
         User user = userService.findUser(userId);
         model.addAttribute("user", user);
         model.addAttribute("userTypeEnums", userType.values());
@@ -58,16 +58,37 @@ public class UserController {
     }
 
     @PostMapping("/editUser")
-    public String updateUser(@ModelAttribute User user){
+    public String updateUser(@ModelAttribute User user) {
         userService.editUser(user);
         return "redirect:/user/profile";
     }
 
     @GetMapping("/deleteUser/{userId}")
-    public String deleteUser(@PathVariable int userId){
+    public String deleteUser(@PathVariable int userId) {
         userService.deleteUser(userId);
         return "redirect:/user/profile";
     }
+
+    @GetMapping("login")
+    public String showLogin(){
+
+        return "login";
+    }
+
+    @PostMapping("login")
+    public String login(@RequestParam("username") String username,
+                        @RequestParam("password") String password,
+                        HttpSession session,
+                        Model model
+    ) {
+        User user = userService.login(username, password);
+        if (user != null) {
+            session.setAttribute("user", user);
+            return "redirect:/user/profile";
+        }
+        return "errorpage";
+    }
+
 }
 
 

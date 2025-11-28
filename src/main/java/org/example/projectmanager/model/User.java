@@ -1,5 +1,6 @@
 package org.example.projectmanager.model;
 
+
 public class User {
     int userId;
     String username;
@@ -19,6 +20,8 @@ public class User {
         this.workTime = workTime;
     }
     public User(){}
+
+
 
 
     public String getUsername() {
