@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add new project</title>
+</head>
+<body>
+    <h1>Add Project</h1>
+
+    <div>
+        <form th:action="@{/project/add}" th:object="${newProject}" method="post">
+            <p>Project Name</p>
+            <input type="text" th:field="*{name}" required>
+
+            <p>Description</p>
+            <textarea th:field="*{description}" rows="4"></textarea>
+
+            <p>Status</p>
+            <input type="text" th:field="*{status}">
+
+            <p>Priority</p>
+            <input type="text" th:field="*{priority}">
+
+            <p>Estimated Time (hours)</p>
+            <input type="number" th:field="*{estimatedTime}" min="0">
+
+            <p>Actual Time (hours)</p>
+            <input type="number" th:field="*{actualTime}" min="0">
+
+            <p>Start Date</p>
+            <input type="date" th:field="*{startDate}">
+
+            <p>End Date</p>
+            <input type="date" th:field="*{endDate}">
+
+            <br><br>
+            <button type="submit">Add Project</button>
+            <a href="/project/list"><button type="button">Cancel</button></a>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Projects</title>
+</head>
+<body>
+    <h1>Projects</h1>
+
+    <!-- Tabel med projekter -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th></th> <!-- Tom kolonne - række-nummer -->
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Estimated time</th>
+                <th>Time used</th>
+                <th>Priority</th>
+                <th>Start date</th>
+                <th>End date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="project, iterStat : ${projects}">
+                <td th:text="${iterStat.count}"></td>
+
+                <!-- Title er LINK til subproject liste -->
+                <td>
+                    <a th:href="@{/project/{id}(id=${project.projectId})}"
+                       th:text="${project.name}">Project Name</a>
+                </td>
+
+                <td th:text="${project.description}">Description</td>
+                <td th:text="${project.status}">Status</td>
+                <td th:text="${project.estimatedTime}">0</td>
+                <td th:text="${project.actualTime}">0</td>
+                <td th:text="${project.priority}">Priority</td>
+                <td th:text="${project.startDate}">Start</td>
+                <td th:text="${project.endDate}">End</td>
+
+                <!-- Actions: Edit & Delete -->
+                <td>
+                    <a th:href="@{/project/edit/{id}(id=${project.projectId})}">
+                        <button>Edit</button>
+                    </a>
+                    <a th:href="@{/project/delete/{id}(id=${project.projectId})}">
+                        <button>Delete</button>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <a th:href="@{/project/add}"><button>Add Project</button></a>
+</body>
+</html>

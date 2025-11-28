@@ -1,20 +1,33 @@
 package org.example.projectmanager.model;
 
+import java.time.LocalDate;
+
 public class Project {
 
     int projectId;
     String name;
     String description;
+    String status;
+    String priority;
     int estimatedTime;
     int actualTime;
+    LocalDate startDate;
+    LocalDate endDate;
 
-    public Project(int projectId, String name, String description, int estimatedTime, int actualTime){
+    public Project(int projectId, String name, String description, String status, String priority, int estimatedTime, int actualTime, LocalDate startDate, LocalDate endDate){
         this.projectId = projectId;
         this.name = name;
         this.description = description;
+        this.status = status;
+        this.priority = priority;
         this.estimatedTime = estimatedTime;
         this.actualTime = actualTime;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
+
+    public Project(){}
+
 
 
 
@@ -56,5 +69,37 @@ public class Project {
 
     public void setActualTime(int actualTime) {
         this.actualTime = actualTime;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 }

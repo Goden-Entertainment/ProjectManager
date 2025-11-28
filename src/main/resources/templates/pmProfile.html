@@ -2,11 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Profile</title>
+    <title>Project Manager Profile</title>
 </head>
 <body>
-    <h1>
-        Du er PM
-    </h1>
+    <h1>Project Manager Profile</h1>
+    <h3>Welcome, <span th:text="${session.user.username}">PM Name</span></h3>
+
+    <div>
+        <a th:href="@{/project/myprojects}">
+            <button>Your Projects</button>
+        </a>
+
+        <a href="#">
+            <button>Teams</button>
+        </a>
+    </div>
+
+    <br>
+    <a th:href="@{/user/logout}"><button>Logout</button></a>
 </body>
 </html>

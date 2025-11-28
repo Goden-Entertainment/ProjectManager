@@ -12,10 +12,14 @@ CREATE TABLE IF NOT EXISTS USER (
 
 CREATE TABLE IF NOT EXISTS PROJECT (
     project_id INT AUTO_INCREMENT PRIMARY KEY,
-    projectName VARCHAR(255) UNIQUE NOT NULL,
-    projectDescription VARCHAR(255),
+    projectName VARCHAR(255) NOT NULL,
+    projectDescription TEXT,
+    status VARCHAR(255),
+    priority VARCHAR(255),
     estimatedTime INT,
-    actualTime INT
+    actualTime INT,
+    startDate DATE,
+    endDate DATE
 );
 
 CREATE TABLE IF NOT EXISTS SUBPROJECT (
@@ -25,7 +29,7 @@ CREATE TABLE IF NOT EXISTS SUBPROJECT (
     estimatedTime INT,
     actualTime INT,
     project_id INT NOT NULL,
-    FOREIGN KEY (project_id) REFERENCES PROJECT(project_id)
+    FOREIGN KEY (project_id) REFERENCES PROJECT(project_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS TASK (
@@ -34,7 +38,7 @@ CREATE TABLE IF NOT EXISTS TASK (
     taskDescription VARCHAR(255),
     taskTime INT,
     sub_project_id INT NOT NULL,
-    FOREIGN KEY (sub_project_id) REFERENCES SUBPROJECT (sub_project_id)
+    FOREIGN KEY (sub_project_id) REFERENCES SUBPROJECT (sub_project_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS SUBTASK (
@@ -43,7 +47,7 @@ CREATE TABLE IF NOT EXISTS SUBTASK (
     subTaskDescription VARCHAR(255),
     subTaskTime VARCHAR(255),
     task_id INT NOT NULL,
-    FOREIGN KEY (task_id) REFERENCES TASK (task_id)
+    FOREIGN KEY (task_id) REFERENCES TASK (task_id) ON DELETE CASCADE
 );
 
 -- Junction tabeller.
@@ -54,7 +58,3 @@ CREATE TABLE IF NOT EXISTS USER_PROJECT (
     FOREIGN KEY (user_id) REFERENCES USER (user_id) ON DELETE CASCADE,
     FOREIGN KEY (project_id) REFERENCES PROJECT(project_id) ON DELETE CASCADE
 );
-
-INSERT INTO USER (userName, userPassword, userType)
-SELECT 'ADMIN', 'admin123', 'ADMIN'
-WHERE NOT EXISTS (SELECT 1 FROM USER WHERE userName = 'ADMIN');

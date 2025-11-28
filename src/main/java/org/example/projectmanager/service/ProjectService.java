@@ -14,11 +14,31 @@ public class ProjectService {
         this.projectRepository = projectRepository;
     }
 
-    public Project createProject(Project project){
+    public int createProject(Project project){
         return projectRepository.createProject(project);
     }
 
     public List<Project> getProjects(){
         return projectRepository.getProjects();
+    }
+
+    public Project findProject(int projectId){
+        return projectRepository.findProject(projectId);
+    }
+
+    public void editProject(Project project){
+        projectRepository.editProject(project);
+    }
+
+    public int deleteProject(int projectId){
+        return projectRepository.deleteProject(projectId);
+    }
+
+    public List<Project> getProjectsByUserId(int userId){
+        return projectRepository.getProjectsByUserId(userId);
+    }
+
+    public void assignProjectToUser(int projectId, int userId){
+        projectRepository.assignProjectToUser(projectId, userId);
     }
 }
