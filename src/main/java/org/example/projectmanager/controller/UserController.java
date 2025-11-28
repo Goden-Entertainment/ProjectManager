@@ -25,9 +25,21 @@ public class UserController {
 
     @GetMapping("/profile")
     public String profile(HttpSession session, Model model) {
-        List<User> userList = userService.getUsers();
-        model.addAttribute("userList", userList);
-        return "adminProfile";
+        User user = (User) session.getAttribute("user");
+
+        if(user == null){
+            return "redirect:/user/login";
+        }
+
+        if(user.getUserType().equals(userType.valueOf("ADMIN"))){
+            List<User> userList = userService.getUsers();
+            model.addAttribute("userList", userList);
+            return "adminProfile";
+        } else if (user.getUserType().equals(userType.valueOf("PROJECTMANAGER"))) {
+            return "pmProfile";
+        }
+
+        return "redirect:/user/login";
     }
 
     @GetMapping("/addNewUser")
@@ -69,26 +81,26 @@ public class UserController {
         return "redirect:/user/profile";
     }
 
-    @GetMapping("login")
-    public String showLogin(){
+    @GetMapping("/login")
+    public String login(HttpSession session){
+        if(session.getAttribute("user") != null){
+            return "redirect:/user/profile";
+        }
 
         return "login";
     }
 
-    @PostMapping("login")
-    public String login(@RequestParam("username") String username,
+    @PostMapping("/login")
+    public String authenticateUser(@RequestParam("username") String username,
                         @RequestParam("password") String password,
-                        HttpSession session,
-                        Model model
-    ) {
+                        HttpSession session) {
         User user = userService.login(username, password);
         if (user != null) {
             session.setAttribute("user", user);
             return "redirect:/user/profile";
         }
-        return "errorpage";
+        return "redirect:/user/login";
     }
-
 }
 
 

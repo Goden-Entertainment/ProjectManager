@@ -34,7 +34,7 @@
 
       <p>Developer type</p>
       <select th:field="*{devType}">
-        <option value="" disabled selected>Select developer type</option>
+        <option th:value="${null}" >Select developer type</option>
         <option th:each="type : ${devTypeEnums}"
                 th:value="${type}"
                 th:text="${type}">
