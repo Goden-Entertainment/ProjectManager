@@ -25,5 +25,9 @@ public class UserService {
         userRepository.editUser(user);
     }
 
+    public User findUser(int userId){
+        return userRepository.findUser(userId);
+    }
+
 }
 

@@ -43,15 +43,36 @@ public class UserRepository {
                 );
         return user;
     }
+
     public void editUser(User user){
         String sqlEdit = "UPDATE USER SET userName = ?, userEmail = ?, userPassword = ?, userType = ?, devType = ?, workTime = ? WHERE user_id = ?";
-        jdbcTemplate.query(sqlEdit, (rs, rowNum) ->
+
+        jdbcTemplate.update(
+                sqlEdit,
                 user.getUsername(),
-                user.getPassword(),
                 user.getEmail(),
-                user.getUserType().name(),
-                user.getDevType().name(),
-                user.getWorkTime()
+                user.getPassword(),
+                user.getUserType() != null ? user.getUserType().name() : null,
+                user.getDevType() != null ? user.getDevType().name() : null,
+                user.getWorkTime(),
+                user.getUserId()
         );
+    }
+
+
+    //Henter enkel bruger fra databasen, *Husk at skrive det samme rækkefølge som dette*
+    public User findUser(int userId){
+        String sqlFindUser = "SELECT * FROM USER WHERE user_id = ?";
+
+        return jdbcTemplate.queryForObject(sqlFindUser, new Object[]{userId}, (rs, rowNum) ->
+                new User(
+                        rs.getInt("user_id"),
+                        rs.getString("userName"),
+                        rs.getString("userPassword"),
+                        rs.getString("userEmail"),
+                        rs.getString("userType") != null ? userType.valueOf(rs.getString("userType")) : null,
+                        rs.getString("devType") != null ? devType.valueOf(rs.getString("devType")) : null,
+                        rs.getInt("workTime")
+                ));
     }
 }

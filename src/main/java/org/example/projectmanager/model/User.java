@@ -10,6 +10,7 @@ public class User {
     int workTime;
 
     public User(int userId, String userName, String password, String email, userType userType, devType devType, int workTime){
+        this.userId = userId;
         this.username = userName;
         this.password = password;
         this.email = email;
