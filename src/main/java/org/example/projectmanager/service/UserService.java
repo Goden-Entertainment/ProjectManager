@@ -1,7 +1,10 @@
 package org.example.projectmanager.service;
 
+import org.example.projectmanager.exceptions.DatabaseOperationException;
+import org.example.projectmanager.exceptions.ProfileNotFoundException;
 import org.example.projectmanager.model.User;
 import org.example.projectmanager.repository.UserRepository;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,8 +32,18 @@ public class UserService {
         return userRepository.findUser(userId);
     }
 
-    public void deleteUser(int userId) {
-        userRepository.deleteUser(userId);
+    public void deleteUser(int user_id){
+
+
+        //fejl håndtering for hvis brugeren ikke eksistere
+        try {
+            int rows = userRepository.deleteUser(user_id);
+            if (rows == 0) throw new ProfileNotFoundException(user_id);
+        } catch (DataAccessException e) {
+            throw new DatabaseOperationException("Failed to delete profile", e);
+        }
     }
+
+
 }
 

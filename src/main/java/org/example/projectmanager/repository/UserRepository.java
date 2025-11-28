@@ -76,8 +76,12 @@ public class UserRepository {
                 ));
     }
 
-    public void deleteUser(int userId) {
-        String sql = "delete from user where user_id = ?";
-        jdbcTemplate.update(sql, userId);
+
+
+    public int deleteUser(int user_id){
+        String sql = "DELETE FROM user where user_id = ?";
+
+        return jdbcTemplate.update(sql, user_id);
+
     }
 }
