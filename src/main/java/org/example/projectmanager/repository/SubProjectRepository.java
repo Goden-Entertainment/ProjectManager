@@ -100,7 +100,7 @@ public class SubProjectRepository {
 
     // Get subprojects for a specific project (via junction table)
     public List<SubProject> getSubProjectsByProjectId(int projectId) {
-        String sql = "SELECT sp.* FROM SUBPROJECT sp " +
+        String sql = "SELECT * FROM SUBPROJECT sp " +
                      "JOIN PROJECT_SUBPROJECT ps ON sp.sub_project_id = ps.sub_project_id " +
                      "WHERE ps.project_id = ?";
         return jdbcTemplate.query(sql, new Object[]{projectId}, (rs, rowNum) ->

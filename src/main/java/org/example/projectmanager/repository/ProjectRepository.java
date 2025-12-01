@@ -87,7 +87,7 @@ public class ProjectRepository {
     }
 
     public List<Project> getProjectsByUserId(int userId){
-        String sql = "SELECT p.* FROM PROJECT p " +
+        String sql = "SELECT * FROM PROJECT p " +
                      "JOIN USER_PROJECT up ON p.project_id = up.project_id " +
                      "WHERE up.user_id = ?";
         return jdbcTemplate.query(sql, new Object[]{userId}, (rs, rowNum) ->

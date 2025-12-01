@@ -104,7 +104,7 @@ public class TaskRepository {
 
     // Get tasks for a specific subproject (via junction table)
     public List<Task> getTasksBySubProjectId(int subProjectId) {
-        String sql = "SELECT t.* FROM TASK t " +
+        String sql = "SELECT * FROM TASK t " +
                      "JOIN SUBPROJECT_TASK st ON t.task_id = st.task_id " +
                      "WHERE st.sub_project_id = ?";
         return jdbcTemplate.query(sql, new Object[]{subProjectId}, (rs, rowNum) ->
