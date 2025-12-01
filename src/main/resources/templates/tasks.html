@@ -36,10 +36,10 @@
                 <td th:text="${task.startDate}">Start Date</td>
                 <td th:text="${task.endDate}">End Date</td>
                 <td>
-                    <a th:href="@{/task/edit/{id}(id=${task.taskId})}">
+                    <a th:href="@{/task/edit/{taskId}(taskId=${task.taskId})}">
                         <button>Edit</button>
                     </a>
-                    <a th:href="@{/task/delete/{id}(id=${task.taskId})}">
+                    <a th:href="@{/task/delete/{taskId}(taskId=${task.taskId})}">
                         <button>Delete</button>
                     </a>
                 </td>
@@ -48,7 +48,7 @@
     </table>
 
     <br>
-    <a th:href="@{/task/add/{id}(id=${subProject.subProjectId})}"><button>Add Task</button></a>
-    <a th:href="@{/subproject/list/{id}(id=${projectId})}"><button>Back to SubProjects</button></a>
+    <a th:href="@{/task/add/{subProjectId}(subProjectId=${subProject.subProjectId})}"><button>Add Task</button></a>
+    <a th:href="@{/subproject/list/{projectId}(projectId=${projectId})}"><button>Back to SubProjects</button></a>
 </body>
 </html>

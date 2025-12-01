@@ -29,7 +29,7 @@
 
                 <!-- Title er LINK til subproject liste -->
                 <td>
-                    <a th:href="@{/subproject/list/{id}(id=${project.projectId})}"
+                    <a th:href="@{/subproject/list/{projectId}(projectId=${project.projectId})}"
                        th:text="${project.name}">Project Name</a>
                 </td>
 
@@ -43,10 +43,10 @@
 
                 <!-- Actions: Edit & Delete -->
                 <td>
-                    <a th:href="@{/project/edit/{id}(id=${project.projectId})}">
+                    <a th:href="@{/project/edit/{projectId}(projectId=${project.projectId})}">
                         <button>Edit</button>
                     </a>
-                    <a th:href="@{/project/delete/{id}(id=${project.projectId})}">
+                    <a th:href="@{/project/delete/{projectId}(projectId=${project.projectId})}">
                         <button>Delete</button>
                     </a>
                 </td>

@@ -26,7 +26,7 @@
             <tr th:each="subProject, iterStat : ${subProjects}">
                 <td th:text="${iterStat.count}"></td>
                 <td>
-                    <a th:href="@{/task/list/{id}(id=${subProject.subProjectId})}"
+                    <a th:href="@{/task/list/{subProjectId}(subProjectId=${subProject.subProjectId})}"
                        th:text="${subProject.name}">SubProject Name</a>
                 </td>
                 <td th:text="${subProject.description}">Description</td>
@@ -37,10 +37,10 @@
                 <td th:text="${subProject.startDate}">Start Date</td>
                 <td th:text="${subProject.endDate}">End Date</td>
                 <td>
-                    <a th:href="@{/subproject/edit/{id}(id=${subProject.subProjectId})}">
+                    <a th:href="@{/subproject/edit/{subProjectId}(subProjectId=${subProject.subProjectId})}">
                         <button>Edit</button>
                     </a>
-                    <a th:href="@{/subproject/delete/{id}(id=${subProject.subProjectId})}">
+                    <a th:href="@{/subproject/delete/{subProjectId}(subProjectId=${subProject.subProjectId})}">
                         <button>Delete</button>
                     </a>
                 </td>
@@ -49,7 +49,7 @@
     </table>
 
     <br>
-    <a th:href="@{/subproject/add/{id}(id=${project.projectId})}"><button>Add SubProject</button></a>
+    <a th:href="@{/subproject/add/{projectId}(projectId=${project.projectId})}"><button>Add SubProject</button></a>
     <a th:href="@{/project/myprojects}"><button>Back to Projects</button></a>
 </body>
 </html>
