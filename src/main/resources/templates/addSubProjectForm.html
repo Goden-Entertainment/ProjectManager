@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add SubProject</title>
+</head>
+<body>
+    <h1>Add SubProject</h1>
+
+    <div>
+        <form th:action="@{/subproject/add}" th:object="${newSubProject}" method="post">
+            <input type="hidden" name="projectId" th:value="${projectId}">
+
+            <p>SubProject Name</p>
+            <input type="text" th:field="*{name}" required>
+
+            <p>Description</p>
+            <textarea th:field="*{description}" rows="4" cols="50"></textarea>
+
+            <p>Team</p>
+            <input type="text" th:field="*{team}">
+
+            <p>Status</p>
+            <input type="text" th:field="*{status}">
+
+            <p>Estimated Time (hours)</p>
+            <input type="number" th:field="*{estimatedTime}">
+
+            <p>Actual Time (hours)</p>
+            <input type="number" th:field="*{actualTime}">
+
+            <p>Start Date</p>
+            <input type="date" th:field="*{startDate}">
+
+            <p>End Date</p>
+            <input type="date" th:field="*{endDate}">
+
+            <br><br>
+            <button type="submit">Add SubProject</button>
+            <a th:href="@{/subproject/list/{id}(id=${projectId})}"><button type="button">Cancel</button></a>
+        </form>
+    </div>
+</body>
+</html>

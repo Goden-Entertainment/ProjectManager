@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Task</title>
+</head>
+<body>
+    <h1>Add Task</h1>
+
+    <div>
+        <form th:action="@{/task/add}" th:object="${newTask}" method="post">
+            <input type="hidden" name="subProjectId" th:value="${subProjectId}">
+
+            <p>Task Name</p>
+            <input type="text" th:field="*{name}" required>
+
+            <p>Description</p>
+            <textarea th:field="*{description}" rows="4" cols="50"></textarea>
+
+            <p>Assigned Team</p>
+            <input type="text" th:field="*{assignedTeam}">
+
+            <p>Status</p>
+            <input type="text" th:field="*{status}">
+
+            <p>Estimated Time (hours)</p>
+            <input type="number" th:field="*{estimatedTime}">
+
+            <p>Actual Time (hours)</p>
+            <input type="number" th:field="*{actualTime}">
+
+            <p>Priority</p>
+            <input type="text" th:field="*{priority}">
+
+            <p>Start Date</p>
+            <input type="date" th:field="*{startDate}">
+
+            <p>End Date</p>
+            <input type="date" th:field="*{endDate}">
+
+            <br><br>
+            <button type="submit">Add Task</button>
+            <a th:href="@{/task/list/{id}(id=${subProjectId})}"><button type="button">Cancel</button></a>
+        </form>
+    </div>
+</body>
+</html>

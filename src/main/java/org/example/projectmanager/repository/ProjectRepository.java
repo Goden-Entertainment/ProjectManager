@@ -2,13 +2,9 @@ package org.example.projectmanager.repository;
 
 import org.example.projectmanager.model.Project;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -20,24 +16,21 @@ public class ProjectRepository {
     }
 
     public int createProject(Project project){
-        String sqlCreate = "INSERT INTO PROJECT (projectName, projectDescription, status, priority, estimatedTime, actualTime, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlInsert = "INSERT INTO PROJECT (projectName, projectDescription, status, priority, estimatedTime, actualTime, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(sqlInsert,
+                project.getName(),
+                project.getDescription(),
+                project.getStatus(),
+                project.getPriority(),
+                project.getEstimatedTime(),
+                project.getActualTime(),
+                project.getStartDate() != null ? Date.valueOf(project.getStartDate()) : null,
+                project.getEndDate() != null ? Date.valueOf(project.getEndDate()) : null
+        );
 
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sqlCreate, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, project.getName());
-            ps.setString(2, project.getDescription());
-            ps.setString(3, project.getStatus());
-            ps.setString(4, project.getPriority());
-            ps.setInt(5, project.getEstimatedTime());
-            ps.setInt(6, project.getActualTime());
-            ps.setDate(7, project.getStartDate() != null ? Date.valueOf(project.getStartDate()) : null);
-            ps.setDate(8, project.getEndDate() != null ? Date.valueOf(project.getEndDate()) : null);
-            return ps;
-        }, keyHolder);
-
-        return keyHolder.getKey().intValue();
+        String sqlGetId = "SELECT LAST_INSERT_ID()";
+        return jdbcTemplate.queryForObject(sqlGetId, Integer.class);
     }
 
     public List<Project> getProjects(){
@@ -115,5 +108,4 @@ public class ProjectRepository {
         String sql = "INSERT INTO USER_PROJECT (user_id, project_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, userId, projectId);
     }
-
 }

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks</title>
+</head>
+<body>
+    <h1>Tasks for: <span th:text="${subProject.name}">SubProject Name</span></h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th></th> <!-- Row number -->
+                <th>Title</th>
+                <th>Description</th>
+                <th>Assigned Team</th>
+                <th>Status</th>
+                <th>Estimated time</th>
+                <th>Time used</th>
+                <th>Priority</th>
+                <th>Start date</th>
+                <th>End date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="task, iterStat : ${tasks}">
+                <td th:text="${iterStat.count}"></td>
+                <td th:text="${task.name}">Task Name</td>
+                <td th:text="${task.description}">Description</td>
+                <td th:text="${task.assignedTeam}">Team</td>
+                <td th:text="${task.status}">Status</td>
+                <td th:text="${task.estimatedTime}">0</td>
+                <td th:text="${task.actualTime}">0</td>
+                <td th:text="${task.priority}">Priority</td>
+                <td th:text="${task.startDate}">Start Date</td>
+                <td th:text="${task.endDate}">End Date</td>
+                <td>
+                    <a th:href="@{/task/edit/{id}(id=${task.taskId})}">
+                        <button>Edit</button>
+                    </a>
+                    <a th:href="@{/task/delete/{id}(id=${task.taskId})}">
+                        <button>Delete</button>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <a th:href="@{/task/add/{id}(id=${subProject.subProjectId})}"><button>Add Task</button></a>
+    <a th:href="@{/subproject/list/{id}(id=${projectId})}"><button>Back to SubProjects</button></a>
+</body>
+</html>
