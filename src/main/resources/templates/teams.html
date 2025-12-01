@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teams</title>
+</head>
+<body>
+    <h1>Teams</h1>
+
+    <a th:href="@{/team/add}"><button>Add Team</button></a>
+    <br><br>
+
+    <div class="teams-container">
+
+        <div class="team-box" th:each="team : ${teams}">
+            <h2 th:text="${team.teamName}">Team Name</h2>
+            <p th:text="${team.teamDescription}">Description</p>
+
+            <h4>Members:</h4>
+            <ul>
+                <li th:each="dev : ${teamMembers.get(team.teamId)}"
+                    th:text="${dev.username}">Dev Name</li>
+
+                <li th:if="${teamMembers.get(team.teamId).isEmpty()}">
+                    No members yet
+                </li>
+            </ul>
+
+            <div>
+                <a th:href="@{/team/edit/{teamId}(teamId=${team.teamId})}">
+                    <button>Edit</button>
+                </a>
+                <a th:href="@{/team/delete/{teamId}(teamId=${team.teamId})}">
+                    <button>Delete</button>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+    <a th:href="@{/user/profile}"><button>Back to Profile</button></a>
+</body>
+</html>

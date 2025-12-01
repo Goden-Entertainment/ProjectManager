@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Team</title>
+</head>
+<body>
+    <h1>Add Team</h1>
+
+    <div>
+        <form th:action="@{/team/add}" th:object="${newTeam}" method="post">
+
+            <p>Team Name</p>
+            <input type="text" th:field="*{teamName}" required>
+
+            <p>Team Description</p>
+            <textarea th:field="*{teamDescription}" rows="4" cols="50"></textarea>
+
+            <p>Select Dev Members (optional):</p>
+            <div th:each="dev : ${allDevs}">
+                <input type="checkbox" name="selectedDevs" th:value="${dev.userId}" th:id="'dev' + ${dev.userId}">
+                <label th:for="'dev' + ${dev.userId}" th:text="${dev.username + ' (' + dev.devType + ')'}">Dev Name</label>
+            </div>
+
+            <br><br>
+            <button type="submit">Add Team</button>
+            <a th:href="@{/team/list}"><button type="button">Cancel</button></a>
+        </form>
+    </div>
+</body>
+</html>
