@@ -16,7 +16,7 @@ public class SubProjectRepository {
     }
 
     public int createSubProject(SubProject subProject) {
-        String sqlInsert = "INSERT INTO SUBPROJECT (subProjectName, subProjectDescription, team, status, estimatedTime, actualTime, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlInsert = "INSERT INTO SUBPROJECT (subProjectName, subProjectDescription, team, status, estimatedTime, actualTime, startDate, endDate, project_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sqlInsert,
                 subProject.getName(),
@@ -26,7 +26,8 @@ public class SubProjectRepository {
                 subProject.getEstimatedTime(),
                 subProject.getActualTime(),
                 subProject.getStartDate() != null ? Date.valueOf(subProject.getStartDate()) : null,
-                subProject.getEndDate() != null ? Date.valueOf(subProject.getEndDate()) : null
+                subProject.getEndDate() != null ? Date.valueOf(subProject.getEndDate()) : null,
+                subProject.getProjectId()
         );
 
         String sqlGetId = "SELECT LAST_INSERT_ID()";
@@ -45,7 +46,8 @@ public class SubProjectRepository {
                         rs.getInt("estimatedTime"),
                         rs.getInt("actualTime"),
                         rs.getDate("startDate") != null ? rs.getDate("startDate").toLocalDate() : null,
-                        rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null
+                        rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null,
+                        rs.getInt("project_id")
                 ));
     }
 
@@ -61,12 +63,13 @@ public class SubProjectRepository {
                         rs.getInt("estimatedTime"),
                         rs.getInt("actualTime"),
                         rs.getDate("startDate") != null ? rs.getDate("startDate").toLocalDate() : null,
-                        rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null
+                        rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null,
+                        rs.getInt("project_id")
                 ));
     }
 
     public void editSubProject(SubProject subProject) {
-        String sqlEdit = "UPDATE SUBPROJECT SET subProjectName = ?, subProjectDescription = ?, team = ?, status = ?, estimatedTime = ?, actualTime = ?, startDate = ?, endDate = ? WHERE sub_project_id = ?";
+        String sqlEdit = "UPDATE SUBPROJECT SET subProjectName = ?, subProjectDescription = ?, team = ?, status = ?, estimatedTime = ?, actualTime = ?, startDate = ?, endDate = ?, project_id = ? WHERE sub_project_id = ?";
         jdbcTemplate.update(
                 sqlEdit,
                 subProject.getName(),
@@ -77,6 +80,7 @@ public class SubProjectRepository {
                 subProject.getActualTime(),
                 subProject.getStartDate() != null ? Date.valueOf(subProject.getStartDate()) : null,
                 subProject.getEndDate() != null ? Date.valueOf(subProject.getEndDate()) : null,
+                subProject.getProjectId(),
                 subProject.getSubProjectId()
         );
     }
@@ -86,23 +90,9 @@ public class SubProjectRepository {
         return jdbcTemplate.update(sql, subProjectId);
     }
 
-    // Junction table method - assign subproject to project
-    public void assignSubProjectToProject(int subProjectId, int projectId) {
-        String sql = "INSERT INTO PROJECT_SUBPROJECT (project_id, sub_project_id) VALUES (?, ?)";
-        jdbcTemplate.update(sql, projectId, subProjectId);
-    }
-
-    // Junction table method - remove subproject from project
-    public void removeSubProjectFromProject(int subProjectId, int projectId) {
-        String sql = "DELETE FROM PROJECT_SUBPROJECT WHERE project_id = ? AND sub_project_id = ?";
-        jdbcTemplate.update(sql, projectId, subProjectId);
-    }
-
-    // Get subprojects for a specific project (via junction table)
+    // Get subprojects for a specific project (simplified - no junction table)
     public List<SubProject> getSubProjectsByProjectId(int projectId) {
-        String sql = "SELECT * FROM SUBPROJECT sp " +
-                     "JOIN PROJECT_SUBPROJECT ps ON sp.sub_project_id = ps.sub_project_id " +
-                     "WHERE ps.project_id = ?";
+        String sql = "SELECT * FROM SUBPROJECT WHERE project_id = ?";
         return jdbcTemplate.query(sql, new Object[]{projectId}, (rs, rowNum) ->
                 new SubProject(
                         rs.getInt("sub_project_id"),
@@ -113,13 +103,14 @@ public class SubProjectRepository {
                         rs.getInt("estimatedTime"),
                         rs.getInt("actualTime"),
                         rs.getDate("startDate") != null ? rs.getDate("startDate").toLocalDate() : null,
-                        rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null
+                        rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null,
+                        rs.getInt("project_id")
                 ));
     }
 
-    // Get projects for a specific subproject (many-to-many reverse lookup)
-    public List<Integer> getProjectIdsBySubProjectId(int subProjectId) {
-        String sql = "SELECT project_id FROM PROJECT_SUBPROJECT WHERE sub_project_id = ?";
-        return jdbcTemplate.queryForList(sql, new Object[]{subProjectId}, Integer.class);
+    // Get project ID for a specific subproject (simplified - direct FK access)
+    public int getProjectIdBySubProjectId(int subProjectId) {
+        String sql = "SELECT project_id FROM SUBPROJECT WHERE sub_project_id = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{subProjectId}, Integer.class);
     }
 }

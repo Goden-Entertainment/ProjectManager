@@ -76,11 +76,9 @@ public class SubProjectController {
             return "redirect:/user/profile";
         }
 
-        // Create subproject first
-        int subProjectId = subProjectService.createSubProject(subProject);
-
-        // Then assign it to the project via junction table
-        subProjectService.assignSubProjectToProject(subProjectId, projectId);
+        // Set FK directly and create subproject (simplified - no junction table)
+        subProject.setProjectId(projectId);
+        subProjectService.createSubProject(subProject);
 
         return "redirect:/subproject/list/" + projectId;
     }
@@ -99,9 +97,8 @@ public class SubProjectController {
 
         SubProject subProject = subProjectService.findSubProject(subProjectId);
 
-        // Get the first project this subproject belongs to (for the redirect)
-        List<Integer> projectIds = subProjectService.getProjectIdsBySubProjectId(subProjectId);
-        int projectId = projectIds.isEmpty() ? 0 : projectIds.get(0);
+        // Get project ID directly from FK (simplified)
+        int projectId = subProjectService.getProjectIdBySubProjectId(subProjectId);
 
         model.addAttribute("subProject", subProject);
         model.addAttribute("projectId", projectId);
@@ -138,9 +135,8 @@ public class SubProjectController {
             return "redirect:/user/profile";
         }
 
-        // Get project ID before deleting (for redirect)
-        List<Integer> projectIds = subProjectService.getProjectIdsBySubProjectId(subProjectId);
-        int projectId = projectIds.isEmpty() ? 0 : projectIds.get(0);
+        // Get project ID before deleting (simplified)
+        int projectId = subProjectService.getProjectIdBySubProjectId(subProjectId);
 
         subProjectService.deleteSubProject(subProjectId);
         return "redirect:/subproject/list/" + projectId;

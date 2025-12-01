@@ -12,10 +12,11 @@ public class SubProject {
     private int actualTime;
     private LocalDate startDate;
     private LocalDate endDate;
+    private int projectId;  // Foreign key to PROJECT
 
     // Full constructor (used by RowMapper)
     public SubProject(int subProjectId, String name, String description, String team, String status,
-                      int estimatedTime, int actualTime, LocalDate startDate, LocalDate endDate) {
+                      int estimatedTime, int actualTime, LocalDate startDate, LocalDate endDate, int projectId) {
         this.subProjectId = subProjectId;
         this.name = name;
         this.description = description;
@@ -25,6 +26,7 @@ public class SubProject {
         this.actualTime = actualTime;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.projectId = projectId;
     }
 
     // Empty constructor (used by forms)
@@ -102,5 +104,13 @@ public class SubProject {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
     }
 }

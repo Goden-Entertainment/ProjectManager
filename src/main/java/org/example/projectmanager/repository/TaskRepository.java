@@ -16,7 +16,7 @@ public class TaskRepository {
     }
 
     public int createTask(Task task) {
-        String sqlInsert = "INSERT INTO TASK (taskName, taskDescription, assignedTeam, status, estimatedTime, actualTime, priority, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlInsert = "INSERT INTO TASK (taskName, taskDescription, assignedTeam, status, estimatedTime, actualTime, priority, startDate, endDate, sub_project_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sqlInsert,
                 task.getName(),
@@ -27,7 +27,8 @@ public class TaskRepository {
                 task.getActualTime(),
                 task.getPriority(),
                 task.getStartDate() != null ? Date.valueOf(task.getStartDate()) : null,
-                task.getEndDate() != null ? Date.valueOf(task.getEndDate()) : null
+                task.getEndDate() != null ? Date.valueOf(task.getEndDate()) : null,
+                task.getSubProjectId()
         );
 
         String sqlGetId = "SELECT LAST_INSERT_ID()";
@@ -47,7 +48,8 @@ public class TaskRepository {
                         rs.getInt("actualTime"),
                         rs.getString("priority"),
                         rs.getDate("startDate") != null ? rs.getDate("startDate").toLocalDate() : null,
-                        rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null
+                        rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null,
+                        rs.getInt("sub_project_id")
                 ));
     }
 
@@ -64,12 +66,13 @@ public class TaskRepository {
                         rs.getInt("actualTime"),
                         rs.getString("priority"),
                         rs.getDate("startDate") != null ? rs.getDate("startDate").toLocalDate() : null,
-                        rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null
+                        rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null,
+                        rs.getInt("sub_project_id")
                 ));
     }
 
     public void editTask(Task task) {
-        String sqlEdit = "UPDATE TASK SET taskName = ?, taskDescription = ?, assignedTeam = ?, status = ?, estimatedTime = ?, actualTime = ?, priority = ?, startDate = ?, endDate = ? WHERE task_id = ?";
+        String sqlEdit = "UPDATE TASK SET taskName = ?, taskDescription = ?, assignedTeam = ?, status = ?, estimatedTime = ?, actualTime = ?, priority = ?, startDate = ?, endDate = ?, sub_project_id = ? WHERE task_id = ?";
         jdbcTemplate.update(
                 sqlEdit,
                 task.getName(),
@@ -81,6 +84,7 @@ public class TaskRepository {
                 task.getPriority(),
                 task.getStartDate() != null ? Date.valueOf(task.getStartDate()) : null,
                 task.getEndDate() != null ? Date.valueOf(task.getEndDate()) : null,
+                task.getSubProjectId(),
                 task.getTaskId()
         );
     }
@@ -90,23 +94,9 @@ public class TaskRepository {
         return jdbcTemplate.update(sql, taskId);
     }
 
-    // Junction table method - assign task to subproject
-    public void assignTaskToSubProject(int taskId, int subProjectId) {
-        String sql = "INSERT INTO SUBPROJECT_TASK (sub_project_id, task_id) VALUES (?, ?)";
-        jdbcTemplate.update(sql, subProjectId, taskId);
-    }
-
-    // Junction table method - remove task from subproject
-    public void removeTaskFromSubProject(int taskId, int subProjectId) {
-        String sql = "DELETE FROM SUBPROJECT_TASK WHERE sub_project_id = ? AND task_id = ?";
-        jdbcTemplate.update(sql, subProjectId, taskId);
-    }
-
-    // Get tasks for a specific subproject (via junction table)
+    // Get tasks for a specific subproject (simplified - no junction table)
     public List<Task> getTasksBySubProjectId(int subProjectId) {
-        String sql = "SELECT * FROM TASK t " +
-                     "JOIN SUBPROJECT_TASK st ON t.task_id = st.task_id " +
-                     "WHERE st.sub_project_id = ?";
+        String sql = "SELECT * FROM TASK WHERE sub_project_id = ?";
         return jdbcTemplate.query(sql, new Object[]{subProjectId}, (rs, rowNum) ->
                 new Task(
                         rs.getInt("task_id"),
@@ -118,13 +108,14 @@ public class TaskRepository {
                         rs.getInt("actualTime"),
                         rs.getString("priority"),
                         rs.getDate("startDate") != null ? rs.getDate("startDate").toLocalDate() : null,
-                        rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null
+                        rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null,
+                        rs.getInt("sub_project_id")
                 ));
     }
 
-    // Get subprojects for a specific task (many-to-many reverse lookup)
-    public List<Integer> getSubProjectIdsByTaskId(int taskId) {
-        String sql = "SELECT sub_project_id FROM SUBPROJECT_TASK WHERE task_id = ?";
-        return jdbcTemplate.queryForList(sql, new Object[]{taskId}, Integer.class);
+    // Get subproject ID for a specific task (simplified - direct FK access)
+    public int getSubProjectIdByTaskId(int taskId) {
+        String sql = "SELECT sub_project_id FROM TASK WHERE task_id = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{taskId}, Integer.class);
     }
 }

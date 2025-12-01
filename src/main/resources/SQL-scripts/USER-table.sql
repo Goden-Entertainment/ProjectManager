@@ -31,7 +31,9 @@ CREATE TABLE IF NOT EXISTS SUBPROJECT (
     estimatedTime INT,
     actualTime INT,
     startDate DATE,
-    endDate DATE
+    endDate DATE,
+    project_id INT NOT NULL,
+    FOREIGN KEY (project_id) REFERENCES PROJECT(project_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS TASK (
@@ -44,7 +46,9 @@ CREATE TABLE IF NOT EXISTS TASK (
     actualTime INT,
     priority VARCHAR(255),
     startDate DATE,
-    endDate DATE
+    endDate DATE,
+    sub_project_id INT NOT NULL,
+    FOREIGN KEY (sub_project_id) REFERENCES SUBPROJECT(sub_project_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS SUBTASK (
@@ -56,6 +60,12 @@ CREATE TABLE IF NOT EXISTS SUBTASK (
     FOREIGN KEY (task_id) REFERENCES TASK (task_id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS TEAM (
+    team_id INT AUTO_INCREMENT PRIMARY KEY,
+    teamName VARCHAR(255) NOT NULL,
+    teamDescription TEXT
+);
+
 -- Junction tabeller.
 CREATE TABLE IF NOT EXISTS USER_PROJECT (
     user_id INT NOT NULL,
@@ -65,18 +75,10 @@ CREATE TABLE IF NOT EXISTS USER_PROJECT (
     FOREIGN KEY (project_id) REFERENCES PROJECT(project_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS PROJECT_SUBPROJECT (
-    project_id INT NOT NULL,
-    sub_project_id INT NOT NULL,
-    PRIMARY KEY (project_id, sub_project_id),
-    FOREIGN KEY (project_id) REFERENCES PROJECT(project_id) ON DELETE CASCADE,
-    FOREIGN KEY (sub_project_id) REFERENCES SUBPROJECT(sub_project_id) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS SUBPROJECT_TASK (
-    sub_project_id INT NOT NULL,
-    task_id INT NOT NULL,
-    PRIMARY KEY (sub_project_id, task_id),
-    FOREIGN KEY (sub_project_id) REFERENCES SUBPROJECT(sub_project_id) ON DELETE CASCADE,
-    FOREIGN KEY (task_id) REFERENCES TASK(task_id) ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS USER_TEAM (
+    user_id INT NOT NULL,
+    team_id INT NOT NULL,
+    PRIMARY KEY (user_id, team_id),
+    FOREIGN KEY (user_id) REFERENCES USER(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (team_id) REFERENCES TEAM(team_id) ON DELETE CASCADE
 );

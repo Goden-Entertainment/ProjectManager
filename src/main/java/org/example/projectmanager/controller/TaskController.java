@@ -40,9 +40,8 @@ public class TaskController {
         SubProject subProject = subProjectService.findSubProject(subProjectId);
         List<Task> tasks = taskService.getTasksBySubProjectId(subProjectId);
 
-        // Get project ID for back button
-        List<Integer> projectIds = subProjectService.getProjectIdsBySubProjectId(subProjectId);
-        int projectId = projectIds.isEmpty() ? 0 : projectIds.get(0);
+        // Get project ID for back button (simplified - no junction table)
+        int projectId = subProjectService.getProjectIdBySubProjectId(subProjectId);
 
         model.addAttribute("subProject", subProject);
         model.addAttribute("tasks", tasks);
@@ -81,11 +80,9 @@ public class TaskController {
             return "redirect:/user/profile";
         }
 
-        // Create task first
-        int taskId = taskService.createTask(task);
-
-        // Then assign it to the subproject via junction table
-        taskService.assignTaskToSubProject(taskId, subProjectId);
+        // Set FK directly and create task (simplified - no junction table)
+        task.setSubProjectId(subProjectId);
+        taskService.createTask(task);
 
         return "redirect:/task/list/" + subProjectId;
     }
@@ -104,9 +101,8 @@ public class TaskController {
 
         Task task = taskService.findTask(taskId);
 
-        // Get the first subproject this task belongs to (for the redirect)
-        List<Integer> subProjectIds = taskService.getSubProjectIdsByTaskId(taskId);
-        int subProjectId = subProjectIds.isEmpty() ? 0 : subProjectIds.get(0);
+        // Get subproject ID directly from FK (simplified)
+        int subProjectId = taskService.getSubProjectIdByTaskId(taskId);
 
         model.addAttribute("task", task);
         model.addAttribute("subProjectId", subProjectId);
@@ -143,9 +139,8 @@ public class TaskController {
             return "redirect:/user/profile";
         }
 
-        // Get subproject ID before deleting (for redirect)
-        List<Integer> subProjectIds = taskService.getSubProjectIdsByTaskId(taskId);
-        int subProjectId = subProjectIds.isEmpty() ? 0 : subProjectIds.get(0);
+        // Get subproject ID before deleting (simplified)
+        int subProjectId = taskService.getSubProjectIdByTaskId(taskId);
 
         taskService.deleteTask(taskId);
         return "redirect:/task/list/" + subProjectId;

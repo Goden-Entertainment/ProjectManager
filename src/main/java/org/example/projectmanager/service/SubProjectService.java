@@ -38,16 +38,7 @@ public class SubProjectService {
         return subProjectRepository.getSubProjectsByProjectId(projectId);
     }
 
-    // Junction table methods
-    public void assignSubProjectToProject(int subProjectId, int projectId) {
-        subProjectRepository.assignSubProjectToProject(subProjectId, projectId);
-    }
-
-    public void removeSubProjectFromProject(int subProjectId, int projectId) {
-        subProjectRepository.removeSubProjectFromProject(subProjectId, projectId);
-    }
-
-    public List<Integer> getProjectIdsBySubProjectId(int subProjectId) {
-        return subProjectRepository.getProjectIdsBySubProjectId(subProjectId);
+    public int getProjectIdBySubProjectId(int subProjectId) {
+        return subProjectRepository.getProjectIdBySubProjectId(subProjectId);
     }
 }

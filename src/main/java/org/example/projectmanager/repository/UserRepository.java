@@ -140,4 +140,19 @@ public class UserRepository {
 //        return null;
     }
 
+    // Get all DEV users (for team assignment)
+    public List<User> getDevUsers() {
+        String sql = "SELECT * FROM USER WHERE userType = 'DEV'";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                new User(
+                        rs.getInt("user_id"),
+                        rs.getString("userName"),
+                        rs.getString("userPassword"),
+                        rs.getString("userEmail"),
+                        userType.valueOf(rs.getString("userType")),
+                        rs.getString("devType") != null ? devType.valueOf(rs.getString("devType")) : null,
+                        rs.getInt("workTime")
+                ));
+    }
+
 }
