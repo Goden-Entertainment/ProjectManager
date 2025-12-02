@@ -1,10 +1,13 @@
 package org.example.projectmanager.controller;
 
 import jakarta.servlet.http.HttpSession;
+import org.example.projectmanager.exceptions.DatabaseOperationException;
+import org.example.projectmanager.exceptions.ProfileNotFoundException;
 import org.example.projectmanager.model.User;
 import org.example.projectmanager.model.devType;
 import org.example.projectmanager.model.userType;
 import org.example.projectmanager.service.UserService;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +30,11 @@ public class UserController {
     public String profile(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
 
-        if(user == null){
+        if (user == null) {
             return "redirect:/user/login";
         }
 
-        if(user.getUserType().equals(userType.valueOf("ADMIN"))){
+        if (user.getUserType().equals(userType.valueOf("ADMIN"))) {
             List<User> userList = userService.getUsers();
             model.addAttribute("userList", userList);
             return "adminProfile";
@@ -82,8 +85,8 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login(HttpSession session){
-        if(session.getAttribute("user") != null){
+    public String login(HttpSession session) {
+        if (session.getAttribute("user") != null) {
             return "redirect:/user/profile";
         }
 
@@ -92,13 +95,25 @@ public class UserController {
 
     @PostMapping("/login")
     public String authenticateUser(@RequestParam("username") String username,
-                        @RequestParam("password") String password,
-                        HttpSession session) {
-        User user = userService.login(username, password);
-        if (user != null) {
-            session.setAttribute("user", user);
-            return "redirect:/user/profile";
+                                   @RequestParam("password") String password,
+                                   HttpSession session) {
+
+        if (username.equals("Admin") && !password.equals("admin123")) {
+            throw new ProfileNotFoundException();
         }
+
+        try {
+            User user = userService.login(username, password);
+
+            if (user != null) {
+                session.setAttribute("user", user);
+                return "redirect:/user/profile";
+            }
+
+        } catch (DataAccessException e) {
+            throw new DatabaseOperationException("Failed to login", e);
+        }
+
         return "redirect:/user/login";
     }
 
