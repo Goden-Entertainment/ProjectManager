@@ -86,23 +86,6 @@ public class UserRepository {
 
     }
 
-//    public User findUser(String username, String password, int userId) {
-//        String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
-//
-//        try {
-//            return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
-//                User user = new User();
-//                user.setUserId(rs.getInt("id"));
-//                user.setUsername(rs.getString("username"));
-//                user.setPassword(rs.getString("password"));
-//                // Tilføj flere felter efter behov
-//                return user;
-//            }, username, password);
-//        } catch (EmptyResultDataAccessException e) {
-//            return null;
-//        }
-//    }
-
 
     public User findUser(String username) {
 
@@ -127,17 +110,6 @@ public class UserRepository {
             // Ingen bruger fundet returner null
             return null;
         }
-
-
-//        List<User> users = jdbcTemplate.queryForObject(sql, new Object[]{username}, (rs, rowNum) ->
-//
-//
-//        for (User user : users) {
-//            if (user.getUsername().equals(username))
-//
-//                return user;
-//        }
-//        return null;
     }
 
     // Get all DEV users (for team assignment)
@@ -154,5 +126,4 @@ public class UserRepository {
                         rs.getInt("workTime")
                 ));
     }
-
 }

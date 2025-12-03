@@ -34,12 +34,13 @@ public class UserService {
 
     public void deleteUser(int user_id){
 
-
         //fejl håndtering for hvis brugeren ikke eksistere
         try {
             int rows = userRepository.deleteUser(user_id);
             if (rows == 0) throw new ProfileNotFoundException(user_id);
-        } catch (DataAccessException e) {
+        }
+
+        catch (DataAccessException e) {
             throw new DatabaseOperationException("Failed to delete profile", e);
         }
     }
