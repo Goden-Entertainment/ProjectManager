@@ -26,9 +26,12 @@
         <tbody>
             <tr th:each="task, iterStat : ${tasks}">
                 <td th:text="${iterStat.count}"></td>
-                <td th:text="${task.name}">Task Name</td>
+                <td>
+                    <a th:href="@{/subtask/list/{taskId}(taskId=${task.taskId})}"
+                        th:text="${task.name}">task Name</a>
+                </td>
                 <td th:text="${task.description}">Description</td>
-                <td th:text="${task.assignedTeam}">Team</td>
+                <td th:text="${taskTeams[task.taskId] ?: 'No Team'}">Team</td>
                 <td th:text="${task.status}">Status</td>
                 <td th:text="${task.estimatedTime}">0</td>
                 <td th:text="${task.actualTime}">0</td>

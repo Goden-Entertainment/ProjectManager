@@ -19,7 +19,14 @@
             <textarea th:field="*{description}" rows="4" cols="50"></textarea>
 
             <p>Assigned Team</p>
-            <input type="text" th:field="*{assignedTeam}">
+            <select th:field="*{teamId}">
+                <option value="0">-- No Team --</option>
+                <option th:each="team : ${teams}"
+                        th:value="${team.teamId}"
+                        th:text="${team.teamName}">
+                    Team Name
+                </option>
+            </select>
 
             <p>Status</p>
             <input type="text" th:field="*{status}">

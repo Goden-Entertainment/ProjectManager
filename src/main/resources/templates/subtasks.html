@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subtasks</title>
+</head>
+<body>
+    <h1>Subtasks for Task: <span th:text="${taskName}">Task Name</span></h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Estimated Time (hours)</th>
+                <th>Assigned Users</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="subtask, iterStat : ${subtasks}">
+                <td th:text="${iterStat.count}"></td>
+                <td th:text="${subtask.subTaskName}">Subtask Name</td>
+                <td th:text="${subtask.subTaskDescription}">Description</td>
+                <td th:text="${subtask.subTaskTime}">0</td>
+                <td>
+                    <span th:each="user, uStat : ${subtaskUsers[subtask.subTaskId]}">
+                        <span th:text="${user.username}">User</span>
+                        <span th:if="${!uStat.last}">, </span>
+                    </span>
+                    <span th:if="${subtaskUsers[subtask.subTaskId].isEmpty()}">No users assigned</span>
+                </td>
+                <td>
+                    <a th:href="@{/subtask/edit/{subTaskId}(subTaskId=${subtask.subTaskId})}">
+                        <button>Edit</button>
+                    </a>
+                    <a th:href="@{/subtask/delete/{subTaskId}(subTaskId=${subtask.subTaskId})}">
+                        <button>Delete</button>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <a th:href="@{/subtask/add/{taskId}(taskId=${taskId})}">
+        <button>Add Subtask</button>
+    </a>
+    <a th:href="@{/task/list/{subProjectId}(subProjectId=${subProjectId})}">
+        <button>Back to Tasks</button>
+    </a>
+</body>
+</html>

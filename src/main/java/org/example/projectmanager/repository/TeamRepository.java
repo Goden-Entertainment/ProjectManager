@@ -11,10 +11,15 @@ import java.util.List;
 public class TeamRepository {
     JdbcTemplate jdbcTemplate;
 
-    public TeamRepository(JdbcTemplate jdbcTemplate){
+    public TeamRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public void assignTeamToTask(int teamId, int taskId) {
+        String sql = "INSERT INTO TEAM_TASK (team_id, task_id) VALUES (?, ?)";
+        jdbcTemplate.update(sql, teamId, taskId);
+
+    }
     // CREATE - Returns generated ID
     public int createTeam(Team team) {
         String sqlInsert = "INSERT INTO TEAM (teamName, teamDescription) VALUES (?, ?)";
@@ -77,6 +82,17 @@ public class TeamRepository {
         jdbcTemplate.update(sql, userId, teamId);
     }
 
+    //Check naming convention for rettelser efter subtask er blevet lavet.
+    public void assignTeamToSubTask(int teamId, int subTaskId) {
+        String sql = "INSERT INTO TEAM_TASK (team_id, subTask_id) VALUES (?, ?)";
+        jdbcTemplate.update(sql, teamId, subTaskId);
+
+    }
+
+    public void assignTeamToSubProject(int teamId, int subProjectId) {
+        String sql = "INSERT INTO SUBPROJECT_TEAM (team_id, task_id) VALUES (?, ?)";
+        jdbcTemplate.update(sql, teamId, subProjectId);
+    }
     // Get users for a specific team (via junction table) - LAZY LOADING
     public List<User> getUsersByTeamId(int teamId) {
         String sql = "SELECT * FROM USER u " +

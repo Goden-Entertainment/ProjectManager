@@ -1,6 +1,7 @@
 package org.example.projectmanager.service;
 
 import org.example.projectmanager.model.Task;
+import org.example.projectmanager.model.Team;
 import org.example.projectmanager.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
@@ -40,5 +41,9 @@ public class TaskService {
 
     public int getSubProjectIdByTaskId(int taskId) {
         return taskRepository.getSubProjectIdByTaskId(taskId);
+    }
+
+    public Team getTeamByTaskId(int taskId) {
+        return taskRepository.getTeamByTaskId(taskId);
     }
 }
