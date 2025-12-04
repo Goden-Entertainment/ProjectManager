@@ -1,27 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Admin profile</title>
+
+    <link rel="stylesheet" href="/css/project-manager.css">
 </head>
-<body>
-    <h1>
-        Admin profile
-    </h1>
-    <h3>Active users</h3>
-<!--    Div felt til gruppering af flere user felter-->
-    <div>
-<!--        Div felt til gruppering af user felt-->
-        <div th:each="user : ${userList}">
-            <p th:text="${user.getUsername()}">Name</p>
-            <a th:href="@{/user/editUser/{userId}(userId=${user.getUserId()})}"><button>edit</button></a>
-            <a th:href="@{/user/deleteUser/{userId}(userId=${user.getUserId()})}"><button>delete</button></a>
+<body class="page page-list">
+
+<!-- Logo -->
+<div class="app-logo">
+    <img src="/img/ProjectManager.png" alt="Project Manager Logo">
+</div>
+
+<!-- Top-right Logout button -->
+<div class="header-actions">
+    <a href="/user/logout" class="btn btn-danger btn-header">Logout</a>
+</div>
+
+<!-- Page title -->
+<h1 class="page-title">
+    <span>Admin</span>
+    <span>Profile</span>
+</h1>
+
+<!-- Main content panel -->
+<div class="content-panel">
+
+    <!-- Panel header with title + Add user button -->
+    <div class="content-panel__header">
+        <div class="content-panel__title">Active users</div>
+
+        <div class="content-panel__actions">
+            <a th:href="@{/user/addNewUser}" class="btn btn-primary">
+                Add user
+            </a>
         </div>
     </div>
-    <a th:href="@{/static}"><button>Cancel</button></a>
-    <a th:href="@{/user/addNewUser}"><button>Add user</button></a>
 
-    <br><br>
-    <a th:href="@{/user/logout}"><button>Logout</button></a>
+    <!-- Users table -->
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th class="text-right">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${userList}">
+            <td th:text="${user.username}">Username</td>
+            <td class="text-right">
+                <a th:href="@{/user/editUser/{userId}(userId=${user.userId})}"
+                   class="btn btn-primary">
+                    Edit
+                </a>
+
+                <a th:href="@{/user/deleteUser/{userId}(userId=${user.userId})}"
+                   class="btn btn-danger">
+                    Delete
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Bottom Cancel button -->
+    <div class="footer-actions mt-20">
+        <a href="/user/logout" class="btn btn-danger">Cancel</a>
+    </div>
+</div>
+
 </body>
 </html>

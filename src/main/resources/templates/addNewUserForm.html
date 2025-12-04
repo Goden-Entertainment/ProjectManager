@@ -1,50 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Add new user</title>
+    <meta charset="UTF-8">
+    <title>Add new user</title>
+
+    <link rel="stylesheet" href="/css/project-manager.css">
 </head>
-<body>
-  <h1>
+<body class="page">
+
+<!-- Logo -->
+<div class="app-logo">
+    <img src="/img/ProjectManager.png" alt="Project Manager Logo">
+</div>
+
+<!-- Top-right Cancel -->
+<div class="header-actions">
+    <a href="/user/profile" class="btn btn-danger btn-header">Cancel</a>
+</div>
+
+<!-- Page title -->
+<h1 class="page-title page-title--small">
     Add User
-  </h1>
-  <!--    Div felt til formen-->
-  <div>
+</h1>
+
+<!-- Form card -->
+<div class="form-card">
+
     <form th:action="@{/user/addNewUser}" th:object="${newUser}" method="post">
-      <p>Email</p>
-      <input type="email" th:field="*{email}" required>
 
-      <p>Username</p>
-      <input type="text" th:field="*{username}" required>
+        <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email"
+                   class="form-control"
+                   th:field="*{email}"
+                   required>
+        </div>
 
-      <p>Password</p>
-      <input type="text" th:field="*{password}" required>
+        <div class="form-group">
+            <label class="form-label">Username</label>
+            <input type="text"
+                   class="form-control"
+                   th:field="*{username}"
+                   required>
+        </div>
 
-      <p>User type</p>
-      <select th:field="*{userType}" required>
-        <option value="" disabled selected>Select user type</option>
-        <option th:each="type : ${userTypeEnums}"
-                th:value="${type}"
-                th:text="${type}">
-        </option>
-      </select>
+        <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="text"
+                   class="form-control"
+                   th:field="*{password}"
+                   required>
+        </div>
 
-      <p>Developer type</p>
-      <select th:field="*{devType}">
-        <option th:value="${null}" >Select developer type</option>
-        <option th:each="type : ${devTypeEnums}"
-                th:value="${type}"
-                th:text="${type}">
-        </option>
-      </select>
+        <div class="form-group">
+            <label class="form-label">User type</label>
+            <select class="form-control"
+                    th:field="*{userType}"
+                    required>
+                <option value="" disabled>Select user type</option>
+                <option th:each="type : ${userTypeEnums}"
+                        th:value="${type}"
+                        th:text="${type}">
+                </option>
+            </select>
+        </div>
 
-      <p>Worktime per day</p>
-      <input type="number" th:field="*{workTime}" min="0" max="24">
+        <div class="form-group">
+            <label class="form-label">Developer type</label>
+            <select class="form-control"
+                    th:field="*{devType}">
+                <option th:value="${null}">Select developer type</option>
+                <option th:each="type : ${devTypeEnums}"
+                        th:value="${type}"
+                        th:text="${type}">
+                </option>
+            </select>
+        </div>
 
-      <br><br>
-      <button type="submit">Add user</button>
-      <a href="/user/profile"><button type="button">Cancel</button></a>
+        <div class="form-group">
+            <label class="form-label">Worktime per day</label>
+            <input type="number"
+                   class="form-control"
+                   th:field="*{workTime}"
+                   min="0"
+                   max="24">
+        </div>
+
+        <!-- Actions -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                Add user
+            </button>
+            <a href="/user/profile" class="btn btn-danger">
+                Cancel
+            </a>
+        </div>
+
     </form>
-  </div>
+</div>
+
 </body>
 </html>

@@ -1,0 +1,286 @@
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+    background: #ffffff;
+    color: #333333;
+}
+
+/* main wrapper – lets everything sit nicely in the middle */
+.page {
+    min-height: 100vh;
+    padding: 40px 60px;
+    position: relative;
+}
+
+/* left blue gear + user icon */
+.app-logo {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+}
+
+.app-logo img {
+    height: 140px;
+    width: auto;
+}
+
+/* top-right Cancel / Contact buttons (shared) */
+.header-actions {
+    position: absolute;
+    top: 32px;
+    right: 60px;
+    display: flex;
+    gap: 10px;
+}
+
+/* =========================================================
+   BUTTONS (shared)
+   ========================================================= */
+
+.btn {
+    border: none;
+    border-radius: 4px;
+    padding: 8px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+/* grey "Sign in" / "Save" style */
+.btn-primary {
+    background: #d5d5d5;
+    color: #333333;
+}
+
+/* red "Cancel" style – like in Figma */
+.btn-danger {
+    background: #e0342b;
+    color: #ffffff;
+}
+
+/* small top-right Cancel / Contact */
+.btn-header {
+    padding: 6px 14px;
+    font-size: 12px;
+    border-radius: 3px;
+}
+
+/* subtle hover */
+.btn:hover {
+    filter: brightness(0.95);
+}
+
+.page-title {
+    text-align: center;
+    margin: 40px auto 10px;
+    font-family: "Georgia", "Times New Roman", serif;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 0.9;
+    color: #1b6fc1;
+}
+
+/* For two-line titles like “Project\nManager” */
+.page-title span {
+    display: block;
+}
+
+/* small title on some forms (e.g. Edit Task) */
+.page-title--small {
+    font-size: 40px;
+}
+
+/* =========================================================
+   FORM CARD  (center white card with fields)
+   Templates: login.html, addNewUserForm.html, editUserForm.html,
+              addProjectForm.html, editProjectForm.html,
+              addSubProjectForm.html, editSubProjectForm.html,
+              addTaskForm.html, editTaskForm.html,
+              addTeamForm.html, editTeamForm.html,
+              pmProfile.html, errorpage.html
+   ========================================================= */
+
+.form-card {
+    max-width: 420px;
+    margin: 40px auto 0;
+    padding: 30px 35px 35px;
+    border-radius: 4px;
+    border: 1px solid #e1e1e1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    background: #ffffff;
+}
+
+/* Slightly wider card for some “Add …” pages (optional) */
+.form-card--wide {
+    max-width: 520px;
+}
+
+/* label + input */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 4px;
+    color: #666666;
+}
+
+.form-control {
+    width: 100%;
+    padding: 7px 9px;
+    border-radius: 3px;
+    border: 1px solid #dddddd;
+    font-size: 14px;
+}
+
+/* select fields should look like inputs */
+select.form-control {
+    background-color: #ffffff;
+}
+
+/* “Sign in / Save / Cancel” buttons inside form card */
+.form-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* login page has grey Sign in full width, red Cancel under it */
+.form-actions--stacked {
+    flex-direction: column;
+}
+
+.form-actions--stacked .btn {
+    width: 100%;
+}
+
+/* =========================================================
+   LOGIN PAGE
+   Template: login.html
+   ========================================================= */
+
+.page-login .page-title {
+    margin-top: 60px;
+}
+
+/* You can add a small helper under the form if needed */
+/* .login-helper { text-align:center; font-size:12px; color:#888; } */
+
+/* =========================================================
+   TABLE / LIST PAGES
+   Templates: projects.html, subprojects.html, tasks.html,
+              teams.html, adminProfile.html
+   ========================================================= */
+
+.page-list .content-panel {
+    max-width: 960px;
+    margin: 40px auto 0;
+    padding: 25px 30px 30px;
+    border-radius: 4px;
+    border: 1px solid #e1e1e1;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* “Active users” header in adminProfile etc */
+.content-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.content-panel__title {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+/* “Add user / Add project …” button inside panel */
+.content-panel__actions .btn {
+    font-size: 13px;
+}
+
+/* generic table */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.data-table thead {
+    background: #f5f5f5;
+}
+
+.data-table th,
+.data-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #e4e4e4;
+    text-align: left;
+}
+
+.data-table th {
+    font-weight: 600;
+}
+
+/* light zebra striping (optional) */
+.data-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+/* small toggle area in adminProfile – style like in Figma */
+.user-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+}
+
+/* =========================================================
+   SUB-PAGES / MISC
+   ========================================================= */
+
+/* pmProfile – you can reuse either form or list styles */
+.page-pm-profile .form-card {
+    max-width: 520px;
+}
+
+/* errorpage.html */
+.error-message {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 15px;
+    color: #c0392b;
+}
+
+/* spacing for bottom Cancel buttons on some screens */
+.footer-actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+/* tiny utility classes */
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+.mt-20 { margin-top: 20px; }
+.mt-40 { margin-top: 40px; }

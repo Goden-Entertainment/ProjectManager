@@ -1,22 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>login</title>
+    <link rel="stylesheet" th:href="@{/css/project-manager.css}">
 </head>
-<body>
-  <h1>
-    login
-  </h1>
-  <form th:action="@{/user/login}" method="post">
-    <p>Username:</p>
-    <input type="text" name="username" required>
+<body class="page page-login">
 
-    <p>Password:</p>
-    <input type="password" name="password" required>
+<div class="app-logo">
+    <!-- optional logo -->
+    <img class="app-logo" src="/img/ProjectManager.png"/>
+</div>
 
-    <br>
-    <button type="submit">login</button>
-  </form>
+<div class="header-actions">
+    <button class="btn btn-danger btn-header" type="button">Cancel</button>
+</div>
+
+<h1 class="page-title">
+    <span>Project</span>
+    <span>Manager</span>
+</h1>
+
+<div class="form-card">
+    <form th:action="@{/user/login}" method="post">
+
+        <div class="form-group">
+            <label class="form-label">Username</label>
+            <input class="form-control" type="text" name="username" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Password</label>
+            <input class="form-control" type="password" name="password" required>
+        </div>
+
+        <div class="form-actions form-actions--stacked">
+            <button class="btn btn-primary" type="submit">Sign in</button>
+            <button class="btn btn-danger" type="button">Cancel</button>
+        </div>
+
+    </form>
+</div>
+
 </body>
 </html>
