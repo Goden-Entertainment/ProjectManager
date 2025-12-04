@@ -61,8 +61,13 @@ CREATE TABLE IF NOT EXISTS TASK (
 CREATE TABLE IF NOT EXISTS SUBTASK (
     sub_task_id INT AUTO_INCREMENT PRIMARY KEY,
     subTaskName VARCHAR(255),
-    subTaskDescription VARCHAR(255),
-    subTaskTime INT,
+    subTaskDescription TEXT,
+    status VARCHAR(255),
+    estimatedTime INT,
+    actualTime INT,
+    priority VARCHAR(255),
+    startDate DATE,
+    endDate DATE,
     task_id INT NOT NULL,
     FOREIGN KEY (task_id) REFERENCES TASK (task_id) ON DELETE CASCADE
 );

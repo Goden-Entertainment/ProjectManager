@@ -9,9 +9,11 @@ import java.util.List;
 @Service
 public class ProjectService {
 
+    private final SubProjectService subProjectService;
     ProjectRepository projectRepository;
-    public ProjectService(ProjectRepository projectRepository){
+    public ProjectService(ProjectRepository projectRepository, SubProjectService subProjectService){
         this.projectRepository = projectRepository;
+        this.subProjectService = subProjectService;
     }
 
     public int createProject(Project project){
@@ -35,7 +37,16 @@ public class ProjectService {
     }
 
     public List<Project> getProjectsByUserId(int userId){
-        return projectRepository.getProjectsByUserId(userId);
+        List<Project> projectList = projectRepository.getProjectsByUserId(userId);
+
+        for(Project project : projectList){
+            int totalActualTime = subProjectService.getTotalActualTime(project.getProjectId());
+
+            project.setActualTime(totalActualTime);
+            projectRepository.editProject(project);
+        }
+
+        return projectList;
     }
 
     public void assignProjectToUser(int projectId, int userId){

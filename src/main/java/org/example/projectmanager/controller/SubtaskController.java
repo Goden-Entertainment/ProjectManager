@@ -50,6 +50,9 @@ public class SubtaskController {
             subtaskUsers.put(subtask.getSubTaskId(), assignedUsers);
         }
 
+        int totalActualTime = subtaskService.getTotalActualTime(taskId);
+
+        model.addAttribute("totalActualTime", totalActualTime);
         model.addAttribute("subtasks", subtasks);
         model.addAttribute("subtaskUsers", subtaskUsers);
         model.addAttribute("taskName", task.getName());

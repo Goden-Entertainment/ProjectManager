@@ -1,5 +1,6 @@
 package org.example.projectmanager.service;
 
+import jakarta.servlet.http.HttpSession;
 import org.example.projectmanager.model.Subtask;
 import org.example.projectmanager.model.User;
 import org.example.projectmanager.repository.SubtaskRepository;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Service
 public class SubtaskService {
+
 
     private SubtaskRepository subtaskRepository;
 
@@ -38,6 +40,17 @@ public class SubtaskService {
 
     public List<Subtask> getSubtasksByTaskId(int taskId) {
         return subtaskRepository.getSubtasksByTaskId(taskId);
+    }
+
+    public int getTotalActualTime(int taskId){
+        int totalTime = 0;
+
+        List<Subtask> subtaskList = subtaskRepository.getSubtasksByTaskId(taskId);
+        for(Subtask subtask : subtaskList){
+            totalTime += subtask.getActualTime();
+        }
+
+        return totalTime;
     }
 
     public int getTaskIdBySubtaskId(int subTaskId) {

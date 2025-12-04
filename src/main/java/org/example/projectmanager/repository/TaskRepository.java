@@ -1,5 +1,6 @@
 package org.example.projectmanager.repository;
 
+import jakarta.servlet.http.HttpSession;
 import org.example.projectmanager.model.Task;
 import org.example.projectmanager.model.Team;
 import org.springframework.jdbc.core.JdbcTemplate;

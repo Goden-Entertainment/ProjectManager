@@ -19,9 +19,6 @@
             <p>Description</p>
             <textarea th:field="*{subTaskDescription}" rows="4" cols="50"></textarea>
 
-            <p>Estimated Time (hours)</p>
-            <input type="number" th:field="*{subTaskTime}" required>
-
             <p>Assign Team Members <span th:text="'(from ' + ${teamName} + '):'"></span></p>
             <div th:if="${!availableUsers.isEmpty()}">
                 <div th:each="user : ${availableUsers}">
@@ -36,9 +33,28 @@
                     </label>
                 </div>
             </div>
+
             <div th:if="${availableUsers.isEmpty()}">
                 <p><em>No team assigned to this task</em></p>
             </div>
+
+            <p>Status</p>
+            <input type="text" th:field="*{status}">
+
+            <p>Estimated Time (hours)</p>
+            <input type="number" th:field="*{estimatedTime}">
+
+            <p>Actual Time (hours)</p>
+            <input type="number" th:field="*{actualTime}">
+
+            <p>Priority</p>
+            <input type="text" th:field="*{priority}">
+
+            <p>Start Date</p>
+            <input type="date" th:field="*{startDate}">
+
+            <p>End Date</p>
+            <input type="date" th:field="*{endDate}">
 
             <br><br>
             <button type="submit">Update Subtask</button>

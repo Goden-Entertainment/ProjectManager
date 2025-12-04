@@ -8,18 +8,16 @@ import java.util.List;
 
 @Service
 public class SubProjectService {
+    private final TaskService taskService;
     SubProjectRepository subProjectRepository;
 
-    public SubProjectService(SubProjectRepository subProjectRepository) {
+    public SubProjectService(SubProjectRepository subProjectRepository, TaskService taskService) {
         this.subProjectRepository = subProjectRepository;
+        this.taskService = taskService;
     }
 
     public int createSubProject(SubProject subProject) {
         return subProjectRepository.createSubProject(subProject);
-    }
-
-    public List<SubProject> getSubProjects() {
-        return subProjectRepository.getSubProjects();
     }
 
     public SubProject findSubProject(int subProjectId) {
@@ -35,7 +33,27 @@ public class SubProjectService {
     }
 
     public List<SubProject> getSubProjectsByProjectId(int projectId) {
-        return subProjectRepository.getSubProjectsByProjectId(projectId);
+        List<SubProject> subProjectList = subProjectRepository.getSubProjectsByProjectId(projectId);
+
+        for(SubProject subProject : subProjectList){
+            int totalActualTime = taskService.getTotalActualTime(subProject.getSubProjectId());
+            subProject.setActualTime(totalActualTime);
+
+            editSubProject(subProject);
+        }
+
+        return subProjectList;
+    }
+
+    public int getTotalActualTime(int projectId){
+        int totalTime = 0;
+
+        List<SubProject> subProjectList = subProjectRepository.getSubProjectsByProjectId(projectId);
+        for(SubProject subProject : subProjectList){
+            totalTime += subProject.getActualTime();
+        }
+
+        return totalTime;
     }
 
     public int getProjectIdBySubProjectId(int subProjectId) {

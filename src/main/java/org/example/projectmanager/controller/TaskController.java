@@ -60,6 +60,9 @@ public class TaskController {
             }
         }
 
+        int totalActualTime = taskService.getTotalActualTime(subProjectId);
+
+        model.addAttribute("totalActualTime", totalActualTime);
         model.addAttribute("subProject", subProject);
         model.addAttribute("tasks", tasks);
         model.addAttribute("taskTeams", taskTeams);

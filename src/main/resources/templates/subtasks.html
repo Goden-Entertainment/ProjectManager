@@ -7,14 +7,21 @@
 <body>
     <h1>Subtasks for Task: <span th:text="${taskName}">Task Name</span></h1>
 
+    <h2>Total actual time used: <span th:text="${totalActualTime}">Time</span></h2>
+
     <table border="1">
         <thead>
             <tr>
                 <th>#</th>
                 <th>Name</th>
                 <th>Description</th>
-                <th>Estimated Time (hours)</th>
-                <th>Assigned Users</th>
+                <th>Devs assigned</th>
+                <th>Status</th>
+                <th>Estimated time</th>
+                <th>Actual Time</th>
+                <th>Priority</th>
+                <th>Start date</th>
+                <th>End date</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -23,7 +30,6 @@
                 <td th:text="${iterStat.count}"></td>
                 <td th:text="${subtask.subTaskName}">Subtask Name</td>
                 <td th:text="${subtask.subTaskDescription}">Description</td>
-                <td th:text="${subtask.subTaskTime}">0</td>
                 <td>
                     <span th:each="user, uStat : ${subtaskUsers[subtask.subTaskId]}">
                         <span th:text="${user.username}">User</span>
@@ -31,6 +37,12 @@
                     </span>
                     <span th:if="${subtaskUsers[subtask.subTaskId].isEmpty()}">No users assigned</span>
                 </td>
+                <td th:text="${subtask.status}">Status</td>
+                <td th:text="${subtask.estimatedTime}">0</td>
+                <td th:text="${subtask.actualTime}">0</td>
+                <td th:text="${subtask.priority}">Priority</td>
+                <td th:text="${subtask.startDate}">Start Date</td>
+                <td th:text="${subtask.endDate}">End Date</td>
                 <td>
                     <a th:href="@{/subtask/edit/{subTaskId}(subTaskId=${subtask.subTaskId})}">
                         <button>Edit</button>
