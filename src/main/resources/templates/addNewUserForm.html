@@ -12,13 +12,13 @@
   <div>
     <form th:action="@{/user/addNewUser}" th:object="${newUser}" method="post">
       <p>Email</p>
-      <input type="email" th:field="*{email}" required>
+      <input type="email" th:field="*{email}">
 
       <p>Username</p>
       <input type="text" th:field="*{username}" required>
 
       <p>Password</p>
-      <input type="text" th:field="*{password}" required>
+      <input type="text" th:field="*{password}">
 
       <p>User type</p>
       <select th:field="*{userType}" required>
