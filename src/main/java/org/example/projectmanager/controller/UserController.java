@@ -68,8 +68,6 @@ public class UserController {
         model.addAttribute("userTypeEnums", userType.values());
         model.addAttribute("devTypeEnums", devType.values());
         return "editUserForm";
-
-
     }
 
     @PostMapping("/editUser")
