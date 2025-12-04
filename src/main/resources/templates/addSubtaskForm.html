@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Subtask</title>
+</head>
+<body>
+    <h1>Add Subtask to Task: <span th:text="${taskName}">Task Name</span></h1>
+
+    <div>
+        <form th:action="@{/subtask/add}" th:object="${newSubtask}" method="post">
+            <!-- Hidden field for task_id -->
+            <input type="hidden" th:field="*{taskId}">
+
+            <p>Subtask Name</p>
+            <input type="text" th:field="*{subTaskName}" required>
+
+            <p>Description</p>
+            <textarea th:field="*{subTaskDescription}" rows="4" cols="50"></textarea>
+
+            <p>Estimated Time (hours)</p>
+            <input type="number" th:field="*{subTaskTime}" required>
+
+            <p>Assign Team Members <span th:text="'(from ' + ${teamName} + '):'"></span></p>
+            <div th:if="${!availableUsers.isEmpty()}">
+                <div th:each="user : ${availableUsers}">
+                    <input type="checkbox" name="assignedUsers" th:value="${user.userId}" th:id="'user-' + ${user.userId}">
+                    <label th:for="'user-' + ${user.userId}"
+                           th:text="${user.username} + ' (' + ${user.devType} + ')'">
+                        User (Type)
+                    </label>
+                </div>
+            </div>
+            <div th:if="${availableUsers.isEmpty()}">
+                <p><em>No team assigned to this task</em></p>
+            </div>
+
+            <br><br>
+            <button type="submit">Add Subtask</button>
+            <a th:href="@{/subtask/list/{taskId}(taskId=${taskId})}">
+                <button type="button">Cancel</button>
+            </a>
+        </form>
+    </div>
+</body>
+</html>

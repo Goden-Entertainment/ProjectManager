@@ -28,7 +28,7 @@
                 <td th:text="${iterStat.count}"></td>
                 <td th:text="${task.name}">Task Name</td>
                 <td th:text="${task.description}">Description</td>
-                <td th:text="${task.assignedTeam}">Team</td>
+                <td th:text="${taskTeams[task.taskId] ?: 'No Team'}">Team</td>
                 <td th:text="${task.status}">Status</td>
                 <td th:text="${task.estimatedTime}">0</td>
                 <td th:text="${task.actualTime}">0</td>
@@ -36,6 +36,9 @@
                 <td th:text="${task.startDate}">Start Date</td>
                 <td th:text="${task.endDate}">End Date</td>
                 <td>
+                    <a th:href="@{/subtask/list/{taskId}(taskId=${task.taskId})}">
+                        <button>Subtasks</button>
+                    </a>
                     <a th:href="@{/task/edit/{taskId}(taskId=${task.taskId})}">
                         <button>Edit</button>
                     </a>

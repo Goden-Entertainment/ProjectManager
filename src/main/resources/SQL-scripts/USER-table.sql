@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS TASK (
     task_id INT AUTO_INCREMENT PRIMARY KEY,
     taskName VARCHAR(255) NOT NULL,
     taskDescription TEXT,
-    assignedTeam VARCHAR(255),
+    team_id INT,
     status VARCHAR(255),
     estimatedTime INT,
     actualTime INT,
@@ -48,14 +48,15 @@ CREATE TABLE IF NOT EXISTS TASK (
     startDate DATE,
     endDate DATE,
     sub_project_id INT NOT NULL,
-    FOREIGN KEY (sub_project_id) REFERENCES SUBPROJECT(sub_project_id) ON DELETE CASCADE
+    FOREIGN KEY (sub_project_id) REFERENCES SUBPROJECT(sub_project_id) ON DELETE CASCADE,
+    FOREIGN KEY (team_id) REFERENCES TEAM(team_id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS SUBTASK (
     sub_task_id INT AUTO_INCREMENT PRIMARY KEY,
-    subTaskName VARCHAR(255) UNIQUE,
+    subTaskName VARCHAR(255),
     subTaskDescription VARCHAR(255),
-    subTaskTime VARCHAR(255),
+    subTaskTime INT,
     task_id INT NOT NULL,
     FOREIGN KEY (task_id) REFERENCES TASK (task_id) ON DELETE CASCADE
 );
@@ -81,4 +82,12 @@ CREATE TABLE IF NOT EXISTS USER_TEAM (
     PRIMARY KEY (user_id, team_id),
     FOREIGN KEY (user_id) REFERENCES USER(user_id) ON DELETE CASCADE,
     FOREIGN KEY (team_id) REFERENCES TEAM(team_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS USER_SUBTASK (
+    user_id INT NOT NULL,
+    sub_task_id INT NOT NULL,
+    PRIMARY KEY (user_id, sub_task_id),
+    FOREIGN KEY (user_id) REFERENCES USER(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (sub_task_id) REFERENCES SUBTASK(sub_task_id) ON DELETE CASCADE
 );

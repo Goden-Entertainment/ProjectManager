@@ -3,15 +3,19 @@ package org.example.projectmanager.controller;
 import jakarta.servlet.http.HttpSession;
 import org.example.projectmanager.model.SubProject;
 import org.example.projectmanager.model.Task;
+import org.example.projectmanager.model.Team;
 import org.example.projectmanager.model.User;
 import org.example.projectmanager.model.userType;
 import org.example.projectmanager.service.SubProjectService;
 import org.example.projectmanager.service.TaskService;
+import org.example.projectmanager.service.TeamService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("task")
@@ -19,10 +23,12 @@ public class TaskController {
 
     private TaskService taskService;
     private SubProjectService subProjectService;
+    private TeamService teamService;
 
-    public TaskController(TaskService taskService, SubProjectService subProjectService) {
+    public TaskController(TaskService taskService, SubProjectService subProjectService, TeamService teamService) {
         this.taskService = taskService;
         this.subProjectService = subProjectService;
+        this.teamService = teamService;
     }
 
     @GetMapping("/list/{subProjectId}")
@@ -43,8 +49,20 @@ public class TaskController {
         // Get project ID for back button (simplified - no junction table)
         int projectId = subProjectService.getProjectIdBySubProjectId(subProjectId);
 
+        // Create HashMap with team names for each task
+        Map<Integer, String> taskTeams = new HashMap<>();
+        for (Task task : tasks) {
+            if (task.getTeamId() != 0) {  // If task has a team
+                Team team = taskService.getTeamByTaskId(task.getTaskId());
+                if (team != null) {
+                    taskTeams.put(task.getTaskId(), team.getTeamName());
+                }
+            }
+        }
+
         model.addAttribute("subProject", subProject);
         model.addAttribute("tasks", tasks);
+        model.addAttribute("taskTeams", taskTeams);
         model.addAttribute("projectId", projectId);
         return "tasks";
     }
@@ -61,7 +79,11 @@ public class TaskController {
             return "redirect:/user/profile";
         }
 
+        // Get all teams for dropdown
+        List<Team> allTeams = teamService.getTeams();
+
         model.addAttribute("newTask", new Task());
+        model.addAttribute("teams", allTeams);
         model.addAttribute("subProjectId", subProjectId);
         return "addTaskForm";
     }
@@ -104,7 +126,11 @@ public class TaskController {
         // Get subproject ID directly from FK (simplified)
         int subProjectId = taskService.getSubProjectIdByTaskId(taskId);
 
+        // Get all teams for dropdown
+        List<Team> allTeams = teamService.getTeams();
+
         model.addAttribute("task", task);
+        model.addAttribute("teams", allTeams);
         model.addAttribute("subProjectId", subProjectId);
         return "editTaskForm";
     }
