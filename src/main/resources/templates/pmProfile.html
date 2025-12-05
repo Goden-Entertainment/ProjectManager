@@ -3,22 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Project Manager Profile</title>
+    <link rel="stylesheet" href="/css/project-manager.css">
 </head>
-<body>
-    <h1>Project Manager Profile</h1>
-    <h3>Welcome, <span th:text="${session.user.username}">PM Name</span></h3>
-
-    <div>
-        <a th:href="@{/project/myprojects}">
-            <button>Your Projects</button>
-        </a>
-
-        <a th:href="@{/team/list}">
-            <button>Teams</button>
-        </a>
+<body class="page page-list">
+    <!-- Logo -->
+    <div class="app-logo">
+        <img src="/img/ProjectManager.png" alt="Project Manager Logo">
     </div>
 
-    <br>
-    <a th:href="@{/user/logout}"><button>Logout</button></a>
+    <!-- Top-right Logout button -->
+    <div class="header-actions">
+        <a href="/user/logout" class="btn btn-danger btn-header">Logout</a>
+    </div>
+
+    <!-- Page title -->
+    <h1 class="page-title">
+        <span>Project Manager</span>
+        <span>Profile</span>
+    </h1>
+
+    <h3 >Welcome, <span th:text="${session.user.username}">PM Name</span></h3>
+
+    <div class="content-panel">
+        <div class="content-panel__header">
+            <a th:href="@{/project/myprojects}">
+                <button class="btn btn-primary">Your Projects</button>
+            </a>
+        </div>
+
+        <a th:href="@{/team/list}">
+            <button class="btn btn-primary">Teams</button>
+        </a>
+    </div>
 </body>
 </html>
