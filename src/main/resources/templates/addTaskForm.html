@@ -3,52 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Task</title>
+    <link rel="stylesheet" href="/css/project-manager.css">
+    <link rel="stylesheet" href="/css/profile.css">
 </head>
-<body>
-    <h1>Add Task</h1>
+<body class="page">
 
-    <div>
+    <!-- Logo -->
+    <div class="app-logo">
+        <img src="/img/ProjectManager.png" alt="Project Manager Logo">
+    </div>
+
+    <!-- Top-right buttons -->
+    <div class="header-actions">
+        <button onclick="copyEmail()" class="btn btn-primary btn-header">Contact</button>
+        <a th:href="@{/task/list/{subProjectId}(subProjectId=${subProjectId})}"
+           class="btn btn-danger btn-header">Cancel</a>
+    </div>
+
+    <!-- Page title -->
+    <h1 class="page-title">
+        <span>Add</span>
+        <span>Task</span>
+    </h1>
+
+    <!-- Form card -->
+    <div class="form-card form-card--wide">
         <form th:action="@{/task/add}" th:object="${newTask}" method="post">
             <input type="hidden" name="subProjectId" th:value="${subProjectId}">
 
-            <p>Task Name</p>
-            <input type="text" th:field="*{name}" required>
+            <div class="form-group">
+                <label class="form-label">Task Name</label>
+                <input class="form-control" type="text" th:field="*{name}" required>
+            </div>
 
-            <p>Description</p>
-            <textarea th:field="*{description}" rows="4" cols="50"></textarea>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" th:field="*{description}" rows="4"></textarea>
+            </div>
 
-            <p>Assigned Team</p>
-            <select th:field="*{teamId}">
-                <option value="0">-- No Team --</option>
-                <option th:each="team : ${teams}"
-                        th:value="${team.teamId}"
-                        th:text="${team.teamName}">
-                    Team Name
-                </option>
-            </select>
+            <div class="form-group">
+                <label class="form-label">Assigned Team</label>
+                <select class="form-control" th:field="*{teamId}">
+                    <option value="0">-- No Team --</option>
+                    <option th:each="team : ${teams}"
+                            th:value="${team.teamId}"
+                            th:text="${team.teamName}">
+                        Team Name
+                    </option>
+                </select>
+            </div>
 
-            <p>Status</p>
-            <input type="text" th:field="*{status}">
+            <div class="form-group">
+                <label class="form-label">Status</label>
+                <input class="form-control" type="text" th:field="*{status}">
+            </div>
 
-            <p>Estimated Time (hours)</p>
-            <input type="number" th:field="*{estimatedTime}">
+            <div class="form-group">
+                <label class="form-label">Estimated Time (hours)</label>
+                <input class="form-control" type="number" th:field="*{estimatedTime}">
+            </div>
 
-            <p>Actual Time (hours)</p>
-            <input type="number" th:field="*{actualTime}">
+            <div class="form-group">
+                <label class="form-label">Actual Time (hours)</label>
+                <input class="form-control" type="number" th:field="*{actualTime}">
+            </div>
 
-            <p>Priority</p>
-            <input type="text" th:field="*{priority}">
+            <div class="form-group">
+                <label class="form-label">Priority</label>
+                <input class="form-control" type="text" th:field="*{priority}">
+            </div>
 
-            <p>Start Date</p>
-            <input type="date" th:field="*{startDate}">
+            <div class="form-group">
+                <label class="form-label">Start Date</label>
+                <input class="form-control" type="date" th:field="*{startDate}">
+            </div>
 
-            <p>End Date</p>
-            <input type="date" th:field="*{endDate}">
+            <div class="form-group">
+                <label class="form-label">End Date</label>
+                <input class="form-control" type="date" th:field="*{endDate}">
+            </div>
 
-            <br><br>
-            <button type="submit">Add Task</button>
-            <a th:href="@{/task/list/{subProjectId}(subProjectId=${subProjectId})}"><button type="button">Cancel</button></a>
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit">Save</button>
+                <a th:href="@{/task/list/{subProjectId}(subProjectId=${subProjectId})}"
+                   class="btn btn-danger">Cancel</a>
+            </div>
+
         </form>
     </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="/js/contact.js"></script>
 </body>
 </html>

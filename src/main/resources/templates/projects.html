@@ -4,59 +4,115 @@
     <meta charset="UTF-8">
     <title>Projects</title>
     <link rel="stylesheet" href="/css/project-manager.css">
+    <link rel="stylesheet" href="/css/time-progress.css">
+    <link rel="stylesheet" href="/css/profile.css">
 </head>
-<body>
-    <h1>Projects</h1>
+<body class="page page-list">
 
-    <!-- Tabel med projekter -->
-    <table border="1">
-        <thead>
-            <tr>
-                <th></th> <!-- Tom kolonne - række-nummer -->
-                <th>Title</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Estimated time</th>
-                <th>Time used</th>
-                <th>Priority</th>
-                <th>Start date</th>
-                <th>End date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="project, iterStat : ${projects}">
-                <td th:text="${iterStat.count}"></td>
+    <!-- Logo -->
+    <div class="app-logo">
+        <img src="/img/ProjectManager.png" alt="Project Manager Logo">
+    </div>
 
-                <!-- Title er LINK til subproject liste -->
-                <td>
-                    <a th:href="@{/subproject/list/{projectId}(projectId=${project.projectId})}"
-                       th:text="${project.name}">Project Name</a>
-                </td>
+    <!-- Top-right buttons -->
+    <div class="header-actions">
+        <button onclick="copyEmail()" class="btn btn-primary btn-header">Contact</button>
+        <a href="/user/profile" class="btn btn-danger btn-header">Back</a>
+    </div>
 
-                <td th:text="${project.description}">Description</td>
-                <td th:text="${project.status}">Status</td>
-                <td th:text="${project.estimatedTime}">0</td>
-                <td th:text="${project.actualTime}">0</td>
-                <td th:text="${project.priority}">Priority</td>
-                <td th:text="${project.startDate}">Start</td>
-                <td th:text="${project.endDate}">End</td>
+    <!-- Page title -->
+    <h1 class="page-title">
+        <span>Your</span>
+        <span>Projects</span>
+    </h1>
 
-                <!-- Actions: Edit & Delete -->
-                <td>
-                    <a th:href="@{/project/edit/{projectId}(projectId=${project.projectId})}">
-                        <button>Edit</button>
-                    </a>
-                    <a th:href="@{/project/delete/{projectId}(projectId=${project.projectId})}">
-                        <button>Delete</button>
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- Main content panel -->
+    <div class="content-panel">
 
-    <br>
-    <a th:href="@{/project/add}"><button>Add Project</button></a>
-    <a th:href="@{/user/profile}"><button>Back to Profile</button></a>
+        <!-- Panel header with title + Add project button -->
+        <div class="content-panel__header">
+            <div class="content-panel__title">Project List</div>
+
+            <div class="content-panel__actions">
+                <a th:href="@{/project/add}" class="btn btn-primary">
+                    Add Project
+                </a>
+            </div>
+        </div>
+
+        <!-- Projects table -->
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th></th> <!-- Row number -->
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Time Progress</th>
+                    <th>Priority</th>
+                    <th>Start date</th>
+                    <th>End date</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="project, iterStat : ${projects}">
+                    <td th:text="${iterStat.count}"></td>
+
+                    <!-- Title is LINK to subproject list -->
+                    <td>
+                        <a th:href="@{/subproject/list/{projectId}(projectId=${project.projectId})}"
+                           th:text="${project.name}">Project Name</a>
+                    </td>
+
+                    <td th:text="${project.description}">Description</td>
+                    <td th:text="${project.status}">Status</td>
+
+                    <!-- Time progress indicator -->
+                    <td>
+                        <div class="time-progress time-progress--small">
+                            <div class="time-progress__clock">
+                                <svg viewBox="0 0 50 50" class="time-progress__circle">
+                                    <circle cx="25" cy="25" r="20" class="time-progress__circle-bg"/>
+                                    <circle cx="25" cy="25" r="20"
+                                            class="time-progress__circle-progress"
+                                            th:classappend="${project.actualTime > project.estimatedTime ? 'status-over' : (project.actualTime > project.estimatedTime * 0.7 ? 'status-warning' : 'status-good')}"
+                                            th:attr="stroke-dasharray='125.6', stroke-dashoffset=${125.6 - (125.6 * (project.estimatedTime > 0 ? (project.actualTime * 1.0 / project.estimatedTime) : 0))}"/>
+                                </svg>
+                                <div class="time-progress__text"
+                                     th:text="${project.estimatedTime > 0 ? #numbers.formatInteger((project.actualTime * 100.0 / project.estimatedTime), 0) + '%' : '0%'}">0%</div>
+                            </div>
+                            <div class="time-progress__details">
+                                <span th:text="${project.actualTime}">0</span>h used /
+                                <strong th:text="${project.estimatedTime}">0</strong>h est.
+                            </div>
+                        </div>
+                    </td>
+
+                    <td th:text="${project.priority}">Priority</td>
+                    <td th:text="${project.startDate}">Start</td>
+                    <td th:text="${project.endDate}">End</td>
+
+                    <!-- Actions: Edit & Delete -->
+                    <td class="text-right">
+                        <a th:href="@{/project/edit/{projectId}(projectId=${project.projectId})}"
+                           class="btn btn-primary">
+                            Edit
+                        </a>
+                        <a th:href="@{/project/delete/{projectId}(projectId=${project.projectId})}"
+                           class="btn btn-danger">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="/js/contact.js"></script>
 </body>
 </html>

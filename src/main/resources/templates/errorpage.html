@@ -2,11 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <h1>Error. Something went wrong</h1>
-    <h3> Pleas return to the log-in page, and try again.</h3>
-    <a th:href="@{/user/logout}"><button>Return</button></a></head>
-<body>
+    <title>Error</title>
+    <link rel="stylesheet" href="/css/project-manager.css">
+</head>
+<body class="page">
+
+    <!-- Logo -->
+    <div class="app-logo">
+        <img src="/img/ProjectManager.png" alt="Project Manager Logo">
+    </div>
+
+    <!-- Page title -->
+    <h1 class="page-title">
+        <span>Error</span>
+    </h1>
+
+    <!-- Error card -->
+    <div class="form-card">
+        <div class="error-message">
+            <h3>Something went wrong</h3>
+            <p>Please return to the login page and try again.</p>
+        </div>
+
+        <div class="form-actions mt-20">
+            <a th:href="@{/user/logout}" class="btn btn-danger">Return to Login</a>
+        </div>
+    </div>
 
 </body>
 </html>
