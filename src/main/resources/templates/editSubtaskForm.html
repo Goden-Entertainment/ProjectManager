@@ -14,8 +14,9 @@
         <img src="/img/ProjectManager.png" alt="Project Manager Logo">
     </div>
 
-    <!-- Top-right Cancel button -->
+    <!-- Top-right buttons -->
     <div class="header-actions">
+        <button onclick="copyEmail()" class="btn btn-primary btn-header">Contact</button>
         <a th:href="@{/subtask/list/{taskId}(taskId=${taskId})}"
            class="btn btn-danger btn-header">Cancel</a>
     </div>
@@ -103,5 +104,9 @@
         </form>
     </div>
 
+    <!-- Toast notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="/js/contact.js"></script>
 </body>
 </html>
