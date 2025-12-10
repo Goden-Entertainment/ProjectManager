@@ -1,0 +1,76 @@
+/* Time progress indicator (clock showing actual vs estimated time) */
+
+.time-progress {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.time-progress__clock {
+    position: relative;
+    width: 50px;
+    height: 50px;
+}
+
+.time-progress__circle {
+    transform: rotate(-90deg);
+}
+
+.time-progress__circle-bg {
+    fill: none;
+    stroke: #e5e5e5;
+    stroke-width: 4;
+}
+
+.time-progress__circle-progress {
+    fill: none;
+    stroke-width: 4;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.3s;
+}
+
+/* Color coding based on time usage */
+.time-progress__circle-progress.status-good {
+    stroke: #4caf50; /* Green - under 70% */
+}
+
+.time-progress__circle-progress.status-warning {
+    stroke: #ff9800; /* Orange - 70-100% */
+}
+
+.time-progress__circle-progress.status-over {
+    stroke: #f44336; /* Red - over 100% */
+}
+
+.time-progress__text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 11px;
+    font-weight: 600;
+    color: #333;
+}
+
+.time-progress__details {
+    font-size: 12px;
+    color: #666;
+}
+
+.time-progress__details strong {
+    color: #333;
+}
+
+/* Smaller version for table cells */
+.time-progress--small .time-progress__clock {
+    width: 40px;
+    height: 40px;
+}
+
+.time-progress--small .time-progress__text {
+    font-size: 10px;
+}
+
+.time-progress--small .time-progress__details {
+    font-size: 11px;
+}

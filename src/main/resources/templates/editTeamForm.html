@@ -3,34 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit Team</title>
+    <link rel="stylesheet" href="/css/project-manager.css">
+    <link rel="stylesheet" href="/css/checkbox-forms.css">
 </head>
-<body>
-    <h1>Edit Team</h1>
+<body class="page">
 
-    <div>
+    <!-- Logo -->
+    <div class="app-logo">
+        <img src="/img/ProjectManager.png" alt="Project Manager Logo">
+    </div>
+
+    <!-- Top-right Cancel button -->
+    <div class="header-actions">
+        <a href="/team/list" class="btn btn-danger btn-header">Cancel</a>
+    </div>
+
+    <!-- Page title -->
+    <h1 class="page-title">
+        <span>Edit</span>
+        <span>Team</span>
+    </h1>
+
+    <!-- Form card -->
+    <div class="form-card form-card--wide">
         <form th:action="@{/team/edit}" th:object="${team}" method="post">
             <input type="hidden" th:field="*{teamId}">
 
-            <p>Team Name</p>
-            <input type="text" th:field="*{teamName}" required>
-
-            <p>Team Description</p>
-            <textarea th:field="*{teamDescription}" rows="4" cols="50"></textarea>
-
-            <p>Select Dev Members:</p>
-            <div th:each="dev : ${allDevs}">
-                <input type="checkbox"
-                       name="selectedDevs"
-                       th:value="${dev.userId}"
-                       th:id="'dev' + ${dev.userId}"
-                       th:checked="${currentMembers.contains(dev)}">
-                <label th:for="'dev' + ${dev.userId}" th:text="${dev.username + ' (' + dev.devType + ')'}">Dev Name</label>
+            <div class="form-group">
+                <label class="form-label">Team Name</label>
+                <input class="form-control" type="text" th:field="*{teamName}" required>
             </div>
 
-            <br><br>
-            <button type="submit">Update Team</button>
-            <a th:href="@{/team/list}"><button type="button">Cancel</button></a>
+            <div class="form-group">
+                <label class="form-label">Team Description</label>
+                <textarea class="form-control" th:field="*{teamDescription}" rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Select Dev Members</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item" th:each="dev : ${allDevs}">
+                        <input type="checkbox"
+                               name="selectedDevs"
+                               th:value="${dev.userId}"
+                               th:id="'dev' + ${dev.userId}"
+                               th:checked="${currentMembers.contains(dev)}">
+                        <label th:for="'dev' + ${dev.userId}" th:text="${dev.username + ' (' + dev.devType + ')'}">Dev Name</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit">Update</button>
+                <a href="/team/list" class="btn btn-danger">Cancel</a>
+            </div>
+
         </form>
     </div>
+
 </body>
 </html>

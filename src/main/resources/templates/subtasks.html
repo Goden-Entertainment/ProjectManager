@@ -1,54 +1,122 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Subtasks</title>
+    <link rel="stylesheet" href="/css/project-manager.css">
+    <link rel="stylesheet" href="/css/time-progress.css">
+    <link rel="stylesheet" href="/css/profile.css">
 </head>
-<body>
-    <h1>Subtasks for Task: <span th:text="${taskName}">Task Name</span></h1>
+<body class="page page-list">
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Estimated Time (hours)</th>
-                <th>Assigned Users</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="subtask, iterStat : ${subtasks}">
-                <td th:text="${iterStat.count}"></td>
-                <td th:text="${subtask.subTaskName}">Subtask Name</td>
-                <td th:text="${subtask.subTaskDescription}">Description</td>
-                <td th:text="${subtask.subTaskTime}">0</td>
-                <td>
-                    <span th:each="user, uStat : ${subtaskUsers[subtask.subTaskId]}">
-                        <span th:text="${user.username}">User</span>
-                        <span th:if="${!uStat.last}">, </span>
-                    </span>
-                    <span th:if="${subtaskUsers[subtask.subTaskId].isEmpty()}">No users assigned</span>
-                </td>
-                <td>
-                    <a th:href="@{/subtask/edit/{subTaskId}(subTaskId=${subtask.subTaskId})}">
-                        <button>Edit</button>
-                    </a>
-                    <a th:href="@{/subtask/delete/{subTaskId}(subTaskId=${subtask.subTaskId})}">
-                        <button>Delete</button>
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- Logo -->
+    <div class="app-logo">
+        <img src="/img/ProjectManager.png" alt="Project Manager Logo">
+    </div>
 
-    <br>
-    <a th:href="@{/subtask/add/{taskId}(taskId=${taskId})}">
-        <button>Add Subtask</button>
-    </a>
-    <a th:href="@{/task/list/{subProjectId}(subProjectId=${subProjectId})}">
-        <button>Back to Tasks</button>
-    </a>
+    <!-- Top-right buttons -->
+    <div class="header-actions">
+        <button onclick="copyEmail()" class="btn btn-primary btn-header">Contact</button>
+        <a th:href="@{/task/list/{subProjectId}(subProjectId=${subProjectId})}"
+           class="btn btn-danger btn-header">Back</a>
+    </div>
+
+    <!-- Page title -->
+    <h1 class="page-title">
+        <span>Subtasks</span>
+    </h1>
+
+    <!-- Main content panel -->
+    <div class="content-panel">
+
+        <!-- Panel header with task name + total time + Add button -->
+        <div class="content-panel__header">
+            <div class="content-panel__title">
+                <span th:text="${taskName}">Task Name</span> -
+                Total time used: <span th:text="${totalActualTime}">0</span>h
+            </div>
+
+            <div class="content-panel__actions">
+                <a th:href="@{/subtask/add/{taskId}(taskId=${taskId})}"
+                   class="btn btn-primary">
+                    Add Subtask
+                </a>
+            </div>
+        </div>
+
+        <!-- Subtasks table -->
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Devs assigned</th>
+                    <th>Status</th>
+                    <th>Time Progress</th>
+                    <th>Priority</th>
+                    <th>Start date</th>
+                    <th>End date</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="subtask, iterStat : ${subtasks}">
+                    <td th:text="${iterStat.count}"></td>
+                    <td th:text="${subtask.subTaskName}">Subtask Name</td>
+                    <td th:text="${subtask.subTaskDescription}">Description</td>
+                    <td>
+                        <span th:each="user, uStat : ${subtaskUsers[subtask.subTaskId]}">
+                            <span th:text="${user.username}">User</span>
+                            <span th:if="${!uStat.last}">, </span>
+                        </span>
+                        <span th:if="${subtaskUsers[subtask.subTaskId].isEmpty()}">No users assigned</span>
+                    </td>
+                    <td th:text="${subtask.status}">Status</td>
+
+                    <!-- Time progress indicator -->
+                    <td>
+                        <div class="time-progress time-progress--small">
+                            <div class="time-progress__clock">
+                                <svg viewBox="0 0 50 50" class="time-progress__circle">
+                                    <circle cx="25" cy="25" r="20" class="time-progress__circle-bg"/>
+                                    <circle cx="25" cy="25" r="20"
+                                            class="time-progress__circle-progress"
+                                            th:classappend="${subtask.actualTime > subtask.estimatedTime ? 'status-over' : (subtask.actualTime > subtask.estimatedTime * 0.7 ? 'status-warning' : 'status-good')}"
+                                            th:attr="stroke-dasharray='125.6', stroke-dashoffset=${125.6 - (125.6 * (subtask.estimatedTime > 0 ? (subtask.actualTime * 1.0 / subtask.estimatedTime) : 0))}"/>
+                                </svg>
+                                <div class="time-progress__text"
+                                     th:text="${subtask.estimatedTime > 0 ? #numbers.formatInteger((subtask.actualTime * 100.0 / subtask.estimatedTime), 0) + '%' : '0%'}">0%</div>
+                            </div>
+                            <div class="time-progress__details">
+                                <span th:text="${subtask.actualTime}">0</span>h used /
+                                <strong th:text="${subtask.estimatedTime}">0</strong>h est.
+                            </div>
+                        </div>
+                    </td>
+
+                    <td th:text="${subtask.priority}">Priority</td>
+                    <td th:text="${subtask.startDate}">Start Date</td>
+                    <td th:text="${subtask.endDate}">End Date</td>
+                    <td class="text-right">
+                        <a th:href="@{/subtask/edit/{subTaskId}(subTaskId=${subtask.subTaskId})}"
+                           class="btn btn-primary">
+                            Edit
+                        </a>
+                        <a th:href="@{/subtask/delete/{subTaskId}(subTaskId=${subtask.subTaskId})}"
+                           class="btn btn-danger">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="/js/contact.js"></script>
 </body>
 </html>

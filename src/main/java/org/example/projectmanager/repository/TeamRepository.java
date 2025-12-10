@@ -115,4 +115,5 @@ public class TeamRepository {
         String sql = "SELECT team_id FROM USERS_TEAM WHERE user_id = ?";
         return jdbcTemplate.queryForList(sql, new Object[]{userId}, Integer.class);
     }
+
 }

@@ -40,6 +40,9 @@ public class SubProjectController {
         Project project = projectService.findProject(projectId);
         List<SubProject> subProjects = subProjectService.getSubProjectsByProjectId(projectId);
 
+        int totalActualTime = subProjectService.getTotalActualTime(projectId);
+
+        model.addAttribute("totalActualTime", totalActualTime);
         model.addAttribute("project", project);
         model.addAttribute("subProjects", subProjects);
         return "subprojects";

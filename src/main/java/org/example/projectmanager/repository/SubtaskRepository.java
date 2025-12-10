@@ -20,12 +20,17 @@ public class SubtaskRepository {
 
     // CREATE
     public int createSubtask(Subtask subtask) {
-        String sqlInsert = "INSERT INTO SUBTASK (subTaskName, subTaskDescription, subTaskTime, task_id) " +
-                           "VALUES (?, ?, ?, ?)";
+        String sqlInsert = "INSERT INTO SUBTASK (subTaskName, subTaskDescription, status, estimatedTime, actualTime, priority, startDate, endDate, task_id) " +
+                           "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sqlInsert,
             subtask.getSubTaskName(),
             subtask.getSubTaskDescription(),
-            subtask.getSubTaskTime(),
+            subtask.getStatus(),
+            subtask.getEstimatedTime(),
+            subtask.getActualTime(),
+            subtask.getPriority(),
+            subtask.getStartDate(),
+            subtask.getEndDate(),
             subtask.getTaskId()
         );
 
@@ -41,7 +46,12 @@ public class SubtaskRepository {
                 rs.getInt("sub_task_id"),
                 rs.getString("subTaskName"),
                 rs.getString("subTaskDescription"),
-                rs.getInt("subTaskTime"),
+                rs.getString("status"),
+                rs.getInt("estimatedTime"),
+                rs.getInt("actualTime"),
+                rs.getString("priority"),
+                rs.getDate("startDate") != null ? rs.getDate("startDate").toLocalDate() : null,
+                rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null,
                 rs.getInt("task_id")
             ));
     }
@@ -51,23 +61,33 @@ public class SubtaskRepository {
         String sql = "SELECT * FROM SUBTASK WHERE sub_task_id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{subTaskId}, (rs, rowNum) ->
             new Subtask(
-                rs.getInt("sub_task_id"),
-                rs.getString("subTaskName"),
-                rs.getString("subTaskDescription"),
-                rs.getInt("subTaskTime"),
-                rs.getInt("task_id")
+                    rs.getInt("sub_task_id"),
+                    rs.getString("subTaskName"),
+                    rs.getString("subTaskDescription"),
+                    rs.getString("status"),
+                    rs.getInt("estimatedTime"),
+                    rs.getInt("actualTime"),
+                    rs.getString("priority"),
+                    rs.getDate("startDate") != null ? rs.getDate("startDate").toLocalDate() : null,
+                    rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null,
+                    rs.getInt("task_id")
             ));
     }
 
     // UPDATE
     public void editSubtask(Subtask subtask) {
-        String sql = "UPDATE SUBTASK SET subTaskName = ?, subTaskDescription = ?, subTaskTime = ? " +
+        String sql = "UPDATE SUBTASK SET subTaskName = ?, subTaskDescription = ?, status = ?, estimatedTime = ?, actualTime = ?, priority = ?, startDate = ?, endDate = ? " +
                      "WHERE sub_task_id = ?";
         jdbcTemplate.update(sql,
-            subtask.getSubTaskName(),
-            subtask.getSubTaskDescription(),
-            subtask.getSubTaskTime(),
-            subtask.getSubTaskId()
+                subtask.getSubTaskName(),
+                subtask.getSubTaskDescription(),
+                subtask.getStatus(),
+                subtask.getEstimatedTime(),
+                subtask.getActualTime(),
+                subtask.getPriority(),
+                subtask.getStartDate(),
+                subtask.getEndDate(),
+                subtask.getSubTaskId()
         );
     }
 
@@ -82,11 +102,16 @@ public class SubtaskRepository {
         String sql = "SELECT * FROM SUBTASK WHERE task_id = ?";
         return jdbcTemplate.query(sql, new Object[]{taskId}, (rs, rowNum) ->
             new Subtask(
-                rs.getInt("sub_task_id"),
-                rs.getString("subTaskName"),
-                rs.getString("subTaskDescription"),
-                rs.getInt("subTaskTime"),
-                rs.getInt("task_id")
+                    rs.getInt("sub_task_id"),
+                    rs.getString("subTaskName"),
+                    rs.getString("subTaskDescription"),
+                    rs.getString("status"),
+                    rs.getInt("estimatedTime"),
+                    rs.getInt("actualTime"),
+                    rs.getString("priority"),
+                    rs.getDate("startDate") != null ? rs.getDate("startDate").toLocalDate() : null,
+                    rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null,
+                    rs.getInt("task_id")
             ));
     }
 

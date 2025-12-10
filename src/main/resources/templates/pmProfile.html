@@ -3,22 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Project Manager Profile</title>
+    <link rel="stylesheet" href="/css/project-manager.css">
+    <link rel="stylesheet" href="/css/profile.css">
 </head>
-<body>
-    <h1>Project Manager Profile</h1>
-    <h3>Welcome, <span th:text="${session.user.username}">PM Name</span></h3>
-
-    <div>
-        <a th:href="@{/project/myprojects}">
-            <button>Your Projects</button>
-        </a>
-
-        <a th:href="@{/team/list}">
-            <button>Teams</button>
-        </a>
+<body class="page page-list">
+    <!-- Logo -->
+    <div class="app-logo">
+        <img src="/img/ProjectManager.png" alt="Project Manager Logo">
     </div>
 
-    <br>
-    <a th:href="@{/user/logout}"><button>Logout</button></a>
+    <!-- Top-right buttons -->
+    <div class="header-actions">
+        <button onclick="copyEmail()" class="btn btn-primary btn-header">Contact</button>
+        <a href="/user/logout" class="btn btn-danger btn-header">Logout</a>
+    </div>
+
+    <!-- Page title -->
+    <h1 class="page-title">
+        <span>Project Manager</span>
+        <span>Profile</span>
+    </h1>
+
+    <!-- Welcome section -->
+    <div class="welcome-section">
+        <div class="welcome-title">Welcome,</div>
+        <div class="welcome-username" th:text="${session.user.username}">PM Name</div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="content-panel">
+        <div class="dashboard-actions">
+            <a th:href="@{/project/myprojects}" class="btn btn-primary">Your Projects</a>
+            <a th:href="@{/team/list}" class="btn btn-primary">Teams</a>
+        </div>
+    </div>
+
+    <!-- Toast notification (hidden by default) -->
+    <div id="toast" class="toast">Email copied to clipboard!</div>
+
+    <script src="/js/contact.js"></script>
 </body>
 </html>
