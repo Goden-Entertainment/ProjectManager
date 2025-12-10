@@ -61,10 +61,7 @@ public class TeamRepository {
         jdbcTemplate.update(sql,
                 team.getTeamName(),
                 team.getTeamDescription(),
-                team.getTeamId(),
-                team.getProjectId(),
-                team.getSubProjectId(),
-                team.getTaskId()
+                team.getTeamId()
         );
     }
 
