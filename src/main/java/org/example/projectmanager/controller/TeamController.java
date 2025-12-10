@@ -69,7 +69,7 @@ public class TeamController {
         }
 
         model.addAttribute("newTeam", new Team());
-        model.addAttribute("allDevs", teamService.getAllDevsForTeamCreation());
+        model.addAttribute("allDevs", teamService.allAvailableDevs());
         return "addTeamForm";
     }
 
@@ -117,9 +117,16 @@ public class TeamController {
         }
 
         Team team = teamService.findTeam(teamId);
+        List<User> allAvailableDevs = teamService.allAvailableDevs();
+        List<User> allCurrentDevs = teamService.getTeamDevs(team.getTeamId());
+
+        for(User dev : allCurrentDevs){
+            allAvailableDevs.add(dev);
+        }
 
         model.addAttribute("team", team);
-        model.addAttribute("allDevs", teamService.getTeamDevs(teamId));
+        model.addAttribute("currentMembers", allCurrentDevs);
+        model.addAttribute("allDevs", allAvailableDevs);
         return "editTeamForm";
     }
 
@@ -138,9 +145,18 @@ public class TeamController {
             return "redirect:/user/profile";
         }
 
-        // Update team info
+        // DELETE OLD TEAM INFO
+        teamService.removeTeamMembers(team.getTeamId());
+        // UPDATE WITH NEW INFO
         teamService.editTeam(team);
 
+        if (selectedDevs != null && !selectedDevs.isEmpty()) {
+            for (Integer devId : selectedDevs) {
+                User dev = userService.findUser(devId);
+                dev.setTeamId(team.getTeamId());  // Set the team_id before updating
+                userService.editUser(dev);
+            }
+        }
 
         return "redirect:/team/list";
     }

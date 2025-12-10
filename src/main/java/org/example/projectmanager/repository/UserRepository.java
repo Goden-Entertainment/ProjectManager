@@ -114,7 +114,7 @@ public class UserRepository {
     }
 
     // Get all DEV users (for team assignment)
-    public List<User> getAllDevsForTeamCreation() {
+    public List<User> allAvailableDevs() {
         String sql = "SELECT * FROM USER WHERE userType = 'DEV' AND team_id IS NULL";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                 new User(
@@ -161,7 +161,7 @@ public class UserRepository {
     }
 
     public void removeTeamMembers(int teamId){
-        String sql = "DELETE user_id FROM USER WHERE user_id = ?";
+        String sql = "UPDATE USER SET team_id = NULL WHERE team_id = ?";
         jdbcTemplate.update(sql, teamId);
     }
 }

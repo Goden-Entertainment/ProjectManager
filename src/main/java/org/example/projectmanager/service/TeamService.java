@@ -40,8 +40,8 @@ public class TeamService {
         return teamRepository.deleteTeam(teamId);
     }
 
-    public List<User> getAllDevsForTeamCreation(){
-        return userRepository.getAllDevsForTeamCreation();
+    public List<User> allAvailableDevs(){
+        return userRepository.allAvailableDevs();
     }
 
     public List<User> getTeamDevs(int teamId){
@@ -52,5 +52,9 @@ public class TeamService {
 
     public List<User> getAllDevs() {
         return userRepository.getAllDevs();
+    }
+
+    public void removeTeamMembers(int teamId){
+        userRepository.removeTeamMembers(teamId);
     }
 }
