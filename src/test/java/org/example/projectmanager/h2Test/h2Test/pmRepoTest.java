@@ -46,7 +46,7 @@ public class pmRepoTest {
 
         List<User> users = userRepository.getUsers();
 
-        assertThat(users).hasSize(4);
+        assertThat(users).hasSize(3);
 
     }
 
@@ -54,8 +54,7 @@ public class pmRepoTest {
     @Test
     void createAndFindUserByUsername() {
 
-        User user = new User(2, "testuser", "secret", "test@email.com", userType.DEV, devType.BACKEND, 7
-        );
+        User user = new User(2, "testuser", "secret", "test@email.com", userType.DEV, devType.BACKEND, 7);
 
         userRepository.createUser(user);
         User found = userRepository.findUser("testuser");

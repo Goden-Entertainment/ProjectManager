@@ -72,13 +72,13 @@ public class TeamRepository {
 
     // Junction table method - assign user to team
     public void assignUserToTeam(int userId, int teamId) {
-        String sql = "INSERT INTO USER_TEAM (user_id, team_id) VALUES (?, ?)";
+        String sql = "INSERT INTO USERS_TEAM (user_id, team_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, userId, teamId);
     }
 
     // Junction table method - remove user from team
     public void removeUserFromTeam(int userId, int teamId) {
-        String sql = "DELETE FROM USER_TEAM WHERE user_id = ? AND team_id = ?";
+        String sql = "DELETE FROM USERS_TEAM WHERE user_id = ? AND team_id = ?";
         jdbcTemplate.update(sql, userId, teamId);
     }
 
@@ -95,8 +95,8 @@ public class TeamRepository {
     }
     // Get users for a specific team (via junction table) - LAZY LOADING
     public List<User> getUsersByTeamId(int teamId) {
-        String sql = "SELECT * FROM USER u " +
-                     "JOIN USER_TEAM ut ON u.user_id = ut.user_id " +
+        String sql = "SELECT * FROM USERS u " +
+                     "JOIN USERS_TEAM ut ON u.user_id = ut.user_id " +
                      "WHERE ut.team_id = ?";
         return jdbcTemplate.query(sql, new Object[]{teamId}, (rs, rowNum) ->
                 new User(
@@ -112,7 +112,7 @@ public class TeamRepository {
 
     // Get teams for a specific user (reverse lookup)
     public List<Integer> getTeamIdsByUserId(int userId) {
-        String sql = "SELECT team_id FROM USER_TEAM WHERE user_id = ?";
+        String sql = "SELECT team_id FROM USERS_TEAM WHERE user_id = ?";
         return jdbcTemplate.queryForList(sql, new Object[]{userId}, Integer.class);
     }
 }

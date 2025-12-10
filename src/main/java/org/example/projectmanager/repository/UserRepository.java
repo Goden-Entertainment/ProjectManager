@@ -19,7 +19,7 @@ public class UserRepository {
     }
 
     public List<User> getUsers() {
-        String sql = "SELECT * FROM USER";
+        String sql = "SELECT * FROM USERS";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                 new User(
                         rs.getInt("user_id"),
@@ -34,7 +34,7 @@ public class UserRepository {
     }
 
     public User createUser(User user) {
-        String sql = "INSERT INTO USER (userName, userPassword, userEmail, userType, devType, workTime) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO USERS (userName, userPassword, userEmail, userType, devType, workTime) VALUES (?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,
                 user.getUsername(),
                 user.getPassword(),
@@ -47,7 +47,7 @@ public class UserRepository {
     }
 
     public void editUser(User user) {
-        String sqlEdit = "UPDATE USER SET userName = ?, userEmail = ?, userPassword = ?, userType = ?, devType = ?, workTime = ? WHERE user_id = ?";
+        String sqlEdit = "UPDATE USERS SET userName = ?, userEmail = ?, userPassword = ?, userType = ?, devType = ?, workTime = ? WHERE user_id = ?";
 
         jdbcTemplate.update(
                 sqlEdit,
@@ -64,7 +64,7 @@ public class UserRepository {
 
     //Henter enkel bruger fra databasen, *Husk at skrive det samme rækkefølge som dette*
     public User findUser(int userId) {
-        String sqlFindUser = "SELECT * FROM USER WHERE user_id = ?";
+        String sqlFindUser = "SELECT * FROM USERS WHERE user_id = ?";
 
         return jdbcTemplate.queryForObject(sqlFindUser, new Object[]{userId}, (rs, rowNum) ->
                 new User(
@@ -80,7 +80,7 @@ public class UserRepository {
 
 
     public int deleteUser(int user_id) {
-        String sql = "DELETE FROM user where user_id = ?";
+        String sql = "DELETE FROM USERS WHERE user_id = ?";
 
         return jdbcTemplate.update(sql, user_id);
 
@@ -89,7 +89,7 @@ public class UserRepository {
 
     public User findUser(String username) {
 
-        String sql = "SELECT * FROM user WHERE username = ?";
+        String sql = "SELECT * FROM USERS WHERE username = ?";
 
         try{
             return jdbcTemplate.queryForObject(sql, (rs, rowNum) ->
@@ -114,7 +114,7 @@ public class UserRepository {
 
     // Get all DEV users (for team assignment)
     public List<User> getDevUsers() {
-        String sql = "SELECT * FROM USER WHERE userType = 'DEV'";
+        String sql = "SELECT * FROM USERS WHERE userType = 'DEV'";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                 new User(
                         rs.getInt("user_id"),
