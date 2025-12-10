@@ -32,8 +32,8 @@ public class ProjectManagerControllerTest {
     // Test: Admin besøger profil-siden og skal kunne se en liste over alle brugere.
     @Test
     void shouldGetAllUsersViaAdmin() throws Exception {
-        User adminUser = new User(1, "admin1", "admin123", "admin@gmail.com", userType.ADMIN, devType.FULLSTACK, 18);
-        User testUser = new User(1, "Goden", "kode", "goden@gmail.com", userType.DEV, devType.FULLSTACK, 18);
+        User adminUser = new User(1, "admin1", "admin123", "admin@gmail.com", userType.ADMIN, devType.FULLSTACK, 18, null);
+        User testUser = new User(1, "Goden", "kode", "goden@gmail.com", userType.DEV, devType.FULLSTACK, 18, null);
 
         // Mock servicen til at returnere vores test-bruger
         when(userService.getUsers()).thenReturn(List.of(testUser));
@@ -53,7 +53,7 @@ public class ProjectManagerControllerTest {
     // Test: En bruger eller admin åbner siden for at redigere en bruger.
     @Test
     void shouldEditUser() throws Exception{
-        User testUser = new User(1, "Yadi", "kode123", "yadi@gmail.com", userType.DEV, devType.BACKEND, 15);
+        User testUser = new User(1, "Yadi", "kode123", "yadi@gmail.com", userType.DEV, devType.BACKEND, 15, null);
 
         // Mock servicen til at returnere brugeren som skal redigeres
         when(userService.findUser(1)).thenReturn(testUser);
@@ -100,7 +100,7 @@ public class ProjectManagerControllerTest {
     // Test: GET /login når sessionen allerede har en bruger
     @Test
     void shouldLoginIfSessionIsActive() throws Exception{
-        User testUser = new User(1, "Yadi", "kode123", "yadi@gmail.com", userType.PROJECTMANAGER, devType.BACKEND, 15);
+        User testUser = new User(1, "Yadi", "kode123", "yadi@gmail.com", userType.PROJECTMANAGER, devType.BACKEND, 15, null);
 
         // Udfør GET-request med session og tjek:
         // - redirect (3xx) til profil-siden
@@ -113,7 +113,7 @@ public class ProjectManagerControllerTest {
     // Test: POST /login med korrekt login-info
     @Test
     void shouldLoginIfInfoIsCorrect() throws Exception{
-        User testUser = new User(1, "yadi", "kode123", "yadi@gmail.com", userType.PROJECTMANAGER, devType.BACKEND, 15);
+        User testUser = new User(1, "yadi", "kode123", "yadi@gmail.com", userType.PROJECTMANAGER, devType.BACKEND, 15, null);
 
         // Mock servicen til at returnere brugeren ved korrekt login
         when(userService.login("yadi", "kode123")).thenReturn(testUser);

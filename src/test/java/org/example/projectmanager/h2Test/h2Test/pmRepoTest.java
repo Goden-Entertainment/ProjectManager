@@ -39,9 +39,9 @@ public class pmRepoTest {
     @Test
     void getUser() {
 
-        userRepository.createUser(new User(0, "Marco", "123", "testX@gmail.com", userType.PROJECTMANAGER, devType.FULLSTACK, 7));
-        userRepository.createUser(new User(1, "Goden", "adgangskode", "goden@gmail.com", userType.DEV, devType.FRONTEND, 5));
-        userRepository.createUser(new User(2, "Rune", "321", "Misser@gmail.com", userType.ADMIN, devType.FULLSTACK, 8));
+        userRepository.createUser(new User(0, "Marco", "123", "testX@gmail.com", userType.PROJECTMANAGER, devType.FULLSTACK, 7, null));
+        userRepository.createUser(new User(1, "Goden", "adgangskode", "goden@gmail.com", userType.DEV, devType.FRONTEND, 5, null));
+        userRepository.createUser(new User(2, "Rune", "321", "Misser@gmail.com", userType.ADMIN, devType.FULLSTACK, 8, null));
 
 
         List<User> users = userRepository.getUsers();
@@ -54,7 +54,7 @@ public class pmRepoTest {
     @Test
     void createAndFindUserByUsername() {
 
-        User user = new User(2, "testuser", "secret", "test@email.com", userType.DEV, devType.BACKEND, 7);
+        User user = new User(2, "testuser", "secret", "test@email.com", userType.DEV, devType.BACKEND, 7, null);
 
         userRepository.createUser(user);
         User found = userRepository.findUser("testuser");
@@ -68,7 +68,7 @@ public class pmRepoTest {
     @Test
     void delete() {
         userRepository.createUser(
-                new User(1, "Jens", "password", "email@.com", userType.DEV, devType.BACKEND, 7)
+                new User(1, "Jens", "password", "email@.com", userType.DEV, devType.BACKEND, 7, null)
         );
         User existing = userRepository.findUser("Jens");
 
@@ -171,9 +171,9 @@ public class pmRepoTest {
 
     @Test
     void getTeam(){
-        teamRepository.createTeam(new Team(1, "Team Alpha", "Det bedste team"));
-        teamRepository.createTeam(new Team(2, "Team Beta", "Det næst bedste team"));
-        teamRepository.createTeam(new Team(3, "Team Omega", "Det tredje bedste team"));
+        teamRepository.createTeam(new Team(1, "Team Alpha", "Det bedste team", null, null, null));
+        teamRepository.createTeam(new Team(2, "Team Beta", "Det næst bedste team", null, null, null));
+        teamRepository.createTeam(new Team(3, "Team Omega", "Det tredje bedste team", null, null, null));
 
         List<Team>teams = teamRepository.getTeams();
 
@@ -188,32 +188,33 @@ public class pmRepoTest {
                 "bobTheGreatest@gmai.com",
                 userType.PROJECTMANAGER,
                 devType.FULLSTACK,
-                6));
+                6,
+               1));
         userRepository.createUser(new User(2,
                 "Frank",
                 "007",
                 "FrankBond@gmail.com",
                 userType.DEV,
                 devType.BACKEND,
-                7 ));
+                7,
+                1 ));
         userRepository.createUser(new User(3,
                 "Timothy",
                 "Charlatan",
                 "Tim@gmail.com",
                 userType.DEV,
                 devType.FRONTEND,
-                8));
+                8,
+                1));
 
 
 
-        Team team = new Team(0, "Test team", "test beskrivelse");
+        Team team = new Team(1, "Test team", "test beskrivelse", null, null, null);
         int teamId = teamRepository.createTeam(team);
 
-        teamRepository.assignUserToTeam(1,teamId);
-        teamRepository.assignUserToTeam(2,teamId);
-        teamRepository.assignUserToTeam(3,teamId);
 
-        List<User> teamMembers = teamRepository.getUsersByTeamId(teamId);
+
+        List<User> teamMembers = userRepository.getTeamDevs(teamId);
 
         assertEquals(3, teamMembers.size());
         assertEquals(1, teamMembers.get(0).getUserId());
@@ -229,7 +230,8 @@ public class pmRepoTest {
                 "bobTheGreatest@gmail.com",
                 userType.PROJECTMANAGER,
                 devType.FULLSTACK,
-                6));
+                6,
+                1));
 
         userRepository.createUser(new User(2,
                 "Frank",
@@ -237,21 +239,23 @@ public class pmRepoTest {
                 "FrankBond@gmail.com",
                 userType.DEV,
                 devType.BACKEND,
-                7));
+                7,
+                1));
 
-        Team team = new Team(0, "Test team", "test beskrivelse");
+        Team team = new Team(1, "Test team", "test beskrivelse", null, null, null);
         int teamId = teamRepository.createTeam(team);
 
-        teamRepository.assignUserToTeam(1, teamId);
-        teamRepository.assignUserToTeam(2, teamId);
 
-        List<User> teamMembersBefore = teamRepository.getUsersByTeamId(teamId);
+        List<User> teamMembersBefore = userRepository.getTeamDevs(teamId);
 
         assertEquals(2, teamMembersBefore.size());
 
-        teamRepository.removeUserFromTeam(1, teamId);
+        User dev = userRepository.findUser(1);
+        dev.setTeamId(null);
 
-        List<User> teamMembersAfter = teamRepository.getUsersByTeamId(teamId);
+        userRepository.editUser(dev);
+
+        List<User> teamMembersAfter = userRepository.getTeamDevs(teamId);
 
         assertEquals(1, teamMembersAfter.size());
         assertEquals(2, teamMembersAfter.get(0).getUserId());

@@ -88,7 +88,7 @@ public class ProjectRepository {
 
     public List<Project> getProjectsByUserId(int userId){
         String sql = "SELECT * FROM PROJECT p " +
-                     "JOIN USERS_PROJECT up ON p.project_id = up.project_id " +
+                     "JOIN USERSS_PROJECT up ON p.project_id = up.project_id " +
                      "WHERE up.user_id = ?";
         return jdbcTemplate.query(sql, new Object[]{userId}, (rs, rowNum) ->
                 new Project(
@@ -105,7 +105,7 @@ public class ProjectRepository {
     }
 
     public void assignProjectToUser(int projectId, int userId){
-        String sql = "INSERT INTO USERS_PROJECT (user_id, project_id) VALUES (?, ?)";
+        String sql = "INSERT INTO USERSS_PROJECT (user_id, project_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, userId, projectId);
     }
 }

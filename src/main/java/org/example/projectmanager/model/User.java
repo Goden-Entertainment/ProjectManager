@@ -9,10 +9,10 @@ public class User {
     private userType userType;
     private devType devType;
     private int workTime;
-    private int teamId;
+    private Integer teamId;
 
 
-    public User(int userId, String userName, String password, String email, userType userType, devType devType, int workTime, int teamId){
+    public User(int userId, String userName, String password, String email, userType userType, devType devType, int workTime, Integer teamId){
         this.userId = userId;
         this.username = userName;
         this.password = password;
@@ -70,7 +70,7 @@ public class User {
     public int getTeamId() {
         return teamId;
     }
-    public void setTeamId(int teamId) {
+    public void setTeamId(Integer teamId) {
         this.teamId = teamId;
     }
 }

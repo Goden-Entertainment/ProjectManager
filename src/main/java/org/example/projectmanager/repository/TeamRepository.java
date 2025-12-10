@@ -85,7 +85,7 @@ public class TeamRepository {
 
     // Get teams for a specific user (reverse lookup)
     public List<Integer> getTeamIdsByUserId(int userId) {
-        String sql = "SELECT team_id FROM USER WHERE user_id = ?";
+        String sql = "SELECT team_id FROM USERS WHERE user_id = ?";
         return jdbcTemplate.queryForList(sql, new Object[]{userId}, Integer.class);
     }
 }

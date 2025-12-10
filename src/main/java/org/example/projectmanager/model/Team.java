@@ -4,12 +4,12 @@ public class Team {
     private int teamId;
     private String teamName;
     private String teamDescription;
-    private int projectId;
-    private int subProjectId;
-    private int taskId;
+    private Integer projectId;
+    private Integer subProjectId;
+    private Integer taskId;
 
     // Full constructor (used by RowMapper)
-    public Team(int teamId, String teamName, String teamDescription, int projectId, int subProjectId, int taskId) {
+    public Team(int teamId, String teamName, String teamDescription, Integer projectId, Integer subProjectId, Integer taskId) {
         this.teamId = teamId;
         this.teamName = teamName;
         this.teamDescription = teamDescription;
@@ -50,7 +50,7 @@ public class Team {
         return projectId;
     }
 
-    public void setProjectId(int projectId) {
+    public void setProjectId(Integer projectId) {
         this.projectId = projectId;
     }
 
@@ -58,7 +58,7 @@ public class Team {
         return subProjectId;
     }
 
-    public void setSubProjectId(int subProjectId) {
+    public void setSubProjectId(Integer subProjectId) {
         this.subProjectId = subProjectId;
     }
 
@@ -66,7 +66,7 @@ public class Team {
         return taskId;
     }
 
-    public void setTaskId(int taskId) {
+    public void setTaskId(Integer taskId) {
         this.taskId = taskId;
     }
 }
