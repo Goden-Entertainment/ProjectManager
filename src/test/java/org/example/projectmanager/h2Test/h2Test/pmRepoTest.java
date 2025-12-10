@@ -80,7 +80,7 @@ public class pmRepoTest {
     }
 
     @Test
-    void creatProject(){
+    void createProject(){
 
         Project projectX = new Project(1,
                 "Projekt X",
@@ -132,7 +132,7 @@ public class pmRepoTest {
 
     @Test
     void editProject(){
-        Project originalProject = new Project(0,
+        Project originalProject = new Project(1,
                 "orginal navn",
                 "Original beskrivelse",
                 "ufærdigt",
@@ -144,7 +144,7 @@ public class pmRepoTest {
 
         projectRepository.createProject(originalProject);
 
-        Project editProject = new Project(0,
+        Project editProject = new Project(1,
                 "Redigeret navn",
                 "Redigeret beskrivelse",
                 "færdigt",
@@ -156,16 +156,15 @@ public class pmRepoTest {
 
         projectRepository.editProject(editProject);
 
-        Project resultat = projectRepository.findProject(0);
+        Project resultat = projectRepository.findProject(1);
 
         assertEquals("Redigeret navn", resultat.getName());
-        assertEquals("Redigeret Description", resultat.getDescription());
+        assertEquals("Redigeret beskrivelse", resultat.getDescription());
         assertEquals("færdigt", resultat.getStatus());
         assertEquals("lav", resultat.getPriority());
         assertEquals(200, resultat.getEstimatedTime());
         assertEquals(400, resultat.getActualTime());
         assertEquals(LocalDate.of(2026, 2, 10), resultat.getEndDate());
-
 
     }
 
@@ -179,8 +178,6 @@ public class pmRepoTest {
         List<Team>teams = teamRepository.getTeams();
 
         assertThat(teams).hasSize(3);
-
-
     }
 
     @Test
@@ -250,13 +247,9 @@ public class pmRepoTest {
 
         List<User> teamMembersBefore = teamRepository.getUsersByTeamId(teamId);
 
-
         assertEquals(2, teamMembersBefore.size());
 
-
         teamRepository.removeUserFromTeam(1, teamId);
-
-
 
         List<User> teamMembersAfter = teamRepository.getUsersByTeamId(teamId);
 
