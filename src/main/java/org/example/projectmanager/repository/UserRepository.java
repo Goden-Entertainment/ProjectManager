@@ -28,8 +28,8 @@ public class UserRepository {
                         rs.getString("userEmail"),
                         rs.getString("userType") != null ? userType.valueOf(rs.getString("userType")) : null,
                         rs.getString("devType") != null ? devType.valueOf(rs.getString("devType")) : null,
-                        rs.getInt("workTime")
-
+                        rs.getInt("workTime"),
+                        rs.getInt("team_id")
                 ));
     }
 
@@ -47,7 +47,7 @@ public class UserRepository {
     }
 
     public void editUser(User user) {
-        String sqlEdit = "UPDATE USER SET userName = ?, userEmail = ?, userPassword = ?, userType = ?, devType = ?, workTime = ? WHERE user_id = ?";
+        String sqlEdit = "UPDATE USER SET userName = ?, userEmail = ?, userPassword = ?, userType = ?, devType = ?, workTime = ? team_id = ? WHERE user_id = ?";
 
         jdbcTemplate.update(
                 sqlEdit,
@@ -57,6 +57,7 @@ public class UserRepository {
                 user.getUserType() != null ? user.getUserType().name() : null,
                 user.getDevType() != null ? user.getDevType().name() : null,
                 user.getWorkTime(),
+                user.getTeamId(),
                 user.getUserId()
         );
     }
@@ -74,7 +75,8 @@ public class UserRepository {
                         rs.getString("userEmail"),
                         rs.getString("userType") != null ? userType.valueOf(rs.getString("userType")) : null,
                         rs.getString("devType") != null ? devType.valueOf(rs.getString("devType")) : null,
-                        rs.getInt("workTime")
+                        rs.getInt("workTime"),
+                        rs.getInt("team_id")
                 ));
     }
 
@@ -88,7 +90,6 @@ public class UserRepository {
 
 
     public User findUser(String username) {
-
         String sql = "SELECT * FROM user WHERE username = ?";
 
         try{
@@ -100,8 +101,8 @@ public class UserRepository {
                             rs.getString("userEmail"),
                             rs.getString("userType") != null ? userType.valueOf(rs.getString("userType")) : null,
                             rs.getString("devType") != null ? devType.valueOf(rs.getString("devType")) : null,
-                            rs.getInt("workTime")
-
+                            rs.getInt("workTime"),
+                            rs.getInt("team_id")
                     ),
                     username
             );
@@ -113,7 +114,7 @@ public class UserRepository {
     }
 
     // Get all DEV users (for team assignment)
-    public List<User> getDevUsers() {
+    public List<User> getAllDevs() {
         String sql = "SELECT * FROM USER WHERE userType = 'DEV'";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                 new User(
@@ -123,7 +124,24 @@ public class UserRepository {
                         rs.getString("userEmail"),
                         userType.valueOf(rs.getString("userType")),
                         rs.getString("devType") != null ? devType.valueOf(rs.getString("devType")) : null,
-                        rs.getInt("workTime")
+                        rs.getInt("workTime"),
+                        rs.getInt("team_id")
                 ));
+    }
+
+    public List<User> getTeamDevs(int teamId) {
+        String sql = "SELECT * FROM USER WHERE userType = 'DEV' AND team_id = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                new User(
+                        rs.getInt("user_id"),
+                        rs.getString("userName"),
+                        rs.getString("userPassword"),
+                        rs.getString("userEmail"),
+                        userType.valueOf(rs.getString("userType")),
+                        rs.getString("devType") != null ? devType.valueOf(rs.getString("devType")) : null,
+                        rs.getInt("workTime"),
+                        rs.getInt("team_id")
+                )
+                , teamId);
     }
 }

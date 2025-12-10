@@ -37,17 +37,17 @@ public class TeamController {
         }
 
         // Get all teams
-        List<Team> teams = teamService.getTeams();
+        List<Team> teams= teamService.getTeams();
 
         // Lazy load team members - create map of teamId -> List<User>
-        Map<Integer, List<User>> teamMembers = new HashMap<>();
+        Map<Integer, List<User>> teamDevMapping = new HashMap<>();
         for (Team team : teams) {
-            List<User> devs = teamService.getUsersByTeamId(team.getTeamId());
-            teamMembers.put(team.getTeamId(), devs);
+            List<User> teamDevs = teamService.getTeamDevs(team.getTeamId());
+            teamDevMapping.put(team.getTeamId(), teamDevs);
         }
 
         model.addAttribute("teams", teams);
-        model.addAttribute("teamMembers", teamMembers);
+        model.addAttribute("teamDevMapping", teamDevMapping);
         return "teams";
     }
 
@@ -65,7 +65,7 @@ public class TeamController {
         }
 
         model.addAttribute("newTeam", new Team());
-        model.addAttribute("allDevs", teamService.getDevUsers());
+        model.addAttribute("allDevs", teamService.getAllDevs());
         return "addTeamForm";
     }
 
@@ -90,7 +90,6 @@ public class TeamController {
         // Assign selected devs to team (if any)
         if (selectedDevs != null && !selectedDevs.isEmpty()) {
             for (Integer devId : selectedDevs) {
-                teamService.assignUserToTeam(devId, teamId);
             }
         }
 
@@ -111,12 +110,8 @@ public class TeamController {
         }
 
         Team team = teamService.findTeam(teamId);
-        List<User> currentMembers = teamService.getUsersByTeamId(teamId);
-        List<User> allDevs = teamService.getDevUsers();
 
         model.addAttribute("team", team);
-        model.addAttribute("currentMembers", currentMembers);
-        model.addAttribute("allDevs", allDevs);
         return "editTeamForm";
     }
 
@@ -139,19 +134,8 @@ public class TeamController {
         teamService.editTeam(team);
 
         // Get current members
-        List<User> currentMembers = teamService.getUsersByTeamId(team.getTeamId());
+        List<User> currentMembers = teamService.getTeamDevs(team.getTeamId());
 
-        // Remove all current members first
-        for (User member : currentMembers) {
-            teamService.removeUserFromTeam(member.getUserId(), team.getTeamId());
-        }
-
-        // Add newly selected members
-        if (selectedDevs != null && !selectedDevs.isEmpty()) {
-            for (Integer devId : selectedDevs) {
-                teamService.assignUserToTeam(devId, team.getTeamId());
-            }
-        }
 
         return "redirect:/team/list";
     }

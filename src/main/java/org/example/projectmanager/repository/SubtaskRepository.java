@@ -146,9 +146,10 @@ public class SubtaskRepository {
                 rs.getString("userName"),
                 rs.getString("userPassword"),
                 rs.getString("userEmail"),
-                userType.valueOf(rs.getString("userType")),
+                rs.getString("userType") != null ?userType.valueOf(rs.getString("userType")) : null,
                 rs.getString("devType") != null ? devType.valueOf(rs.getString("devType")) : null,
-                rs.getInt("workTime")
+                rs.getInt("workTime"),
+                rs.getInt("team_id")
             ));
     }
 

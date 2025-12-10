@@ -2,15 +2,17 @@ package org.example.projectmanager.model;
 
 
 public class User {
-    int userId;
-    String username;
-    String password;
-    String email;
-    userType userType;
-    devType devType;
-    int workTime;
+    private int userId;
+    private String username;
+    private String password;
+    private String email;
+    private userType userType;
+    private devType devType;
+    private int workTime;
+    private int teamId;
 
-    public User(int userId, String userName, String password, String email, userType userType, devType devType, int workTime){
+
+    public User(int userId, String userName, String password, String email, userType userType, devType devType, int workTime, int teamId){
         this.userId = userId;
         this.username = userName;
         this.password = password;
@@ -18,10 +20,9 @@ public class User {
         this.userType = userType;
         this.devType = devType;
         this.workTime = workTime;
+        this.teamId = teamId;
     }
     public User(){}
-
-
 
 
     public String getUsername() {
@@ -66,5 +67,10 @@ public class User {
     public void setWorkTime(int workTime) {
         this.workTime = workTime;
     }
-
+    public int getTeamId() {
+        return teamId;
+    }
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
+    }
 }

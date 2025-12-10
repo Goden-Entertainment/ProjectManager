@@ -82,7 +82,7 @@ public class SubtaskController {
         List<User> availableUsers = new ArrayList<>();
         String teamName = "No Team";
         if (task.getTeamId() != 0) {
-            availableUsers = teamService.getUsersByTeamId(task.getTeamId());
+            availableUsers = teamService.getTeamDevs(task.getTeamId());
             Team team = teamService.findTeam(task.getTeamId());
             if (team != null) {
                 teamName = team.getTeamName();
@@ -158,7 +158,7 @@ public class SubtaskController {
         List<User> availableUsers = new ArrayList<>();
         String teamName = "No Team";
         if (task.getTeamId() != 0) {
-            availableUsers = teamService.getUsersByTeamId(task.getTeamId());
+            availableUsers = teamService.getTeamDevs(task.getTeamId());
             Team team = teamService.findTeam(task.getTeamId());
             if (team != null) {
                 teamName = team.getTeamName();

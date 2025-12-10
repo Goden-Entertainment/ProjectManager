@@ -15,11 +15,6 @@ public class TeamRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void assignTeamToTask(int teamId, int taskId) {
-        String sql = "INSERT INTO TEAM_TASK (team_id, task_id) VALUES (?, ?)";
-        jdbcTemplate.update(sql, teamId, taskId);
-
-    }
     // CREATE - Returns generated ID
     public int createTeam(Team team) {
         String sqlInsert = "INSERT INTO TEAM (teamName, teamDescription) VALUES (?, ?)";
@@ -39,7 +34,10 @@ public class TeamRepository {
                 new Team(
                         rs.getInt("team_id"),
                         rs.getString("teamName"),
-                        rs.getString("teamDescription")
+                        rs.getString("teamDescription"),
+                        rs.getInt("project_id"),
+                        rs.getInt("sub_project_id"),
+                        rs.getInt("task_id")
                 ));
     }
 
@@ -50,7 +48,10 @@ public class TeamRepository {
                 new Team(
                         rs.getInt("team_id"),
                         rs.getString("teamName"),
-                        rs.getString("teamDescription")
+                        rs.getString("teamDescription"),
+                        rs.getInt("project_id"),
+                        rs.getInt("sub_project_id"),
+                        rs.getInt("task_id")
                 ));
     }
 
@@ -60,7 +61,10 @@ public class TeamRepository {
         jdbcTemplate.update(sql,
                 team.getTeamName(),
                 team.getTeamDescription(),
-                team.getTeamId()
+                team.getTeamId(),
+                team.getProjectId(),
+                team.getSubProjectId(),
+                team.getTaskId()
         );
     }
 
@@ -68,18 +72,6 @@ public class TeamRepository {
     public int deleteTeam(int teamId) {
         String sql = "DELETE FROM TEAM WHERE team_id = ?";
         return jdbcTemplate.update(sql, teamId);
-    }
-
-    // Junction table method - assign user to team
-    public void assignUserToTeam(int userId, int teamId) {
-        String sql = "INSERT INTO USER_TEAM (user_id, team_id) VALUES (?, ?)";
-        jdbcTemplate.update(sql, userId, teamId);
-    }
-
-    // Junction table method - remove user from team
-    public void removeUserFromTeam(int userId, int teamId) {
-        String sql = "DELETE FROM USER_TEAM WHERE user_id = ? AND team_id = ?";
-        jdbcTemplate.update(sql, userId, teamId);
     }
 
     //Check naming convention for rettelser efter subtask er blevet lavet.
@@ -93,27 +85,10 @@ public class TeamRepository {
         String sql = "INSERT INTO SUBPROJECT_TEAM (team_id, task_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, teamId, subProjectId);
     }
-    // Get users for a specific team (via junction table) - LAZY LOADING
-    public List<User> getUsersByTeamId(int teamId) {
-        String sql = "SELECT * FROM USER u " +
-                     "JOIN USER_TEAM ut ON u.user_id = ut.user_id " +
-                     "WHERE ut.team_id = ?";
-        return jdbcTemplate.query(sql, new Object[]{teamId}, (rs, rowNum) ->
-                new User(
-                        rs.getInt("user_id"),
-                        rs.getString("userName"),
-                        rs.getString("userPassword"),
-                        rs.getString("userEmail"),
-                        org.example.projectmanager.model.userType.valueOf(rs.getString("userType")),
-                        rs.getString("devType") != null ? org.example.projectmanager.model.devType.valueOf(rs.getString("devType")) : null,
-                        rs.getInt("workTime")
-                ));
-    }
 
     // Get teams for a specific user (reverse lookup)
     public List<Integer> getTeamIdsByUserId(int userId) {
-        String sql = "SELECT team_id FROM USER_TEAM WHERE user_id = ?";
+        String sql = "SELECT team_id FROM USER WHERE user_id = ?";
         return jdbcTemplate.queryForList(sql, new Object[]{userId}, Integer.class);
     }
-
 }

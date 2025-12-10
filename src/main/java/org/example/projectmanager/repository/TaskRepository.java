@@ -130,7 +130,10 @@ public class TaskRepository {
                 new Team(
                         rs.getInt("team_id"),
                         rs.getString("teamName"),
-                        rs.getString("teamDescription")
+                        rs.getString("teamDescription"),
+                        rs.getInt("project_id"),
+                        rs.getInt("sub_project_id"),
+                        rs.getInt("task_id")
                 ));
         return teams.isEmpty() ? null : teams.get(0);
     }

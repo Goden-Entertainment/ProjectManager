@@ -40,25 +40,13 @@ public class TeamService {
         return teamRepository.deleteTeam(teamId);
     }
 
-    // Junction table methods
-    public void assignUserToTeam(int userId, int teamId) {
-        teamRepository.assignUserToTeam(userId, teamId);
+    public List<User> getTeamDevs(int teamId){
+        List<User> teamDevs = userRepository.getTeamDevs(teamId);
+
+        return teamDevs;
     }
 
-    public void removeUserFromTeam(int userId, int teamId) {
-        teamRepository.removeUserFromTeam(userId, teamId);
-    }
-
-    public List<User> getUsersByTeamId(int teamId) {
-        return teamRepository.getUsersByTeamId(teamId);
-    }
-
-    public List<Integer> getTeamIdsByUserId(int userId) {
-        return teamRepository.getTeamIdsByUserId(userId);
-    }
-
-    // Get all DEV users (for team assignment)
-    public List<User> getDevUsers() {
-        return userRepository.getDevUsers();
+    public List<User> getAllDevs() {
+        return userRepository.getAllDevs();
     }
 }
