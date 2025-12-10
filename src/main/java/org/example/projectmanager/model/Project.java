@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Project {
 
-    int projectId;
+    Integer projectId;
     String name;
     String description;
     String status;
@@ -14,7 +14,7 @@ public class Project {
     LocalDate startDate;
     LocalDate endDate;
 
-    public Project(int projectId, String name, String description, String status, String priority, int estimatedTime, int actualTime, LocalDate startDate, LocalDate endDate){
+    public Project(Integer projectId, String name, String description, String status, String priority, int estimatedTime, int actualTime, LocalDate startDate, LocalDate endDate){
         this.projectId = projectId;
         this.name = name;
         this.description = description;
@@ -31,11 +31,11 @@ public class Project {
 
 
 
-    public int getProjectId() {
+    public Integer getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(int projectId) {
+    public void setProjectId(Integer projectId) {
         this.projectId = projectId;
     }
 

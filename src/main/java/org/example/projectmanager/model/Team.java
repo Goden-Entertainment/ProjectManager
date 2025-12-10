@@ -1,7 +1,7 @@
 package org.example.projectmanager.model;
 
 public class Team {
-    private int teamId;
+    private Integer teamId;
     private String teamName;
     private String teamDescription;
     private Integer projectId;
@@ -9,7 +9,7 @@ public class Team {
     private Integer taskId;
 
     // Full constructor (used by RowMapper)
-    public Team(int teamId, String teamName, String teamDescription, Integer projectId, Integer subProjectId, Integer taskId) {
+    public Team(Integer teamId, String teamName, String teamDescription, Integer projectId, Integer subProjectId, Integer taskId) {
         this.teamId = teamId;
         this.teamName = teamName;
         this.teamDescription = teamDescription;
@@ -22,11 +22,11 @@ public class Team {
     public Team() {}
 
     // Getters and Setters
-    public int getTeamId() {
+    public Integer getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(int teamId) {
+    public void setTeamId(Integer teamId) {
         this.teamId = teamId;
     }
 
@@ -46,7 +46,7 @@ public class Team {
         this.teamDescription = teamDescription;
     }
 
-    public int getProjectId() {
+    public Integer getProjectId() {
         return projectId;
     }
 
@@ -54,7 +54,7 @@ public class Team {
         this.projectId = projectId;
     }
 
-    public int getSubProjectId() {
+    public Integer getSubProjectId() {
         return subProjectId;
     }
 
@@ -62,7 +62,7 @@ public class Team {
         this.subProjectId = subProjectId;
     }
 
-    public int getTaskId() {
+    public Integer getTaskId() {
         return taskId;
     }
 

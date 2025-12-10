@@ -3,7 +3,7 @@ package org.example.projectmanager.model;
 import java.time.LocalDate;
 
 public class SubProject {
-    private int subProjectId;
+    private Integer subProjectId;
     private String name;
     private String description;
     private String team;
@@ -15,7 +15,7 @@ public class SubProject {
     private int projectId;  // Foreign key to PROJECT
 
     // Full constructor (used by RowMapper)
-    public SubProject(int subProjectId, String name, String description, String team, String status,
+    public SubProject(Integer subProjectId, String name, String description, String team, String status,
                       int estimatedTime, int actualTime, LocalDate startDate, LocalDate endDate, int projectId) {
         this.subProjectId = subProjectId;
         this.name = name;
@@ -34,11 +34,11 @@ public class SubProject {
     }
 
     // Getters and Setters
-    public int getSubProjectId() {
+    public Integer getSubProjectId() {
         return subProjectId;
     }
 
-    public void setSubProjectId(int subProjectId) {
+    public void setSubProjectId(Integer subProjectId) {
         this.subProjectId = subProjectId;
     }
 

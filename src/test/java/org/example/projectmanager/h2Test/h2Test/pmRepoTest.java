@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,18 +24,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
 @SpringBootTest
+@Transactional
 @ActiveProfiles("test")
 @Sql(scripts = "classpath:h2init.sql", executionPhase = BEFORE_TEST_METHOD)
 public class pmRepoTest {
 
-
-    @Autowired
-    private UserRepository userRepository;
     @Autowired
     private ProjectRepository projectRepository;
     @Autowired
     private TeamRepository teamRepository;
-
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     void getUser() {
@@ -81,8 +81,7 @@ public class pmRepoTest {
 
     @Test
     void createProject(){
-
-        Project projectX = new Project(1,
+        Project projectX = new Project(null,
                 "Projekt X",
                 "Beskrivelse",
                 "Ufærdrigt",
@@ -92,11 +91,14 @@ public class pmRepoTest {
                 LocalDate.of(2025,12,10)
                 , LocalDate.of(2026,1,1));
 
+        //SAVE AND RETRIEVE PROJECTS
+        int madeProjectXID = projectRepository.createProject(projectX);
 
-        int madeProject = projectRepository.createProject(projectX);
+        Project projectX2 = projectRepository.findProject(madeProjectXID);
 
-        assertThat(madeProject).isEqualTo(1);
 
+        //CHECK THAT THE PROJECTS MATCH
+        assertThat(projectX).usingRecursiveComparison().ignoringFields("projectId").isEqualTo(projectX2);
     }
 
     @Test
@@ -132,7 +134,7 @@ public class pmRepoTest {
 
     @Test
     void editProject(){
-        Project originalProject = new Project(1,
+        Project originalProject = new Project(null,
                 "orginal navn",
                 "Original beskrivelse",
                 "ufærdigt",
@@ -142,30 +144,31 @@ public class pmRepoTest {
                 LocalDate.of(2025, 1, 1),
                 LocalDate.of(2026,1,30));
 
-        projectRepository.createProject(originalProject);
+        int project1 = projectRepository.createProject(originalProject);
 
-        Project editProject = new Project(1,
-                "Redigeret navn",
-                "Redigeret beskrivelse",
-                "færdigt",
-                "lav",
-                200,
-                400,
-                LocalDate.of(2025, 1, 1),
-                LocalDate.of(2026,2,10));
+        Project editProject = projectRepository.findProject(project1);
 
+        //CHECK THAT THE PROJECT HASNT BEEN ALTERED YET
+        assertThat(originalProject).usingRecursiveComparison().ignoringFields("projectId").isEqualTo(editProject);
+
+        //SET NEW PROJECT VALUES
+        editProject.setName("Redigeret navn");
+        editProject.setDescription("Redigeret beskrivelse");
+        editProject.setStatus("færdigt");
+        editProject.setPriority("lav");
+        editProject.setEstimatedTime(200);
+        editProject.setActualTime(400);
+        editProject.setStartDate(LocalDate.of(2025, 1, 1));
+        editProject.setEndDate(LocalDate.of(2026,2,10));
+
+
+        //WRITE ALTERATIONS TO THE DATABASE
         projectRepository.editProject(editProject);
 
-        Project resultat = projectRepository.findProject(1);
+        //CHECK IF THE ALTERATIONS ARE CORRECT
+        Project resultProject = projectRepository.findProject(project1);
 
-        assertEquals("Redigeret navn", resultat.getName());
-        assertEquals("Redigeret beskrivelse", resultat.getDescription());
-        assertEquals("færdigt", resultat.getStatus());
-        assertEquals("lav", resultat.getPriority());
-        assertEquals(200, resultat.getEstimatedTime());
-        assertEquals(400, resultat.getActualTime());
-        assertEquals(LocalDate.of(2026, 2, 10), resultat.getEndDate());
-
+        assertThat(editProject).usingRecursiveComparison().ignoringFields("projectId").isEqualTo(resultProject);
     }
 
 
@@ -182,83 +185,87 @@ public class pmRepoTest {
 
     @Test
     void assignUsersToTeam(){
-       userRepository.createUser(new User(1,
+        Team team = new Team(null, "Test team", "test beskrivelse", null, null, null);
+        int teamId = teamRepository.createTeam(team);
+
+        int user1 = userRepository.createUser(new User(null,
                 "bob",
                 "123",
                 "bobTheGreatest@gmai.com",
-                userType.PROJECTMANAGER,
+                userType.DEV,
                 devType.FULLSTACK,
                 6,
-               1));
-        userRepository.createUser(new User(2,
+                teamId));
+
+        int user2 = userRepository.createUser(new User(null,
                 "Frank",
                 "007",
                 "FrankBond@gmail.com",
                 userType.DEV,
                 devType.BACKEND,
                 7,
-                1 ));
-        userRepository.createUser(new User(3,
+                teamId));
+
+        int user3 = userRepository.createUser(new User(null,
                 "Timothy",
                 "Charlatan",
                 "Tim@gmail.com",
                 userType.DEV,
                 devType.FRONTEND,
                 8,
-                1));
-
-
-
-        Team team = new Team(1, "Test team", "test beskrivelse", null, null, null);
-        int teamId = teamRepository.createTeam(team);
-
+                teamId));
 
 
         List<User> teamMembers = userRepository.getTeamDevs(teamId);
 
-        assertEquals(3, teamMembers.size());
-        assertEquals(1, teamMembers.get(0).getUserId());
+        //CHECK THAT ALL TEAM MEMBERS ARE PRESENT
+        assertThat(teamMembers).hasSize(3);
 
+        assertEquals(user1, teamMembers.get(0).getUserId());
+        assertEquals(user2, teamMembers.get(1).getUserId());
+        assertEquals(user3, teamMembers.get(2).getUserId());
     }
 
 
     @Test
     void removeUserFromTeam(){
-        userRepository.createUser(new User(1,
-                "bob",
+        Team team = new Team(null, "Test team", "test beskrivelse", null, null, null);
+        int teamId = teamRepository.createTeam(team);
+
+        int user1 = userRepository.createUser(new User(null,
+                "bub",
                 "123",
                 "bobTheGreatest@gmail.com",
-                userType.PROJECTMANAGER,
+                userType.DEV,
                 devType.FULLSTACK,
                 6,
-                1));
+                teamId));
 
-        userRepository.createUser(new User(2,
+        int user2 = userRepository.createUser(new User(null,
                 "Frank",
                 "007",
                 "FrankBond@gmail.com",
                 userType.DEV,
                 devType.BACKEND,
                 7,
-                1));
-
-        Team team = new Team(1, "Test team", "test beskrivelse", null, null, null);
-        int teamId = teamRepository.createTeam(team);
-
+                teamId));
 
         List<User> teamMembersBefore = userRepository.getTeamDevs(teamId);
 
-        assertEquals(2, teamMembersBefore.size());
+        assertThat(teamMembersBefore).hasSize(2);
 
-        User dev = userRepository.findUser(1);
+        //USER2 REMOVED FROM TEAM
+        User dev = userRepository.findUser(user2);
         dev.setTeamId(null);
 
         userRepository.editUser(dev);
 
         List<User> teamMembersAfter = userRepository.getTeamDevs(teamId);
 
-        assertEquals(1, teamMembersAfter.size());
-        assertEquals(2, teamMembersAfter.get(0).getUserId());
+        //CHECKING TEAM SIZE
+        assertThat(teamMembersAfter).hasSize(1);
+        //CHECKING IF USER1 IS STILL ON THE TEAM
+        assertEquals(user1, teamMembersAfter.get(0).getUserId());
 
     }
 

@@ -20,7 +20,7 @@ public class UserService {
         return  userRepository.getUsers();
     }
 
-    public User createUser(User user){
+    public int createUser(User user){
        return userRepository.createUser(user);
     }
 

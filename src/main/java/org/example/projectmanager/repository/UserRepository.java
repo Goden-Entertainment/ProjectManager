@@ -33,17 +33,20 @@ public class UserRepository {
                 ));
     }
 
-    public User createUser(User user) {
-        String sql = "INSERT INTO USERS (userName, userPassword, userEmail, userType, devType, workTime) VALUES (?, ?, ?, ?, ?, ?)";
+    public int createUser(User user) {
+        String sql = "INSERT INTO USERS (userName, userPassword, userEmail, userType, devType, workTime, team_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
                 user.getUserType() != null ? user.getUserType().name() : null,
                 user.getDevType() != null ? user.getDevType().name() : null,
-                user.getWorkTime()
+                user.getWorkTime(),
+                user.getTeamId()
         );
-        return user;
+
+        String sqlGetId = "SELECT LAST_INSERT_ID()";
+        return jdbcTemplate.queryForObject(sqlGetId, Integer.class);
     }
 
     public void editUser(User user) {

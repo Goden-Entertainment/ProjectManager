@@ -2,7 +2,7 @@ package org.example.projectmanager.model;
 
 
 public class User {
-    private int userId;
+    private Integer userId;
     private String username;
     private String password;
     private String email;
@@ -12,7 +12,7 @@ public class User {
     private Integer teamId;
 
 
-    public User(int userId, String userName, String password, String email, userType userType, devType devType, int workTime, Integer teamId){
+    public User(Integer userId, String userName, String password, String email, userType userType, devType devType, int workTime, Integer teamId){
         this.userId = userId;
         this.username = userName;
         this.password = password;
@@ -43,10 +43,10 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
     public Enum getDevType() {
@@ -67,7 +67,7 @@ public class User {
     public void setWorkTime(int workTime) {
         this.workTime = workTime;
     }
-    public int getTeamId() {
+    public Integer getTeamId() {
         return teamId;
     }
     public void setTeamId(Integer teamId) {
