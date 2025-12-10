@@ -5,10 +5,12 @@ import org.example.projectmanager.model.Team;
 import org.example.projectmanager.model.User;
 import org.example.projectmanager.model.userType;
 import org.example.projectmanager.service.TeamService;
+import org.example.projectmanager.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,10 +19,12 @@ import java.util.Map;
 @RequestMapping("team")
 public class TeamController {
 
+    private final UserService userService;
     private TeamService teamService;
 
-    public TeamController(TeamService teamService) {
+    public TeamController(TeamService teamService, UserService userService) {
         this.teamService = teamService;
+        this.userService = userService;
     }
 
     // LIST - Show all teams with their members
@@ -65,7 +69,7 @@ public class TeamController {
         }
 
         model.addAttribute("newTeam", new Team());
-        model.addAttribute("allDevs", teamService.getAllDevs());
+        model.addAttribute("allDevs", teamService.getAllDevsForTeamCreation());
         return "addTeamForm";
     }
 
@@ -90,6 +94,9 @@ public class TeamController {
         // Assign selected devs to team (if any)
         if (selectedDevs != null && !selectedDevs.isEmpty()) {
             for (Integer devId : selectedDevs) {
+                User dev = userService.findUser(devId);
+                dev.setTeamId(teamId);  // Set the team_id before updating
+                userService.editUser(dev);
             }
         }
 
@@ -112,6 +119,7 @@ public class TeamController {
         Team team = teamService.findTeam(teamId);
 
         model.addAttribute("team", team);
+        model.addAttribute("allDevs", teamService.getTeamDevs(teamId));
         return "editTeamForm";
     }
 
@@ -132,9 +140,6 @@ public class TeamController {
 
         // Update team info
         teamService.editTeam(team);
-
-        // Get current members
-        List<User> currentMembers = teamService.getTeamDevs(team.getTeamId());
 
 
         return "redirect:/team/list";

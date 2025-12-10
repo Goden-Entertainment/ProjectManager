@@ -40,6 +40,10 @@ public class TeamService {
         return teamRepository.deleteTeam(teamId);
     }
 
+    public List<User> getAllDevsForTeamCreation(){
+        return userRepository.getAllDevsForTeamCreation();
+    }
+
     public List<User> getTeamDevs(int teamId){
         List<User> teamDevs = userRepository.getTeamDevs(teamId);
 

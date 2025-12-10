@@ -46,5 +46,8 @@ public class UserService {
 
         return null;
     }
-    }
 
+    public void removeTeamMembers(int teamId){
+
+    }
+}
