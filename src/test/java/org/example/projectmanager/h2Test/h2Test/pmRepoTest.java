@@ -184,6 +184,88 @@ public class pmRepoTest {
 
     }
 
+    @Test
+    void assignUsersToTeam(){
+       userRepository.createUser(new User(1,
+                "bob",
+                "123",
+                "bobTheGreatest@gmai.com",
+                userType.PROJECTMANAGER,
+                devType.FULLSTACK,
+                6));
+        userRepository.createUser(new User(2,
+                "Frank",
+                "007",
+                "FrankBond@gmail.com",
+                userType.DEV,
+                devType.BACKEND,
+                7 ));
+        userRepository.createUser(new User(3,
+                "Timothy",
+                "Charlatan",
+                "Tim@gmail.com",
+                userType.DEV,
+                devType.FRONTEND,
+                8));
+
+
+
+        Team team = new Team(0, "Test team", "test beskrivelse");
+        int teamId = teamRepository.createTeam(team);
+
+        teamRepository.assignUserToTeam(1,teamId);
+        teamRepository.assignUserToTeam(2,teamId);
+        teamRepository.assignUserToTeam(3,teamId);
+
+        List<User> teamMembers = teamRepository.getUsersByTeamId(teamId);
+
+        assertEquals(3, teamMembers.size());
+        assertEquals(1, teamMembers.get(0).getUserId());
+
+    }
+
+
+    @Test
+    void removeUserFromTeam(){
+        userRepository.createUser(new User(1,
+                "bob",
+                "123",
+                "bobTheGreatest@gmail.com",
+                userType.PROJECTMANAGER,
+                devType.FULLSTACK,
+                6));
+
+        userRepository.createUser(new User(2,
+                "Frank",
+                "007",
+                "FrankBond@gmail.com",
+                userType.DEV,
+                devType.BACKEND,
+                7));
+
+        Team team = new Team(0, "Test team", "test beskrivelse");
+        int teamId = teamRepository.createTeam(team);
+
+        teamRepository.assignUserToTeam(1, teamId);
+        teamRepository.assignUserToTeam(2, teamId);
+
+        List<User> teamMembersBefore = teamRepository.getUsersByTeamId(teamId);
+
+
+        assertEquals(2, teamMembersBefore.size());
+
+
+        teamRepository.removeUserFromTeam(1, teamId);
+
+
+
+        List<User> teamMembersAfter = teamRepository.getUsersByTeamId(teamId);
+
+        assertEquals(1, teamMembersAfter.size());
+        assertEquals(2, teamMembersAfter.get(0).getUserId());
+
+    }
+
 
 
 

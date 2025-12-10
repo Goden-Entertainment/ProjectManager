@@ -27,6 +27,13 @@ team_id int AUTO_INCREMENT PRIMARY KEY ,
 teamName varchar(255),
 teamDescription varchar(255)
 );
+CREATE TABLE IF NOT EXISTS `USER_TEAM` (
+user_id int NOT NULL,
+team_id int NOT NULL,
+PRIMARY KEY (user_id, team_id),  -- Composite primary key
+FOREIGN KEY (user_id) REFERENCES USER(user_id),
+FOREIGN KEY (team_id) REFERENCES TEAM(team_id)
+);
 
 --
 -- INSERT INTO USER (userName, userPassword, userType)
