@@ -8,6 +8,26 @@ CREATE TABLE IF NOT EXISTS `USER` (
     devType VARCHAR(255),
     workTime INT
 );
+
+CREATE TABLE IF NOT EXISTS `PROJECT` (
+    project_id int AUTO_INCREMENT PRIMARY KEY,
+    projectName varchar(255) UNIQUE NOT NULL,
+    projectDescription varchar (255) NOT NULL,
+    status varchar(255) NOT NULL,
+    priority varchar(255) NOT NULL,
+    estimatedTime int,
+    actualTime int,
+    startDate date,
+    endDate date
+
+);
+
+CREATE TABLE IF NOT EXISTS `TEAM` (
+team_id int AUTO_INCREMENT PRIMARY KEY ,
+teamName varchar(255),
+teamDescription varchar(255)
+);
+
 --
 -- INSERT INTO USER (userName, userPassword, userType)
 -- SELECT 'ADMIN', 'admin123', 'ADMIN'
