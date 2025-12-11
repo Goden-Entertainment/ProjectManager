@@ -66,8 +66,4 @@ public class TaskService {
     public int getSubProjectIdByTaskId(int taskId) {
         return taskRepository.getSubProjectIdByTaskId(taskId);
     }
-
-    public Team getTeamByTaskId(int taskId) {
-        return taskRepository.getTeamByTaskId(taskId);
-    }
 }

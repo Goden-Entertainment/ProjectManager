@@ -71,16 +71,21 @@ public class TeamRepository {
         return jdbcTemplate.update(sql, teamId);
     }
 
-    //Check naming convention for rettelser efter subtask er blevet lavet.
-    public void assignTeamToSubTask(int teamId, int subTaskId) {
-        String sql = "INSERT INTO TEAM_TASK (team_id, subTask_id) VALUES (?, ?)";
-        jdbcTemplate.update(sql, teamId, subTaskId);
+
+    public void assignTeamToProject(int teamId, int projectId) {
+        String sql = "UPDATE TEAM SET project_id = ? WHERE team_id = ?";
+        jdbcTemplate.update(sql, projectId, teamId);
 
     }
 
     public void assignTeamToSubProject(int teamId, int subProjectId) {
-        String sql = "INSERT INTO SUBPROJECT_TEAM (team_id, task_id) VALUES (?, ?)";
-        jdbcTemplate.update(sql, teamId, subProjectId);
+        String sql = "UPDATE TEAM SET sub_project_id = ? WHERE team_id = ?";
+        jdbcTemplate.update(sql, subProjectId, teamId);
+    }
+
+    public void assignTeamToTask(int teamId, int taskId) {
+        String sql = "UPDATE TEAM SET task_id = ? WHERE team_id = ?";
+        jdbcTemplate.update(sql, taskId, teamId);
     }
 
     // Get teams for a specific user (reverse lookup)

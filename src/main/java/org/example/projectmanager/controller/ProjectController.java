@@ -46,6 +46,7 @@ public class ProjectController {
             return "redirect:/user/login";
         }
 
+
         model.addAttribute("newProject", new Project());
         return "addProjectForm";
     }

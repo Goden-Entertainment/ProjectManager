@@ -49,23 +49,11 @@ public class TaskController {
         // Get project ID for back button (simplified - no junction table)
         int projectId = subProjectService.getProjectIdBySubProjectId(subProjectId);
 
-        // Create HashMap with team names for each task
-        Map<Integer, String> taskTeams = new HashMap<>();
-        for (Task task : tasks) {
-            if (task.getTeamId() != 0) {  // If task has a team
-                Team team = taskService.getTeamByTaskId(task.getTaskId());
-                if (team != null) {
-                    taskTeams.put(task.getTaskId(), team.getTeamName());
-                }
-            }
-        }
-
         int totalActualTime = taskService.getTotalActualTime(subProjectId);
 
         model.addAttribute("totalActualTime", totalActualTime);
         model.addAttribute("subProject", subProject);
         model.addAttribute("tasks", tasks);
-        model.addAttribute("taskTeams", taskTeams);
         model.addAttribute("projectId", projectId);
         return "tasks";
     }

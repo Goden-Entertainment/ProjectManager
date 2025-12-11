@@ -6,7 +6,6 @@ public class Task {
     private int taskId;
     private String name;
     private String description;
-    private int teamId;  // Foreign key to TEAM
     private String status;
     private int estimatedTime;
     private int actualTime;
@@ -16,12 +15,11 @@ public class Task {
     private int subProjectId;  // Foreign key to SUBPROJECT
 
     // Full constructor (used by RowMapper)
-    public Task(int taskId, String name, String description, int teamId, String status,
+    public Task(int taskId, String name, String description, String status,
                 int estimatedTime, int actualTime, String priority, LocalDate startDate, LocalDate endDate, int subProjectId) {
         this.taskId = taskId;
         this.name = name;
         this.description = description;
-        this.teamId = teamId;
         this.status = status;
         this.estimatedTime = estimatedTime;
         this.actualTime = actualTime;
@@ -58,14 +56,6 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getTeamId() {
-        return teamId;
-    }
-
-    public void setTeamId(int teamId) {
-        this.teamId = teamId;
     }
 
     public String getStatus() {

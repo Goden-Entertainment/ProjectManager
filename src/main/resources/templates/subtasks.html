@@ -66,11 +66,11 @@
                     <td th:text="${subtask.subTaskName}">Subtask Name</td>
                     <td th:text="${subtask.subTaskDescription}">Description</td>
                     <td>
-                        <span th:each="user, uStat : ${subtaskUsers[subtask.subTaskId]}">
-                            <span th:text="${user.username}">User</span>
-                            <span th:if="${!uStat.last}">, </span>
-                        </span>
-                        <span th:if="${subtaskUsers[subtask.subTaskId].isEmpty()}">No users assigned</span>
+<!--                        <span th:each="user, uStat : ${subtaskUsers[subtask.subTaskId]}">-->
+<!--                            <span th:text="${user.username}">User</span>-->
+<!--                            <span th:if="${!uStat.last}">, </span>-->
+<!--                        </span>-->
+<!--                        <span th:if="${subtaskUsers[subtask.subTaskId].isEmpty()}">No users assigned</span>-->
                     </td>
                     <td th:text="${subtask.status}">Status</td>
 

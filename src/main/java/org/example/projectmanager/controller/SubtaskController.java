@@ -78,24 +78,12 @@ public class SubtaskController {
         // Get task info
         Task task = taskService.findTask(taskId);
 
-        // Get team members from task's assigned team
-        List<User> availableUsers = new ArrayList<>();
-        String teamName = "No Team";
-        if (task.getTeamId() != 0) {
-            availableUsers = teamService.getTeamDevs(task.getTeamId());
-            Team team = teamService.findTeam(task.getTeamId());
-            if (team != null) {
-                teamName = team.getTeamName();
-            }
-        }
 
         Subtask newSubtask = new Subtask();
         newSubtask.setTaskId(taskId);
 
         model.addAttribute("newSubtask", newSubtask);
         model.addAttribute("taskName", task.getName());
-        model.addAttribute("teamName", teamName);
-        model.addAttribute("availableUsers", availableUsers);
         model.addAttribute("taskId", taskId);
 
         return "addSubtaskForm";
@@ -154,21 +142,8 @@ public class SubtaskController {
             assignedUserIds.add(u.getUserId());
         }
 
-        // Get available users from task's team
-        List<User> availableUsers = new ArrayList<>();
-        String teamName = "No Team";
-        if (task.getTeamId() != 0) {
-            availableUsers = teamService.getTeamDevs(task.getTeamId());
-            Team team = teamService.findTeam(task.getTeamId());
-            if (team != null) {
-                teamName = team.getTeamName();
-            }
-        }
-
         model.addAttribute("subtask", subtask);
         model.addAttribute("taskName", task.getName());
-        model.addAttribute("teamName", teamName);
-        model.addAttribute("availableUsers", availableUsers);
         model.addAttribute("assignedUserIds", assignedUserIds);
         model.addAttribute("taskId", taskId);
 

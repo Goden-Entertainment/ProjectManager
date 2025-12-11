@@ -18,12 +18,11 @@ public class TaskRepository {
     }
 
     public int createTask(Task task) {
-        String sqlInsert = "INSERT INTO TASK (taskName, taskDescription, team_id, status, estimatedTime, actualTime, priority, startDate, endDate, sub_project_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlInsert = "INSERT INTO TASK (taskName, taskDescription, status, estimatedTime, actualTime, priority, startDate, endDate, sub_project_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sqlInsert,
                 task.getName(),
                 task.getDescription(),
-                task.getTeamId() != 0 ? task.getTeamId() : null,
                 task.getStatus(),
                 task.getEstimatedTime(),
                 task.getActualTime(),
@@ -44,7 +43,6 @@ public class TaskRepository {
                         rs.getInt("task_id"),
                         rs.getString("taskName"),
                         rs.getString("taskDescription"),
-                        rs.getInt("team_id"),
                         rs.getString("status"),
                         rs.getInt("estimatedTime"),
                         rs.getInt("actualTime"),
@@ -62,7 +60,6 @@ public class TaskRepository {
                         rs.getInt("task_id"),
                         rs.getString("taskName"),
                         rs.getString("taskDescription"),
-                        rs.getInt("team_id"),
                         rs.getString("status"),
                         rs.getInt("estimatedTime"),
                         rs.getInt("actualTime"),
@@ -74,12 +71,11 @@ public class TaskRepository {
     }
 
     public void editTask(Task task) {
-        String sqlEdit = "UPDATE TASK SET taskName = ?, taskDescription = ?, team_id = ?, status = ?, estimatedTime = ?, actualTime = ?, priority = ?, startDate = ?, endDate = ?, sub_project_id = ? WHERE task_id = ?";
+        String sqlEdit = "UPDATE TASK SET taskName = ?, taskDescription = ?, status = ?, estimatedTime = ?, actualTime = ?, priority = ?, startDate = ?, endDate = ?, sub_project_id = ? WHERE task_id = ?";
         jdbcTemplate.update(
                 sqlEdit,
                 task.getName(),
                 task.getDescription(),
-                task.getTeamId() != 0 ? task.getTeamId() : null,
                 task.getStatus(),
                 task.getEstimatedTime(),
                 task.getActualTime(),
@@ -104,7 +100,6 @@ public class TaskRepository {
                         rs.getInt("task_id"),
                         rs.getString("taskName"),
                         rs.getString("taskDescription"),
-                        rs.getInt("team_id"),
                         rs.getString("status"),
                         rs.getInt("estimatedTime"),
                         rs.getInt("actualTime"),
@@ -119,22 +114,5 @@ public class TaskRepository {
     public int getSubProjectIdByTaskId(int taskId) {
         String sql = "SELECT sub_project_id FROM TASK WHERE task_id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{taskId}, Integer.class);
-    }
-
-    // Get team for a specific task via JOIN
-    public Team getTeamByTaskId(int taskId) {
-        String sql = "SELECT t.* FROM TEAM t " +
-                     "JOIN TASK ta ON t.team_id = ta.team_id " +
-                     "WHERE ta.task_id = ?";
-        List<Team> teams = jdbcTemplate.query(sql, new Object[]{taskId}, (rs, rowNum) ->
-                new Team(
-                        rs.getInt("team_id"),
-                        rs.getString("teamName"),
-                        rs.getString("teamDescription"),
-                        rs.getInt("project_id"),
-                        rs.getInt("sub_project_id"),
-                        rs.getInt("task_id")
-                ));
-        return teams.isEmpty() ? null : teams.get(0);
     }
 }
