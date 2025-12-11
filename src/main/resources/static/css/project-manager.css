@@ -284,3 +284,48 @@ select.form-control {
 .text-center { text-align: center; }
 .mt-20 { margin-top: 20px; }
 .mt-40 { margin-top: 40px; }
+
+/*SELECT MULTIPLE CHECKBOXES*/
+.dropdown-checkbox {
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: white;
+}
+
+.dropdown-checkbox summary {
+    padding: 10px;
+    cursor: pointer;
+    list-style: none; /* Fjerner default pil i nogle browsere */
+    user-select: none;
+}
+
+.dropdown-checkbox summary::-webkit-details-marker {
+    display: none; /* Fjerner default pil */
+}
+
+.dropdown-checkbox summary::after {
+    content: '▼';
+    float: right;
+}
+
+.dropdown-checkbox[open] summary::after {
+    content: '▲';
+}
+
+.checkbox-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+}
+
+.checkbox-list label {
+    display: block;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.checkbox-list label:hover {
+    background-color: #f0f0f0;
+}

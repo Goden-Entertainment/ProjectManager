@@ -57,4 +57,23 @@ public class TeamService {
     public void removeTeamMembers(int teamId){
         userRepository.removeTeamMembers(teamId);
     }
+
+    public void removeProjectTeams(int projectId){
+        teamRepository.removeProjectTeams(projectId);
+    }
+
+    public List<Team> allAvailableTeamsFor_Project() {
+        return teamRepository.allAvailableTeamsFor_Project();
+    }
+    public List<Team> allAvailableTeamsFor_Project(int projectId) {
+        return teamRepository.allAvailableTeamsFor_Project(projectId);
+    }
+
+    public List<Team> allAvailableTeamsFor_SubProject() {
+        return teamRepository.allAvailableTeamsFor_SubProject();
+    }
+
+    public List<Team> allAvailableTeamsFor_Task() {
+        return teamRepository.allAvailableTeamsFor_Task();
+    }
 }

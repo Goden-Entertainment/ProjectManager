@@ -28,54 +28,82 @@
     <!-- Form card -->
     <div class="form-card form-card--wide">
         <form th:action="@{/project/edit}" th:object="${project}" method="post">
+
             <!-- Hidden field for project ID -->
             <input type="hidden" th:field="*{projectId}">
 
+            <!--PROJECT NAME-->
             <div class="form-group">
                 <label class="form-label">Project Name</label>
                 <input class="form-control" type="text" th:field="*{name}" required>
             </div>
 
+            <!--DESCRIPTION-->
             <div class="form-group">
                 <label class="form-label">Description</label>
                 <textarea class="form-control" th:field="*{description}" rows="4"></textarea>
             </div>
 
+            <!--TEAM DROPDOWN MENU-->
+            <div class="form-group">
+                <label>Select Teams:</label>
+                <details class="dropdown-checkbox">
+                    <summary>Available Teams</summary>
+                    <div class="checkbox-list">
+                        <div th:each="team : ${availableTeams}">
+                            <label>
+                                <input type="checkbox"
+                                       name="selectedTeamIds"
+                                       th:value="${team.teamId}"
+                                       th:checked="${team.projectId != null && team.projectId.equals(project.projectId)}">
+                                <span th:text="${team.teamName}">Team Name</span>
+                            </label>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <!--STATUS-->
             <div class="form-group">
                 <label class="form-label">Status</label>
                 <input class="form-control" type="text" th:field="*{status}">
             </div>
 
+            <!--PRIORITY-->
             <div class="form-group">
                 <label class="form-label">Priority</label>
                 <input class="form-control" type="text" th:field="*{priority}">
             </div>
 
+            <!--ESTIMATED TIME-->
             <div class="form-group">
                 <label class="form-label">Estimated Time (hours)</label>
                 <input class="form-control" type="number" th:field="*{estimatedTime}" min="0">
             </div>
 
+            <!--ACTUAL TIME-->
             <div class="form-group">
                 <label class="form-label">Actual Time (hours)</label>
                 <input class="form-control" type="number" th:field="*{actualTime}" min="0">
             </div>
 
+            <!--START DATE-->
             <div class="form-group">
                 <label class="form-label">Start Date</label>
                 <input class="form-control" type="date" th:field="*{startDate}">
             </div>
 
+            <!--END DATE-->
             <div class="form-group">
                 <label class="form-label">End Date</label>
                 <input class="form-control" type="date" th:field="*{endDate}">
             </div>
 
+            <!--SUBMIT BUTTON-->
             <div class="form-actions">
                 <button class="btn btn-primary" type="submit">Update</button>
                 <a href="/project/myprojects" class="btn btn-danger">Cancel</a>
             </div>
-
         </form>
     </div>
 

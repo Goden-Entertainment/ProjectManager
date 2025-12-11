@@ -2,9 +2,11 @@ package org.example.projectmanager.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.example.projectmanager.model.Project;
+import org.example.projectmanager.model.Team;
 import org.example.projectmanager.model.User;
 import org.example.projectmanager.model.userType;
 import org.example.projectmanager.service.ProjectService;
+import org.example.projectmanager.service.TeamService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +17,12 @@ import java.util.List;
 @RequestMapping("project")
 public class ProjectController {
 
+    private final TeamService teamService;
     private ProjectService projectService;
 
-    public ProjectController(ProjectService projectService){
+    public ProjectController(ProjectService projectService, TeamService teamService){
         this.projectService = projectService;
+        this.teamService = teamService;
     }
 
     @GetMapping("/myprojects")
@@ -46,13 +50,15 @@ public class ProjectController {
             return "redirect:/user/login";
         }
 
+        List<Team> availableTeams = teamService.allAvailableTeamsFor_Project();
 
+        model.addAttribute("availableTeams", availableTeams);
         model.addAttribute("newProject", new Project());
         return "addProjectForm";
     }
 
     @PostMapping("/add")
-    public String createProject(@ModelAttribute Project project, HttpSession session){
+    public String createProject(@ModelAttribute Project project, @RequestParam List<Integer> selectedTeamIds, HttpSession session){
         User user = (User) session.getAttribute("user");
 
         if(user == null || user.getUserType() != userType.PROJECTMANAGER){
@@ -61,6 +67,16 @@ public class ProjectController {
 
         int projectId = projectService.createProject(project);
         projectService.assignProjectToUser(projectId, user.getUserId());
+
+        //ERROR HANDLING FOR WHEN NO TEAMS WERE SELECTED
+        if(selectedTeamIds != null && !selectedTeamIds.isEmpty()){
+            //CONNECTS THE TEAMS TO THE PROJECT WITH PROJECT_ID AS FOREIGN KEY
+            for(Integer teamId: selectedTeamIds){
+                Team selectedTeam = teamService.findTeam(teamId);
+                selectedTeam.setProjectId(projectId);
+                teamService.editTeam(selectedTeam);
+            }
+        }
 
         return "redirect:/project/myprojects";
     }
@@ -74,12 +90,15 @@ public class ProjectController {
         }
 
         Project project = projectService.findProject(projectId);
+        List<Team> availableTeams = teamService.allAvailableTeamsFor_Project(projectId);
+
+        model.addAttribute("availableTeams", availableTeams);
         model.addAttribute("project", project);
         return "editProjectForm";
     }
 
     @PostMapping("/edit")
-    public String updateProject(@ModelAttribute Project project, HttpSession session){
+    public String updateProject(@ModelAttribute Project project, @RequestParam(required = false) List<Integer> selectedTeamIds, HttpSession session){
         User user = (User) session.getAttribute("user");
 
         if(user == null || user.getUserType() != userType.PROJECTMANAGER){
@@ -87,6 +106,20 @@ public class ProjectController {
         }
 
         projectService.editProject(project);
+
+        //REMOVE THE OLD TEAM TO PROJECT CONNECTIONS
+        teamService.removeProjectTeams(project.getProjectId());
+
+        //ERROR HANDLING FOR WHEN NO TEAMS WERE SELECTED
+        if(selectedTeamIds != null && !selectedTeamIds.isEmpty()){
+            //CONNECTS THE TEAMS TO THE PROJECT WITH PROJECT_ID AS FOREIGN KEY
+            for(Integer teamId: selectedTeamIds) {
+                Team selectedTeam = teamService.findTeam(teamId);
+                selectedTeam.setProjectId(project.getProjectId());
+                teamService.editTeam(selectedTeam);
+            }
+        }
+
         return "redirect:/project/myprojects";
     }
 
