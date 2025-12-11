@@ -95,11 +95,6 @@ public class UserController {
     public String authenticateUser(@RequestParam("username") String username,
                                    @RequestParam("password") String password,
                                    HttpSession session) {
-
-        if (username.equals("Admin") && !password.equals("admin123")) {
-            throw new ProfileNotFoundException();
-        }
-
         try {
             User user = userService.login(username, password);
 
