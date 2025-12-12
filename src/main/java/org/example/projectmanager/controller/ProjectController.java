@@ -59,7 +59,7 @@ public class ProjectController {
     }
 
     @PostMapping("/add")
-    public String createProject(@ModelAttribute Project project, @RequestParam List<Integer> selectedTeamIds, HttpSession session){
+    public String createProject(@ModelAttribute Project project, @RequestParam(required = false) List<Integer> selectedTeamIds, HttpSession session){
         User user = (User) session.getAttribute("user");
 
         if(user == null || user.getUserType() != userType.PROJECTMANAGER){
