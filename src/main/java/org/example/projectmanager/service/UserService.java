@@ -42,9 +42,12 @@ public class UserService {
         if (user.getPassword().equals(password)) {
 
             return user;
-        }
+        } else if (! user.getPassword().equals(password)){
+            throw new ProfileNotFoundException();
+        } else{
 
-        return null;
+            return null;
+        }
     }
 
     public void removeTeamMembers(int teamId){
