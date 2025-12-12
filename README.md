@@ -3,26 +3,31 @@
 
 ### Links
 * Vores [Github Link][githublink]
-* Eksempel link
-* endnu et
-* osv
+* Link til vores applikation på Azure her
+* 
 
 
 ## Introduktion
-Velkommen til dette repository som har til formål at udvikle et Scrum management system til vores kunde: [Alpha Solutions][alphalink].
+ __Velkommen til dette repository som har til formål at udvikle et Scrum management system til vores kunde__: [Alpha Solutions][alphalink].
 
 Vi er fire studerende, som går på EK, der har fået en deadline til dette eksamens projekt, der er til _17. December 2025_.
 
 I dette repository har vi til opgave at udføre et program der har til formål at struktere et projekt baseret system.
 
-## Brug af projektet 
+## Funktionalitet af programmet
+* Programmet har til formål at gøre det lettere for en project manager at tidsestimere og strukturer hans projekter mm.
+
+## Database Set-up
+Database navn: project_manager
+Vi benytter os af MySQL workbench og bruger det som vores database i vores projekt.
+
+1. Opret et schema i MySQL ved navn project_manager.
+
+2. Når programmet bliver kørt bliver tabellerne og evt data automatisk oprettet i databasen.
 
 
-## Teknologier 
-
-
-## Opretterer af produktet
-Denne projekt er lavet af følgende personer:
+## Opretterer af produktet aka OGs.
+Dette projekt er lavet af følgende personer:
 * [Marco][marcoLink]
 * [Yacqub][yacLink]
 * [Rune][runeLink]
@@ -31,13 +36,10 @@ Denne projekt er lavet af følgende personer:
 
 
 ## To Do List - README.md fil.
-- [ ] Database set up
-  * Scripts
-  * Navn på database
-  * mm.
-- [ ] Beskrivelse af produktet
+- [x] Database set up
+- [x] Beskrivelse af produktet
 
-- [ ] Funktionalitet af programmet
+- [x] Funktionalitet af programmet
   * Hvad gør programmet
   * osv.
 - [x] Hvem har lavet projektet
