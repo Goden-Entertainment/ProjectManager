@@ -34,19 +34,6 @@ Dette projekt er lavet af følgende personer:
 * [August][augustLink]
 > Link til [contributing fil][conLink]
 
-
-## To Do List - README.md fil.
-- [x] Database set up
-- [x] Beskrivelse af produktet
-
-- [x] Funktionalitet af programmet
-  * Hvad gør programmet
-  * osv.
-- [x] Hvem har lavet projektet
-- [ ] Visuelt?
-- [ ] Status på projektet.
-
-
 [githublink]: https://github.com/Goden-Entertainment
 [alphalink]: https://www.alpha-solutions.com/da
 [runeLink]: https://github.com/runejy
