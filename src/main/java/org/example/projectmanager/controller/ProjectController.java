@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -106,6 +107,13 @@ public class ProjectController {
         }
 
         projectService.editProject(project);
+
+        List<Team> projectTeams = teamService.getTeams(project.getProjectId(), null, null);
+        List<Team> selectedTeams = new ArrayList<>();
+        for(Integer teamId: selectedTeamIds) {
+            Team selectedTeam = teamService.findTeam(teamId);
+            selectedTeams.add(selectedTeam)
+        }
 
         //REMOVE THE OLD TEAM TO PROJECT CONNECTIONS
         teamService.removeProjectTeams(project.getProjectId());

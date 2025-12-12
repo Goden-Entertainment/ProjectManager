@@ -1,12 +1,10 @@
 package org.example.projectmanager.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.example.projectmanager.model.Project;
-import org.example.projectmanager.model.SubProject;
-import org.example.projectmanager.model.User;
-import org.example.projectmanager.model.userType;
+import org.example.projectmanager.model.*;
 import org.example.projectmanager.service.ProjectService;
 import org.example.projectmanager.service.SubProjectService;
+import org.example.projectmanager.service.TeamService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +15,14 @@ import java.util.List;
 @RequestMapping("subproject")
 public class SubProjectController {
 
+    private final TeamService teamService;
     private SubProjectService subProjectService;
     private ProjectService projectService;
 
-    public SubProjectController(SubProjectService subProjectService, ProjectService projectService) {
+    public SubProjectController(SubProjectService subProjectService, ProjectService projectService, TeamService teamService) {
         this.subProjectService = subProjectService;
         this.projectService = projectService;
+        this.teamService = teamService;
     }
 
     @GetMapping("/list/{projectId}")
@@ -60,14 +60,18 @@ public class SubProjectController {
             return "redirect:/user/profile";
         }
 
-        model.addAttribute("newSubProject", new SubProject());
-        model.addAttribute("projectId", projectId);
+        List<Team> availableTeams = teamService.allAvailableTeamsFor_SubProject(projectId);
+        SubProject newSubProject = new SubProject();
+        newSubProject.setProjectId(projectId);
+
+        model.addAttribute("availableTeams", availableTeams);
+        model.addAttribute("newSubProject", newSubProject);
         return "addSubProjectForm";
     }
 
     @PostMapping("/add")
     public String createSubProject(@ModelAttribute SubProject subProject,
-                                    @RequestParam("projectId") int projectId,
+                                    @RequestParam(required = false) List<Integer> selectedTeamIds,
                                     HttpSession session) {
         User user = (User) session.getAttribute("user");
 
@@ -79,11 +83,19 @@ public class SubProjectController {
             return "redirect:/user/profile";
         }
 
-        // Set FK directly and create subproject (simplified - no junction table)
-        subProject.setProjectId(projectId);
-        subProjectService.createSubProject(subProject);
+        int subProjectId = subProjectService.createSubProject(subProject);
 
-        return "redirect:/subproject/list/" + projectId;
+        //ERROR HANDLING FOR WHEN NO TEAMS WERE SELECTED
+        if(selectedTeamIds != null && !selectedTeamIds.isEmpty()){
+            //CONNECTS THE TEAMS TO THE SUBPROJECT WITH SUBPROJECT_ID AS FOREIGN KEY
+            for(Integer teamId: selectedTeamIds) {
+                Team selectedTeam = teamService.findTeam(teamId);
+                selectedTeam.setSubProjectId(subProjectId);
+                teamService.editTeam(selectedTeam);
+            }
+        }
+
+        return "redirect:/subproject/list/" + subProject.getProjectId();
     }
 
     @GetMapping("/edit/{subProjectId}")
@@ -100,18 +112,18 @@ public class SubProjectController {
 
         SubProject subProject = subProjectService.findSubProject(subProjectId);
 
-        // Get project ID directly from FK (simplified)
-        int projectId = subProjectService.getProjectIdBySubProjectId(subProjectId);
+        List<Team> availableTeams = teamService.allAvailableTeamsFor_SubProject(subProject.getProjectId(),subProjectId);
 
+        model.addAttribute("availableTeams", availableTeams);
         model.addAttribute("subProject", subProject);
-        model.addAttribute("projectId", projectId);
         return "editSubProjectForm";
     }
 
     @PostMapping("/edit")
     public String updateSubProject(@ModelAttribute SubProject subProject,
-                                    @RequestParam("projectId") int projectId,
+                                    @RequestParam(required = false) List<Integer> selectedTeamIds,
                                     HttpSession session) {
+
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
@@ -123,7 +135,20 @@ public class SubProjectController {
         }
 
         subProjectService.editSubProject(subProject);
-        return "redirect:/subproject/list/" + projectId;
+
+        //REMOVE THE OLD TEAM TO SUBPROJECT CONNECTIONS
+        teamService.removeSubProjectTeams(subProject.getSubProjectId());
+
+        //ERROR HANDLING FOR WHEN NO TEAMS WERE SELECTED
+        if(selectedTeamIds != null && !selectedTeamIds.isEmpty()){
+            //CONNECTS THE TEAMS TO THE SUBPROJECT WITH SUBPROJECT_ID AS FOREIGN KEY
+            for(Integer teamId: selectedTeamIds) {
+                Team selectedTeam = teamService.findTeam(teamId);
+                selectedTeam.setSubProjectId(subProject.getSubProjectId());
+                teamService.editTeam(selectedTeam);
+            }
+        }
+        return "redirect:/subproject/list/" + subProject.getProjectId();
     }
 
     @GetMapping("/delete/{subProjectId}")

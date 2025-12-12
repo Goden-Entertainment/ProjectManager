@@ -29,54 +29,75 @@
     <!-- Form card -->
     <div class="form-card form-card--wide">
         <form th:action="@{/subproject/add}" th:object="${newSubProject}" method="post">
-            <input type="hidden" name="projectId" th:value="${projectId}">
+            <!--HIDDEN INPUT-->
+            <input type="hidden" th:field="*{projectId}">
 
+            <!--SUB_PROJECT NAME-->
             <div class="form-group">
                 <label class="form-label">SubProject Name</label>
                 <input class="form-control" type="text" th:field="*{name}" required>
             </div>
 
+            <!--DESCRIPTION-->
             <div class="form-group">
                 <label class="form-label">Description</label>
                 <textarea class="form-control" th:field="*{description}" rows="4"></textarea>
             </div>
 
+            <!--TEAM DROPDOWN MENU-->
             <div class="form-group">
-                <label class="form-label">Team</label>
-                <input class="form-control" type="text" th:field="*{team}">
+                <label>Select Teams:</label>
+                <details class="dropdown-checkbox">
+                    <summary>Available Teams</summary>
+                    <div class="checkbox-list">
+                        <div th:each="team : ${availableTeams}">
+                            <label>
+                                <input type="checkbox"
+                                       name="selectedTeamIds"
+                                       th:value="${team.teamId}">
+                                <span th:text="${team.teamName}">Team Name</span>
+                            </label>
+                        </div>
+                    </div>
+                </details>
             </div>
 
+            <!--STATUS-->
             <div class="form-group">
                 <label class="form-label">Status</label>
                 <input class="form-control" type="text" th:field="*{status}">
             </div>
 
+            <!--ESTIMATED TIME-->
             <div class="form-group">
                 <label class="form-label">Estimated Time (hours)</label>
                 <input class="form-control" type="number" th:field="*{estimatedTime}">
             </div>
 
+            <!--ACTUAL TIME-->
             <div class="form-group">
                 <label class="form-label">Actual Time (hours)</label>
                 <input class="form-control" type="number" th:field="*{actualTime}">
             </div>
 
+            <!--START DATE-->
             <div class="form-group">
                 <label class="form-label">Start Date</label>
                 <input class="form-control" type="date" th:field="*{startDate}">
             </div>
 
+            <!--END DATE-->
             <div class="form-group">
                 <label class="form-label">End Date</label>
                 <input class="form-control" type="date" th:field="*{endDate}">
             </div>
 
+            <!--SUBMIT BUTTON-->
             <div class="form-actions">
                 <button class="btn btn-primary" type="submit">Save</button>
                 <a th:href="@{/subproject/list/{projectId}(projectId=${projectId})}"
                    class="btn btn-danger">Cancel</a>
             </div>
-
         </form>
     </div>
 

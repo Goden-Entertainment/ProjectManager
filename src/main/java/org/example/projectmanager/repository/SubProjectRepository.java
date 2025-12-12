@@ -16,12 +16,11 @@ public class SubProjectRepository {
     }
 
     public int createSubProject(SubProject subProject) {
-        String sqlInsert = "INSERT INTO SUBPROJECT (subProjectName, subProjectDescription, team, status, estimatedTime, actualTime, startDate, endDate, project_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlInsert = "INSERT INTO SUBPROJECT (subProjectName, subProjectDescription, status, estimatedTime, actualTime, startDate, endDate, project_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sqlInsert,
                 subProject.getName(),
                 subProject.getDescription(),
-                subProject.getTeam(),
                 subProject.getStatus(),
                 subProject.getEstimatedTime(),
                 subProject.getActualTime(),
@@ -38,16 +37,15 @@ public class SubProjectRepository {
         String sql = "SELECT * FROM SUBPROJECT";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                 new SubProject(
-                        rs.getInt("sub_project_id"),
+                        rs.getObject("sub_project_id", Integer.class),
                         rs.getString("subProjectName"),
                         rs.getString("subProjectDescription"),
-                        rs.getString("team"),
                         rs.getString("status"),
-                        rs.getInt("estimatedTime"),
-                        rs.getInt("actualTime"),
+                        rs.getObject("estimatedTime", Integer.class),
+                        rs.getObject("actualTime", Integer.class),
                         rs.getDate("startDate") != null ? rs.getDate("startDate").toLocalDate() : null,
                         rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null,
-                        rs.getInt("project_id")
+                        rs.getObject("project_id", Integer.class)
                 ));
     }
 
@@ -55,26 +53,24 @@ public class SubProjectRepository {
         String sqlFindSubProject = "SELECT * FROM SUBPROJECT WHERE sub_project_id = ?";
         return jdbcTemplate.queryForObject(sqlFindSubProject, new Object[]{subProjectId}, (rs, rowNum) ->
                 new SubProject(
-                        rs.getInt("sub_project_id"),
+                        rs.getObject("sub_project_id", Integer.class),
                         rs.getString("subProjectName"),
                         rs.getString("subProjectDescription"),
-                        rs.getString("team"),
                         rs.getString("status"),
-                        rs.getInt("estimatedTime"),
-                        rs.getInt("actualTime"),
+                        rs.getObject("estimatedTime", Integer.class),
+                        rs.getObject("actualTime", Integer.class),
                         rs.getDate("startDate") != null ? rs.getDate("startDate").toLocalDate() : null,
                         rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null,
-                        rs.getInt("project_id")
+                        rs.getObject("project_id", Integer.class)
                 ));
     }
 
     public void editSubProject(SubProject subProject) {
-        String sqlEdit = "UPDATE SUBPROJECT SET subProjectName = ?, subProjectDescription = ?, team = ?, status = ?, estimatedTime = ?, actualTime = ?, startDate = ?, endDate = ?, project_id = ? WHERE sub_project_id = ?";
+        String sqlEdit = "UPDATE SUBPROJECT SET subProjectName = ?, subProjectDescription = ?, status = ?, estimatedTime = ?, actualTime = ?, startDate = ?, endDate = ?, project_id = ? WHERE sub_project_id = ?";
         jdbcTemplate.update(
                 sqlEdit,
                 subProject.getName(),
                 subProject.getDescription(),
-                subProject.getTeam(),
                 subProject.getStatus(),
                 subProject.getEstimatedTime(),
                 subProject.getActualTime(),
@@ -95,16 +91,15 @@ public class SubProjectRepository {
         String sql = "SELECT * FROM SUBPROJECT WHERE project_id = ?";
         return jdbcTemplate.query(sql, new Object[]{projectId}, (rs, rowNum) ->
                 new SubProject(
-                        rs.getInt("sub_project_id"),
+                        rs.getObject("sub_project_id", Integer.class),
                         rs.getString("subProjectName"),
                         rs.getString("subProjectDescription"),
-                        rs.getString("team"),
                         rs.getString("status"),
-                        rs.getInt("estimatedTime"),
-                        rs.getInt("actualTime"),
+                        rs.getObject("estimatedTime", Integer.class),
+                        rs.getObject("actualTime", Integer.class),
                         rs.getDate("startDate") != null ? rs.getDate("startDate").toLocalDate() : null,
                         rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null,
-                        rs.getInt("project_id")
+                        rs.getObject("project_id", Integer.class)
                 ));
     }
 

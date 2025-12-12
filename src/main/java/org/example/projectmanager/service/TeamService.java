@@ -54,6 +54,10 @@ public class TeamService {
         return userRepository.getAllDevs();
     }
 
+    public List<Team> getTeams(Integer projectId, Integer subProjectId, Integer taskId) {
+        return teamRepository.getTeams(projectId, subProjectId, taskId);
+    }
+
     public void removeTeamMembers(int teamId){
         userRepository.removeTeamMembers(teamId);
     }
@@ -61,7 +65,6 @@ public class TeamService {
     public void removeProjectTeams(int projectId){
         teamRepository.removeProjectTeams(projectId);
     }
-
     public List<Team> allAvailableTeamsFor_Project() {
         return teamRepository.allAvailableTeamsFor_Project();
     }
@@ -69,11 +72,20 @@ public class TeamService {
         return teamRepository.allAvailableTeamsFor_Project(projectId);
     }
 
-    public List<Team> allAvailableTeamsFor_SubProject() {
-        return teamRepository.allAvailableTeamsFor_SubProject();
+    public void removeSubProjectTeams(int subProjectId){
+        teamRepository.removeSubProjectTeams(subProjectId);
     }
+    public List<Team> allAvailableTeamsFor_SubProject(int projectId) {
+        return teamRepository.allAvailableTeamsFor_SubProject(projectId);
+    }
+    public List<Team> allAvailableTeamsFor_SubProject(int projectId, int subProjectId) {
+        return teamRepository.allAvailableTeamsFor_SubProject(projectId, subProjectId);
+    }
+
 
     public List<Team> allAvailableTeamsFor_Task() {
         return teamRepository.allAvailableTeamsFor_Task();
     }
+
+
 }

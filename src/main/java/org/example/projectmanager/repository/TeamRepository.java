@@ -74,27 +74,26 @@ public class TeamRepository {
         return jdbcTemplate.update(sql, teamId);
     }
 
-
-    public void assignTeamToProject(int teamId, int projectId) {
-        String sql = "UPDATE TEAM SET project_id = ? WHERE team_id = ?";
-        jdbcTemplate.update(sql, projectId, teamId);
-
-    }
-
-    public void assignTeamToSubProject(int teamId, int subProjectId) {
-        String sql = "UPDATE TEAM SET sub_project_id = ? WHERE team_id = ?";
-        jdbcTemplate.update(sql, subProjectId, teamId);
-    }
-
-    public void assignTeamToTask(int teamId, int taskId) {
-        String sql = "UPDATE TEAM SET task_id = ? WHERE team_id = ?";
-        jdbcTemplate.update(sql, taskId, teamId);
-    }
-
     // Get teams for a specific user (reverse lookup)
     public List<Integer> getTeamIdsByUserId(int userId) {
         String sql = "SELECT team_id FROM USERS WHERE user_id = ?";
         return jdbcTemplate.queryForList(sql, new Object[]{userId}, Integer.class);
+    }
+
+    public List<Team> getTeams(Integer projectId, Integer subProjectId, Integer taskId) {
+        String sql = "SELECT * FROM TEAM WHERE project_id = ? OR sub_project_id = ? OR task_id = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                new Team(
+                        rs.getObject("team_id", Integer.class),
+                        rs.getString("teamName"),
+                        rs.getString("teamDescription"),
+                        rs.getObject("project_id", Integer.class),
+                        rs.getObject("sub_project_id", Integer.class),
+                        rs.getObject("task_id", Integer.class)
+                )
+                , projectId
+                , subProjectId
+                , taskId);
     }
 
     public void removeProjectTeams(int projectId){
@@ -129,8 +128,26 @@ public class TeamRepository {
                 , projectId);
     }
 
-    public List<Team> allAvailableTeamsFor_SubProject() {
-        String sql = "SELECT * FROM TEAM WHERE sub_project_id IS NULL";
+    public void removeSubProjectTeams(int subProjectId){
+        String sql = "UPDATE TEAM SET sub_project_id = NULL, task_id = NULL WHERE sub_project_id = ?";
+        jdbcTemplate.update(sql, subProjectId);
+    }
+
+    public List<Team> allAvailableTeamsFor_SubProject(int projectId) {
+        String sql = "SELECT * FROM TEAM WHERE sub_project_id IS NULL AND project_id = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                        new Team(
+                                rs.getObject("team_id", Integer.class),
+                                rs.getString("teamName"),
+                                rs.getString("teamDescription"),
+                                rs.getObject("project_id", Integer.class),
+                                rs.getObject("sub_project_id", Integer.class),
+                                rs.getObject("task_id", Integer.class)
+                        )
+                , projectId);
+    }
+    public List<Team> allAvailableTeamsFor_SubProject(int projectId, int subProjectId) {
+        String sql = "SELECT * FROM TEAM WHERE (sub_project_id IS NULL OR sub_project_id = ?) AND project_id = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                 new Team(
                         rs.getObject("team_id", Integer.class),
@@ -139,7 +156,9 @@ public class TeamRepository {
                         rs.getObject("project_id", Integer.class),
                         rs.getObject("sub_project_id", Integer.class),
                         rs.getObject("task_id", Integer.class)
-                ));
+                )
+                , subProjectId
+                , projectId);
     }
 
     public List<Team> allAvailableTeamsFor_Task() {
@@ -154,4 +173,6 @@ public class TeamRepository {
                         rs.getObject("task_id", Integer.class)
                 ));
     }
+
+
 }
