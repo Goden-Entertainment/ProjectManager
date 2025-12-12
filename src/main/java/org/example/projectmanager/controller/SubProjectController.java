@@ -136,12 +136,20 @@ public class SubProjectController {
 
         subProjectService.editSubProject(subProject);
 
-        //REMOVE THE OLD TEAM TO SUBPROJECT CONNECTIONS
-        teamService.removeSubProjectTeams(subProject.getSubProjectId());
+        //REMOVE THE OLD TEAM TO PROJECT CONNECTIONS
+        List<Team> oldSelectedTeams = teamService.getTeams(subProject.getProjectId(), subProject.getProjectId(), null);
+        for(Team team : oldSelectedTeams) {
+            if(selectedTeamIds == null || !selectedTeamIds.contains(team.getTeamId())){
+                team.setSubProjectId(null);
+                team.setTaskId(null);
+
+                teamService.editTeam(team);
+            }
+        }
 
         //ERROR HANDLING FOR WHEN NO TEAMS WERE SELECTED
         if(selectedTeamIds != null && !selectedTeamIds.isEmpty()){
-            //CONNECTS THE TEAMS TO THE SUBPROJECT WITH SUBPROJECT_ID AS FOREIGN KEY
+            //CONNECTS THE TEAMS TO THE PROJECT WITH PROJECT_ID AS FOREIGN KEY
             for(Integer teamId: selectedTeamIds) {
                 Team selectedTeam = teamService.findTeam(teamId);
                 selectedTeam.setSubProjectId(subProject.getSubProjectId());

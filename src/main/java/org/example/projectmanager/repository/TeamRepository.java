@@ -161,8 +161,22 @@ public class TeamRepository {
                 , projectId);
     }
 
-    public List<Team> allAvailableTeamsFor_Task() {
-        String sql = "SELECT * FROM TEAM WHERE task_id IS NULL";
+    public List<Team> allAvailableTeamsFor_Task(int subProjectId) {
+        String sql = "SELECT * FROM TEAM WHERE task_id IS NULL AND sub_project_id = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                        new Team(
+                                rs.getObject("team_id", Integer.class),
+                                rs.getString("teamName"),
+                                rs.getString("teamDescription"),
+                                rs.getObject("project_id", Integer.class),
+                                rs.getObject("sub_project_id", Integer.class),
+                                rs.getObject("task_id", Integer.class)
+                        )
+                , subProjectId);
+    }
+
+    public List<Team> allAvailableTeamsFor_Task(int subProjectId, int taskId) {
+        String sql = "SELECT * FROM TEAM WHERE (task_id IS NULL OR task_id = ?) AND sub_project_id = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                 new Team(
                         rs.getObject("team_id", Integer.class),
@@ -171,7 +185,9 @@ public class TeamRepository {
                         rs.getObject("project_id", Integer.class),
                         rs.getObject("sub_project_id", Integer.class),
                         rs.getObject("task_id", Integer.class)
-                ));
+                )
+                , taskId
+                , subProjectId);
     }
 
 

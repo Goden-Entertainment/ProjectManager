@@ -108,15 +108,17 @@ public class ProjectController {
 
         projectService.editProject(project);
 
-        List<Team> projectTeams = teamService.getTeams(project.getProjectId(), null, null);
-        List<Team> selectedTeams = new ArrayList<>();
-        for(Integer teamId: selectedTeamIds) {
-            Team selectedTeam = teamService.findTeam(teamId);
-            selectedTeams.add(selectedTeam)
-        }
-
         //REMOVE THE OLD TEAM TO PROJECT CONNECTIONS
-        teamService.removeProjectTeams(project.getProjectId());
+        List<Team> oldSelectedTeams = teamService.getTeams(project.getProjectId(), null, null);
+        for(Team team : oldSelectedTeams) {
+            if(selectedTeamIds == null || !selectedTeamIds.contains(team.getTeamId())){
+                team.setProjectId(null);
+                team.setSubProjectId(null);
+                team.setTaskId(null);
+
+                teamService.editTeam(team);
+            }
+        }
 
         //ERROR HANDLING FOR WHEN NO TEAMS WERE SELECTED
         if(selectedTeamIds != null && !selectedTeamIds.isEmpty()){

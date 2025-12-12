@@ -40,16 +40,16 @@ public class TaskRepository {
         String sql = "SELECT * FROM TASK";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                 new Task(
-                        rs.getInt("task_id"),
+                        rs.getObject("task_id", Integer.class),
                         rs.getString("taskName"),
                         rs.getString("taskDescription"),
                         rs.getString("status"),
-                        rs.getInt("estimatedTime"),
-                        rs.getInt("actualTime"),
+                        rs.getObject("estimatedTime", Integer.class),
+                        rs.getObject("actualTime", Integer.class),
                         rs.getString("priority"),
                         rs.getDate("startDate") != null ? rs.getDate("startDate").toLocalDate() : null,
                         rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null,
-                        rs.getInt("sub_project_id")
+                        rs.getObject("sub_project_id", Integer.class)
                 ));
     }
 
@@ -57,16 +57,16 @@ public class TaskRepository {
         String sqlFindTask = "SELECT * FROM TASK WHERE task_id = ?";
         return jdbcTemplate.queryForObject(sqlFindTask, new Object[]{taskId}, (rs, rowNum) ->
                 new Task(
-                        rs.getInt("task_id"),
+                        rs.getObject("task_id", Integer.class),
                         rs.getString("taskName"),
                         rs.getString("taskDescription"),
                         rs.getString("status"),
-                        rs.getInt("estimatedTime"),
-                        rs.getInt("actualTime"),
+                        rs.getObject("estimatedTime", Integer.class),
+                        rs.getObject("actualTime", Integer.class),
                         rs.getString("priority"),
                         rs.getDate("startDate") != null ? rs.getDate("startDate").toLocalDate() : null,
                         rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null,
-                        rs.getInt("sub_project_id")
+                        rs.getObject("sub_project_id", Integer.class)
                 ));
     }
 
@@ -97,16 +97,16 @@ public class TaskRepository {
         String sql = "SELECT * FROM TASK WHERE sub_project_id = ?";
         return jdbcTemplate.query(sql, new Object[]{subProjectId}, (rs, rowNum) ->
                 new Task(
-                        rs.getInt("task_id"),
+                        rs.getObject("task_id", Integer.class),
                         rs.getString("taskName"),
                         rs.getString("taskDescription"),
                         rs.getString("status"),
-                        rs.getInt("estimatedTime"),
-                        rs.getInt("actualTime"),
+                        rs.getObject("estimatedTime", Integer.class),
+                        rs.getObject("actualTime", Integer.class),
                         rs.getString("priority"),
                         rs.getDate("startDate") != null ? rs.getDate("startDate").toLocalDate() : null,
                         rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null,
-                        rs.getInt("sub_project_id")
+                        rs.getObject("sub_project_id", Integer.class)
                 ));
     }
 

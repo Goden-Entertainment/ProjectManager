@@ -46,15 +46,11 @@ public class TaskController {
         SubProject subProject = subProjectService.findSubProject(subProjectId);
         List<Task> tasks = taskService.getTasksBySubProjectId(subProjectId);
 
-        // Get project ID for back button (simplified - no junction table)
-        int projectId = subProjectService.getProjectIdBySubProjectId(subProjectId);
-
         int totalActualTime = taskService.getTotalActualTime(subProjectId);
 
         model.addAttribute("totalActualTime", totalActualTime);
-        model.addAttribute("subProject", subProject);
         model.addAttribute("tasks", tasks);
-        model.addAttribute("projectId", projectId);
+        model.addAttribute("subProject", subProject);
         return "tasks";
     }
 
@@ -70,18 +66,18 @@ public class TaskController {
             return "redirect:/user/profile";
         }
 
-        // Get all teams for dropdown
-        List<Team> allTeams = teamService.getTeams();
+        List<Team> availableTeams = teamService.allAvailableTeamsFor_Task(subProjectId);
+        Task newTask = new Task();
+        newTask.setSubProjectId(subProjectId);
 
-        model.addAttribute("newTask", new Task());
-        model.addAttribute("teams", allTeams);
-        model.addAttribute("subProjectId", subProjectId);
+        model.addAttribute("newTask", newTask);
+        model.addAttribute("availableTeams", availableTeams);
         return "addTaskForm";
     }
 
     @PostMapping("/add")
     public String createTask(@ModelAttribute Task task,
-                              @RequestParam("subProjectId") int subProjectId,
+                              @RequestParam(required = false) List<Integer> selectedTeamIds,
                               HttpSession session) {
         User user = (User) session.getAttribute("user");
 
@@ -93,11 +89,19 @@ public class TaskController {
             return "redirect:/user/profile";
         }
 
-        // Set FK directly and create task (simplified - no junction table)
-        task.setSubProjectId(subProjectId);
-        taskService.createTask(task);
+        int taskId = taskService.createTask(task);
 
-        return "redirect:/task/list/" + subProjectId;
+        //ERROR HANDLING FOR WHEN NO TEAMS WERE SELECTED
+        if(selectedTeamIds != null && !selectedTeamIds.isEmpty()){
+            //CONNECTS THE TEAMS TO THE SUBPROJECT WITH SUBPROJECT_ID AS FOREIGN KEY
+            for(Integer teamId: selectedTeamIds) {
+                Team selectedTeam = teamService.findTeam(teamId);
+                selectedTeam.setTaskId(taskId);
+                teamService.editTeam(selectedTeam);
+            }
+        }
+
+        return "redirect:/task/list/" + task.getSubProjectId();
     }
 
     @GetMapping("/edit/{taskId}")
@@ -114,21 +118,17 @@ public class TaskController {
 
         Task task = taskService.findTask(taskId);
 
-        // Get subproject ID directly from FK (simplified)
-        int subProjectId = taskService.getSubProjectIdByTaskId(taskId);
-
         // Get all teams for dropdown
-        List<Team> allTeams = teamService.getTeams();
+        List<Team> availableTeams = teamService.allAvailableTeamsFor_Task(task.getSubProjectId(),taskId);
 
         model.addAttribute("task", task);
-        model.addAttribute("teams", allTeams);
-        model.addAttribute("subProjectId", subProjectId);
+        model.addAttribute("availableTeams", availableTeams);
         return "editTaskForm";
     }
 
     @PostMapping("/edit")
     public String updateTask(@ModelAttribute Task task,
-                              @RequestParam("subProjectId") int subProjectId,
+                              @RequestParam(required = false) List<Integer> selectedTeamIds,
                               HttpSession session) {
         User user = (User) session.getAttribute("user");
 
@@ -141,7 +141,27 @@ public class TaskController {
         }
 
         taskService.editTask(task);
-        return "redirect:/task/list/" + subProjectId;
+
+        //REMOVE THE OLD TEAM TO PROJECT CONNECTIONS
+        List<Team> oldSelectedTeams = teamService.getTeams(null, null, task.getTaskId());
+        for(Team team : oldSelectedTeams) {
+            if(selectedTeamIds == null || !selectedTeamIds.contains(team.getTeamId())){
+                team.setTaskId(null);
+
+                teamService.editTeam(team);
+            }
+        }
+
+        //ERROR HANDLING FOR WHEN NO TEAMS WERE SELECTED
+        if(selectedTeamIds != null && !selectedTeamIds.isEmpty()){
+            //CONNECTS THE TEAMS TO THE PROJECT WITH PROJECT_ID AS FOREIGN KEY
+            for(Integer teamId: selectedTeamIds) {
+                Team selectedTeam = teamService.findTeam(teamId);
+                selectedTeam.setTaskId(task.getTaskId());
+                teamService.editTeam(selectedTeam);
+            }
+        }
+        return "redirect:/task/list/" + task.getSubProjectId();
     }
 
     @GetMapping("/delete/{taskId}")

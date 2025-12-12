@@ -17,7 +17,7 @@
     <!-- Top-right buttons -->
     <div class="header-actions">
         <button onclick="copyEmail()" class="btn btn-primary btn-header">Contact</button>
-        <a th:href="@{/subproject/list/{projectId}(projectId=${projectId})}"
+        <a th:href="@{/subproject/list/{projectId}(projectId=${subProject.projectId})}"
            class="btn btn-danger btn-header">Back</a>
     </div>
 

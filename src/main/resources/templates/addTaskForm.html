@@ -41,17 +41,23 @@
                 <textarea class="form-control" th:field="*{description}" rows="4"></textarea>
             </div>
 
-<!--            <div class="form-group">-->
-<!--                <label class="form-label">Assigned Team</label>-->
-<!--                <select class="form-control" th:field="*{teamId}">-->
-<!--                    <option value="0">&#45;&#45; No Team &#45;&#45;</option>-->
-<!--                    <option th:each="team : ${teams}"-->
-<!--                            th:value="${team.teamId}"-->
-<!--                            th:text="${team.teamName}">-->
-<!--                        Team Name-->
-<!--                    </option>-->
-<!--                </select>-->
-<!--            </div>-->
+            <!--TEAM DROPDOWN MENU-->
+            <div class="form-group">
+                <label>Select Teams:</label>
+                <details class="dropdown-checkbox">
+                    <summary>Available Teams</summary>
+                    <div class="checkbox-list">
+                        <div th:each="team : ${availableTeams}">
+                            <label>
+                                <input type="checkbox"
+                                       name="selectedTeamIds"
+                                       th:value="${team.teamId}">
+                                <span th:text="${team.teamName}">Team Name</span>
+                            </label>
+                        </div>
+                    </div>
+                </details>
+            </div>
 
             <div class="form-group">
                 <label class="form-label">Status</label>
@@ -85,7 +91,7 @@
 
             <div class="form-actions">
                 <button class="btn btn-primary" type="submit">Save</button>
-                <a th:href="@{/task/list/{subProjectId}(subProjectId=${subProjectId})}"
+                <a th:href="@{/task/list/{subProjectId}(subProjectId=${newTask.subProjectId})}"
                    class="btn btn-danger">Cancel</a>
             </div>
 

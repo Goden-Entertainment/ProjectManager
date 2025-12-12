@@ -82,9 +82,11 @@ public class TeamService {
         return teamRepository.allAvailableTeamsFor_SubProject(projectId, subProjectId);
     }
 
-
-    public List<Team> allAvailableTeamsFor_Task() {
-        return teamRepository.allAvailableTeamsFor_Task();
+    public List<Team> allAvailableTeamsFor_Task(int subProjectId) {
+        return teamRepository.allAvailableTeamsFor_Task(subProjectId);
+    }
+    public List<Team> allAvailableTeamsFor_Task(int subProjectId, int taskid) {
+        return teamRepository.allAvailableTeamsFor_Task(subProjectId, taskid);
     }
 
 
