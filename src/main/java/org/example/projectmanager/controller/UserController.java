@@ -104,7 +104,7 @@ public class UserController {
             }
 
         } catch (DataAccessException e) {
-            throw new DatabaseOperationException("Failed to login", e);
+            throw new DatabaseOperationException("Database fejl ved autentificering", e);
         }
 
         return "redirect:/user/login";

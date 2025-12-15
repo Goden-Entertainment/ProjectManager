@@ -12,10 +12,10 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler({DatabaseOperationException.class})
-    public String handleGeneric(Exception ex, Model model) {
+    public String handleDatabaseError(Exception ex, Model model) {
         model.addAttribute("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
         model.addAttribute("error", "Internal Server Error");
-        model.addAttribute("message", "Something went wrong. Please try again later.");
+        model.addAttribute("message", "Der opstod en fejl med databasen.");
         return "errorpage";
     }
 
