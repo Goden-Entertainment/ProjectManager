@@ -28,6 +28,9 @@
     <div class="form-card form-card--wide">
         <form th:action="@{/team/edit}" th:object="${team}" method="post">
             <input type="hidden" th:field="*{teamId}">
+            <input type="hidden" th:field="*{projectId}">
+            <input type="hidden" th:field="*{subProjectId}">
+            <input type="hidden" th:field="*{taskId}">
 
             <div class="form-group">
                 <label class="form-label">Team Name</label>

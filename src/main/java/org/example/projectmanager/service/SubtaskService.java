@@ -58,19 +58,25 @@ public class SubtaskService {
     }
 
     // Junction table methods
-    public void assignUserToSubtask(int userId, int subTaskId) {
-        subtaskRepository.assignUserToSubtask(userId, subTaskId);
+    public void assignDevToSubtask(int devId, int subTaskId) {
+        subtaskRepository.assignDevToSubtask(devId, subTaskId);
     }
 
-    public void removeUserFromSubtask(int userId, int subTaskId) {
-        subtaskRepository.removeUserFromSubtask(userId, subTaskId);
+    public void removeDevFromSubtask(int devId, int subTaskId) {
+        subtaskRepository.removeDevFromSubtask(devId, subTaskId);
     }
 
-    public List<User> getUsersBySubtaskId(int subTaskId) {
-        return subtaskRepository.getUsersBySubtaskId(subTaskId);
+    public List<Integer> getCurrentlyAssignedDevIds(int subTaskId) {
+        return subtaskRepository.getCurrentlyAssignedDevIds(subTaskId);
+    }
+
+    public List<User> getDevsBySubtaskId(int subTaskId) {
+        return subtaskRepository.getDevsBySubtaskId(subTaskId);
     }
 
     public void removeAllUsersFromSubtask(int subTaskId) {
         subtaskRepository.removeAllUsersFromSubtask(subTaskId);
     }
+
+
 }

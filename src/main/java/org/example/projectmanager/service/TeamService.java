@@ -6,6 +6,7 @@ import org.example.projectmanager.repository.TeamRepository;
 import org.example.projectmanager.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -89,5 +90,7 @@ public class TeamService {
         return teamRepository.allAvailableTeamsFor_Task(subProjectId, taskid);
     }
 
-
+    public List<Team> allAvailableTeamsFor_SubTask(int taskId) {
+        return teamRepository.allAvailableTeamsFor_SubTask(taskId);
+    }
 }

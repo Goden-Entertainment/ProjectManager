@@ -190,5 +190,17 @@ public class TeamRepository {
                 , subProjectId);
     }
 
-
+    public List<Team> allAvailableTeamsFor_SubTask(int taskId) {
+        String sql = "SELECT * FROM TEAM WHERE task_id = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                        new Team(
+                                rs.getObject("team_id", Integer.class),
+                                rs.getString("teamName"),
+                                rs.getString("teamDescription"),
+                                rs.getObject("project_id", Integer.class),
+                                rs.getObject("sub_project_id", Integer.class),
+                                rs.getObject("task_id", Integer.class)
+                        )
+                , taskId);
+    }
 }

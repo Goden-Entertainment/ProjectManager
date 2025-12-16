@@ -124,19 +124,25 @@ public class SubtaskRepository {
     // ========== JUNCTION TABLE METHODS ==========
 
     // Assign user to subtask
-    public void assignUserToSubtask(int userId, int subTaskId) {
+    public void assignDevToSubtask(int devId, int subTaskId) {
         String sql = "INSERT INTO USERS_SUBTASK (user_id, sub_task_id) VALUES (?, ?)";
-        jdbcTemplate.update(sql, userId, subTaskId);
+        jdbcTemplate.update(sql, devId, subTaskId);
     }
 
     // Remove user from subtask
-    public void removeUserFromSubtask(int userId, int subTaskId) {
+    public void removeDevFromSubtask(int devId, int subTaskId) {
         String sql = "DELETE FROM USERS_SUBTASK WHERE user_id = ? AND sub_task_id = ?";
-        jdbcTemplate.update(sql, userId, subTaskId);
+        jdbcTemplate.update(sql, devId, subTaskId);
     }
 
     // Get all users assigned to a subtask
-    public List<User> getUsersBySubtaskId(int subTaskId) {
+    public List<Integer> getCurrentlyAssignedDevIds(int subTaskId) {
+        String sql = "SELECT user_id FROM USERS_SUBTASK WHERE sub_task_id = ?";
+
+        return jdbcTemplate.queryForList(sql, Integer.class, subTaskId);
+    }
+
+    public List<User> getDevsBySubtaskId(int subTaskId) {
         String sql = "SELECT * FROM USERS u " +
                      "JOIN USERS_SUBTASK us ON u.user_id = us.user_id " +
                      "WHERE us.sub_task_id = ?";
@@ -158,4 +164,6 @@ public class SubtaskRepository {
         String sql = "DELETE FROM USERS_SUBTASK WHERE sub_task_id = ?";
         jdbcTemplate.update(sql, subTaskId);
     }
+
+
 }

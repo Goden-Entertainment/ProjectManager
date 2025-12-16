@@ -1,7 +1,5 @@
-// Contact button functionality - copies email to clipboard
-
 function copyEmail() {
-    const email = 'support@projectmanager.com'; // Change this to your actual email
+    const email = 'support@projectmanager.com';
 
     // Copy to clipboard
     navigator.clipboard.writeText(email).then(function() {
