@@ -18,3 +18,5 @@ Please be as detailed as you can be, since we are new programmers so we won't be
 
 ## 📝 Closing thoughts 📝
 Since we are new at programming and new to GitHub as a whole aswell, we're still taking most of the feedback and contributions via email mostly. Thanks for reading our contributing file and may you have a blessed day, Goden Entertainment out 💅
+
+#HALLLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
