@@ -3,8 +3,12 @@
 
 ### Links
 * Vores [Github Link][githublink]
-* Link til vores applikation på Azure kommer før eksamen i Januar.
-* 
+* Link til vores applikation på Azure: https://project-manager-e2b8ceejfmgaddh7.norwayeast-01.azurewebsites.net/user/login
+>Admin username: ADMIN , Admin password: admin123
+> 
+> For at bruge systemets project-management funktioner skal admin først lave en project-manager og devs til teams. 
+> Password er ikke påkrevet for at oprette devs. Det eneste der er påkrevet for at oprette en project-manager er username, password og userType(PROJECTMANAGER).
+> Email og worktime per day er ikke implimenteret i systemets funtionalitet og det er derfor anbefalet ikke at udfylde de felter.
 
 
 ## Introduktion
@@ -16,6 +20,8 @@ I dette repository har vi til opgave at udføre et program der har til formål a
 
 ## Funktionalitet af programmet
 * Programmet har til formål at gøre det lettere for en project manager at tidsestimere og strukturer hans projekter mm.
+* Tidsestimering kan sættes på hvert Projekt, SubProject, Task og SubTask. 
+Actual time værdien burde kun sættes i Subtasks siden at actual time værdien i Projects, SubProjects og Tasks bliver udregnet baseret på deres Subtasks.
 
 ## Database Set-up
 Database navn: project_manager
