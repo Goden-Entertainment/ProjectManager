@@ -1,7 +1,6 @@
 package org.example.projectmanager.repository;
 
 import org.example.projectmanager.model.Team;
-import org.example.projectmanager.model.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +14,7 @@ public class TeamRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // CREATE - Returns generated ID
+    // CREATE
     public int createTeam(Team team) {
         String sqlInsert = "INSERT INTO TEAM (teamName, teamDescription) VALUES (?, ?)";
         jdbcTemplate.update(sqlInsert,
