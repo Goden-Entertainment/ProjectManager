@@ -3,10 +3,8 @@ function copyEmail() {
 
     // Copy to clipboard
     navigator.clipboard.writeText(email).then(function() {
-        // Show toast notification
         showToast('Email copied to clipboard: ' + email);
     }).catch(function(err) {
-        // Fallback for older browsers
         console.error('Could not copy email: ', err);
         showToast('Failed to copy email');
     });
