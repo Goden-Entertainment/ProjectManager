@@ -8,7 +8,7 @@
 > 
 > For at bruge systemets project-management funktioner skal admin først lave en project-manager og devs til teams. 
 > Password er ikke påkrevet for at oprette devs. Det eneste der er påkrevet for at oprette en project-manager er username, password og userType(PROJECTMANAGER).
-> Email og worktime per day er ikke implimenteret i systemets funtionalitet og det er derfor anbefalet ikke at udfylde de felter.
+> Email og worktime per day er ikke implimenteret i systemets nuværende funtionalitet og det er derfor anbefalet ikke at udfylde de felter.
 
 
 ## Introduktion
