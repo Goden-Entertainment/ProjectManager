@@ -3,7 +3,7 @@
 
 ### Links
 * Vores [Github Link][githublink]
-* Link til vores applikation på Azure her
+* Link til vores applikation på Azure kommer før eksamen i Januar.
 * 
 
 
