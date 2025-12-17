@@ -38,24 +38,6 @@ public class SubtaskRepository {
         return jdbcTemplate.queryForObject(sqlGetId, Integer.class);
     }
 
-    // READ ALL
-    public List<Subtask> getSubtasks() {
-        String sql = "SELECT * FROM SUBTASK";
-        return jdbcTemplate.query(sql, (rs, rowNum) ->
-            new Subtask(
-                rs.getInt("sub_task_id"),
-                rs.getString("subTaskName"),
-                rs.getString("subTaskDescription"),
-                rs.getString("status"),
-                rs.getInt("estimatedTime"),
-                rs.getInt("actualTime"),
-                rs.getString("priority"),
-                rs.getDate("startDate") != null ? rs.getDate("startDate").toLocalDate() : null,
-                rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null,
-                rs.getInt("task_id")
-            ));
-    }
-
     // READ ONE
     public Subtask findSubtask(int subTaskId) {
         String sql = "SELECT * FROM SUBTASK WHERE sub_task_id = ?";
@@ -92,9 +74,9 @@ public class SubtaskRepository {
     }
 
     // DELETE
-    public int deleteSubtask(int subTaskId) {
+    public void deleteSubtask(int subtaskId) {
         String sql = "DELETE FROM SUBTASK WHERE sub_task_id = ?";
-        return jdbcTemplate.update(sql, subTaskId);
+        jdbcTemplate.update(sql, subtaskId);
     }
 
     // Get subtasks by task ID
@@ -116,31 +98,31 @@ public class SubtaskRepository {
     }
 
     // Get parent task ID
-    public int getTaskIdBySubtaskId(int subTaskId) {
+    public int getTaskIdBySubtaskId(int subtaskId) {
         String sql = "SELECT task_id FROM SUBTASK WHERE sub_task_id = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{subTaskId}, Integer.class);
+        return jdbcTemplate.queryForObject(sql, new Object[]{subtaskId}, Integer.class);
     }
 
     // ========== JUNCTION TABLE METHODS ==========
 
     // Assign user to subtask
-    public void assignUserToSubtask(int userId, int subTaskId) {
+    public void assignDevToSubtask(int devId, int subtaskId) {
         String sql = "INSERT INTO USERS_SUBTASK (user_id, sub_task_id) VALUES (?, ?)";
-        jdbcTemplate.update(sql, userId, subTaskId);
-    }
-
-    // Remove user from subtask
-    public void removeUserFromSubtask(int userId, int subTaskId) {
-        String sql = "DELETE FROM USERS_SUBTASK WHERE user_id = ? AND sub_task_id = ?";
-        jdbcTemplate.update(sql, userId, subTaskId);
+        jdbcTemplate.update(sql, devId, subtaskId);
     }
 
     // Get all users assigned to a subtask
-    public List<User> getUsersBySubtaskId(int subTaskId) {
+    public List<Integer> getCurrentlyAssignedDevIds(int subtaskId) {
+        String sql = "SELECT user_id FROM USERS_SUBTASK WHERE sub_task_id = ?";
+
+        return jdbcTemplate.queryForList(sql, Integer.class, subtaskId);
+    }
+
+    public List<User> getDevsBySubtaskId(int subtaskId) {
         String sql = "SELECT * FROM USERS u " +
                      "JOIN USERS_SUBTASK us ON u.user_id = us.user_id " +
                      "WHERE us.sub_task_id = ?";
-        return jdbcTemplate.query(sql, new Object[]{subTaskId}, (rs, rowNum) ->
+        return jdbcTemplate.query(sql, new Object[]{subtaskId}, (rs, rowNum) ->
             new User(
                 rs.getInt("user_id"),
                 rs.getString("userName"),
@@ -154,8 +136,10 @@ public class SubtaskRepository {
     }
 
     // Remove all users from subtask (used before reassignment in edit)
-    public void removeAllUsersFromSubtask(int subTaskId) {
+    public void removeAllDevsFromSubtask(int subtaskId) {
         String sql = "DELETE FROM USERS_SUBTASK WHERE sub_task_id = ?";
-        jdbcTemplate.update(sql, subTaskId);
+        jdbcTemplate.update(sql, subtaskId);
     }
+
+
 }

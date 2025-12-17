@@ -22,20 +22,16 @@ public class SubtaskService {
         return subtaskRepository.createSubtask(subtask);
     }
 
-    public List<Subtask> getSubtasks() {
-        return subtaskRepository.getSubtasks();
-    }
-
-    public Subtask findSubtask(int subTaskId) {
-        return subtaskRepository.findSubtask(subTaskId);
+    public Subtask findSubtask(int subtaskId) {
+        return subtaskRepository.findSubtask(subtaskId);
     }
 
     public void editSubtask(Subtask subtask) {
         subtaskRepository.editSubtask(subtask);
     }
 
-    public int deleteSubtask(int subTaskId) {
-        return subtaskRepository.deleteSubtask(subTaskId);
+    public void deleteSubtask(int subtaskId) {
+        subtaskRepository.deleteSubtask(subtaskId);
     }
 
     public List<Subtask> getSubtasksByTaskId(int taskId) {
@@ -53,24 +49,26 @@ public class SubtaskService {
         return totalTime;
     }
 
-    public int getTaskIdBySubtaskId(int subTaskId) {
-        return subtaskRepository.getTaskIdBySubtaskId(subTaskId);
+    public int getTaskIdBySubtaskId(int subtaskId) {
+        return subtaskRepository.getTaskIdBySubtaskId(subtaskId);
     }
 
     // Junction table methods
-    public void assignUserToSubtask(int userId, int subTaskId) {
-        subtaskRepository.assignUserToSubtask(userId, subTaskId);
+    public void assignDevToSubtask(int devId, int subtaskId) {
+        subtaskRepository.assignDevToSubtask(devId, subtaskId);
     }
 
-    public void removeUserFromSubtask(int userId, int subTaskId) {
-        subtaskRepository.removeUserFromSubtask(userId, subTaskId);
+    public List<Integer> getCurrentlyAssignedDevIds(int subtaskId) {
+        return subtaskRepository.getCurrentlyAssignedDevIds(subtaskId);
     }
 
-    public List<User> getUsersBySubtaskId(int subTaskId) {
-        return subtaskRepository.getUsersBySubtaskId(subTaskId);
+    public List<User> getDevsBySubtaskId(int subtaskId) {
+        return subtaskRepository.getDevsBySubtaskId(subtaskId);
     }
 
-    public void removeAllUsersFromSubtask(int subTaskId) {
-        subtaskRepository.removeAllUsersFromSubtask(subTaskId);
+    public void removeAllDevsFromSubtask(int subtaskId) {
+        subtaskRepository.removeAllDevsFromSubtask(subtaskId);
     }
+
+
 }

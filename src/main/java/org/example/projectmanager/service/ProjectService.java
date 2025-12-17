@@ -8,9 +8,9 @@ import java.util.List;
 
 @Service
 public class ProjectService {
-
-    private final SubProjectService subProjectService;
     ProjectRepository projectRepository;
+    private final SubProjectService subProjectService;
+
     public ProjectService(ProjectRepository projectRepository, SubProjectService subProjectService){
         this.projectRepository = projectRepository;
         this.subProjectService = subProjectService;
@@ -18,10 +18,6 @@ public class ProjectService {
 
     public int createProject(Project project){
         return projectRepository.createProject(project);
-    }
-
-    public List<Project> getProjects(){
-        return projectRepository.getProjects();
     }
 
     public Project findProject(int projectId){

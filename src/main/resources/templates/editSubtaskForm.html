@@ -47,23 +47,24 @@
                 <textarea class="form-control" th:field="*{subTaskDescription}" rows="4"></textarea>
             </div>
 
-<!--            <div class="form-group">-->
-<!--                <label class="form-label">Assign Team Members <span th:text="'(from ' + ${teamName} + ')'"></span></label>-->
-<!--                <div th:if="${!availableUsers.isEmpty()}" class="checkbox-group">-->
-<!--                    <div class="checkbox-item" th:each="user : ${availableUsers}">-->
-<!--                        <input type="checkbox"-->
-<!--                               name="assignedUsers"-->
-<!--                               th:value="${user.userId}"-->
-<!--                               th:id="'user-' + ${user.userId}"-->
-<!--                               th:checked="${assignedUserIds.contains(user.userId)}">-->
-<!--                        <label th:for="'user-' + ${user.userId}"-->
-<!--                               th:text="${user.username} + ' (' + ${user.devType} + ')'">-->
-<!--                            User (Type)-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <p th:if="${availableUsers.isEmpty()}" class="no-team-message">No team assigned to this task</p>-->
-<!--            </div>-->
+            <!--DEV DROPDOWN-->
+            <div class="form-group">
+                <label>Select Devs:</label>
+                <details class="dropdown-checkbox">
+                    <summary>Available Devs</summary>
+                    <div th:if="${!availableDevs.isEmpty()}" class="checkbox-group">
+                        <div class="checkbox-item" th:each="dev : ${availableDevs}">
+                            <input type="checkbox"
+                                   name="selectedDevIds"
+                                   th:value="${dev.userId}"
+                                   th:id="'user-' + ${dev.userId}"
+                                   th:checked="${currentlyAssignedDevIds.contains(dev.userId)}">
+                            <label th:for="'user-' + ${dev.userId}" th:text="${dev.username} + ' (' + ${dev.devType} + ')'"></label>
+                        </div>
+                    </div>
+                    <p th:if="${availableDevs.isEmpty()}" class="no-team-message">No devs available for this subtask</p>
+                </details>
+            </div>
 
             <div class="form-group">
                 <label class="form-label">Status</label>

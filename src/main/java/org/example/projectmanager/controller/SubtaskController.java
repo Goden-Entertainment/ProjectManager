@@ -13,14 +13,14 @@ import java.util.*;
 @RequestMapping("subtask")
 public class SubtaskController {
 
-    private SubtaskService subtaskService;
-    private TaskService taskService;
-    private TeamService teamService;
+    private final UserService userService;
+    private final SubtaskService subtaskService;
+    private final TaskService taskService;
 
-    public SubtaskController(SubtaskService subtaskService, TaskService taskService, TeamService teamService) {
+    public SubtaskController(SubtaskService subtaskService, TaskService taskService, UserService userService) {
         this.subtaskService = subtaskService;
         this.taskService = taskService;
-        this.teamService = teamService;
+        this.userService = userService;
     }
 
     // LIST - Show all subtasks for a task
@@ -44,17 +44,17 @@ public class SubtaskController {
         List<Subtask> subtasks = subtaskService.getSubtasksByTaskId(taskId);
 
         // Get assigned users for each subtask
-        Map<Integer, List<User>> subtaskUsers = new HashMap<>();
+        Map<Integer, List<User>> subtaskDevs = new HashMap<>();
         for (Subtask subtask : subtasks) {
-            List<User> assignedUsers = subtaskService.getUsersBySubtaskId(subtask.getSubTaskId());
-            subtaskUsers.put(subtask.getSubTaskId(), assignedUsers);
+            List<User> assignedUsers = subtaskService.getDevsBySubtaskId(subtask.getSubTaskId());
+            subtaskDevs.put(subtask.getSubTaskId(), assignedUsers);
         }
 
         int totalActualTime = subtaskService.getTotalActualTime(taskId);
 
         model.addAttribute("totalActualTime", totalActualTime);
         model.addAttribute("subtasks", subtasks);
-        model.addAttribute("subtaskUsers", subtaskUsers);
+        model.addAttribute("subtaskDevs", subtaskDevs);
         model.addAttribute("taskName", task.getName());
         model.addAttribute("taskId", taskId);
         model.addAttribute("subProjectId", subProjectId);
@@ -78,10 +78,12 @@ public class SubtaskController {
         // Get task info
         Task task = taskService.findTask(taskId);
 
+        List<User> availableDevs = userService.allAvailableDevsFor_SubTask(taskId);
 
         Subtask newSubtask = new Subtask();
         newSubtask.setTaskId(taskId);
 
+        model.addAttribute("availableDevs", availableDevs);
         model.addAttribute("newSubtask", newSubtask);
         model.addAttribute("taskName", task.getName());
         model.addAttribute("taskId", taskId);
@@ -92,7 +94,7 @@ public class SubtaskController {
     // ADD - Process form
     @PostMapping("/add")
     public String createSubtask(@ModelAttribute Subtask subtask,
-                                @RequestParam(value = "assignedUsers", required = false) List<Integer> assignedUserIds,
+                                @RequestParam(required = false) List<Integer> selectedDevIds,
                                 HttpSession session) {
         User user = (User) session.getAttribute("user");
 
@@ -105,12 +107,12 @@ public class SubtaskController {
         }
 
         // Create subtask
-        int subTaskId = subtaskService.createSubtask(subtask);
+        int subtaskId = subtaskService.createSubtask(subtask);
 
         // Assign selected users
-        if (assignedUserIds != null && !assignedUserIds.isEmpty()) {
-            for (int userId : assignedUserIds) {
-                subtaskService.assignUserToSubtask(userId, subTaskId);
+        if (selectedDevIds != null && !selectedDevIds.isEmpty()) {
+            for (int devId : selectedDevIds) {
+                subtaskService.assignDevToSubtask(devId, subtaskId);
             }
         }
 
@@ -118,8 +120,8 @@ public class SubtaskController {
     }
 
     // EDIT - Show form
-    @GetMapping("/edit/{subTaskId}")
-    public String editSubtask(@PathVariable int subTaskId, HttpSession session, Model model) {
+    @GetMapping("/edit/{subtaskId}")
+    public String editSubtask(@PathVariable int subtaskId, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
@@ -131,20 +133,21 @@ public class SubtaskController {
         }
 
         // Get subtask
-        Subtask subtask = subtaskService.findSubtask(subTaskId);
+        Subtask subtask = subtaskService.findSubtask(subtaskId);
         int taskId = subtask.getTaskId();
         Task task = taskService.findTask(taskId);
 
-        // Get currently assigned users
-        List<User> currentlyAssigned = subtaskService.getUsersBySubtaskId(subTaskId);
-        Set<Integer> assignedUserIds = new HashSet<>();
-        for (User u : currentlyAssigned) {
-            assignedUserIds.add(u.getUserId());
-        }
+        // Get currently assigned developer id's
+        List<Integer> currentlyAssignedDevIds = subtaskService.getCurrentlyAssignedDevIds(subtaskId);
+
+        //AVAILABLE DEVS
+        List<User> availableDevs = userService.allAvailableDevsFor_SubTask(subtask);
+
 
         model.addAttribute("subtask", subtask);
         model.addAttribute("taskName", task.getName());
-        model.addAttribute("assignedUserIds", assignedUserIds);
+        model.addAttribute("availableDevs", availableDevs);
+        model.addAttribute("currentlyAssignedDevIds", currentlyAssignedDevIds);
         model.addAttribute("taskId", taskId);
 
         return "editSubtaskForm";
@@ -153,7 +156,7 @@ public class SubtaskController {
     // EDIT - Process form
     @PostMapping("/edit")
     public String updateSubtask(@ModelAttribute Subtask subtask,
-                                @RequestParam(value = "assignedUsers", required = false) List<Integer> assignedUserIds,
+                                @RequestParam(required = false) List<Integer> selectedDevIds,
                                 HttpSession session) {
         User user = (User) session.getAttribute("user");
 
@@ -169,12 +172,12 @@ public class SubtaskController {
         subtaskService.editSubtask(subtask);
 
         // Remove all old user assignments
-        subtaskService.removeAllUsersFromSubtask(subtask.getSubTaskId());
+        subtaskService.removeAllDevsFromSubtask(subtask.getSubTaskId());
 
-        // Add new assignments
-        if (assignedUserIds != null && !assignedUserIds.isEmpty()) {
-            for (int userId : assignedUserIds) {
-                subtaskService.assignUserToSubtask(userId, subtask.getSubTaskId());
+        if(selectedDevIds != null && !selectedDevIds.isEmpty()){
+            // Add new assignments
+            for (int devId : selectedDevIds) {
+                subtaskService.assignDevToSubtask(devId, subtask.getSubTaskId());
             }
         }
 
@@ -182,8 +185,8 @@ public class SubtaskController {
     }
 
     // DELETE
-    @GetMapping("/delete/{subTaskId}")
-    public String deleteSubtask(@PathVariable int subTaskId, HttpSession session) {
+    @GetMapping("/delete/{subtaskId}")
+    public String deleteSubtask(@PathVariable int subtaskId, HttpSession session) {
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
@@ -194,8 +197,8 @@ public class SubtaskController {
             return "redirect:/user/profile";
         }
 
-        int taskId = subtaskService.getTaskIdBySubtaskId(subTaskId);
-        subtaskService.deleteSubtask(subTaskId);
+        int taskId = subtaskService.getTaskIdBySubtaskId(subtaskId);
+        subtaskService.deleteSubtask(subtaskId);
 
         return "redirect:/subtask/list/" + taskId;
     }

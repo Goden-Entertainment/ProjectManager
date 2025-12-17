@@ -163,6 +163,39 @@ public class UserRepository {
                 , teamId);
     }
 
+    public List<User> getAvailableTeamDevs(int teamId, int subtaskId) {
+        String sql = "SELECT * FROM users u LEFT JOIN users_subtask us ON u.user_id = us.user_id WHERE u.userType = 'DEV' AND team_id = ? AND (us.sub_task_id = ? OR us.sub_task_id IS NULL)";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                        new User(
+                                rs.getInt("user_id"),
+                                rs.getString("userName"),
+                                rs.getString("userPassword"),
+                                rs.getString("userEmail"),
+                                rs.getString("userType") != null ? userType.valueOf(rs.getString("userType")) : null,
+                                rs.getString("devType") != null ? devType.valueOf(rs.getString("devType")) : null,
+                                rs.getInt("workTime"),
+                                rs.getInt("team_id")
+                        )
+                        , teamId
+                        , subtaskId);
+    }
+
+    public List<User> getAvailableTeamDevs(int teamId) {
+        String sql = "SELECT * FROM users u LEFT JOIN users_subtask us ON u.user_id = us.user_id WHERE u.userType = 'DEV' AND team_id = ? AND us.sub_task_id IS NULL";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                        new User(
+                                rs.getInt("user_id"),
+                                rs.getString("userName"),
+                                rs.getString("userPassword"),
+                                rs.getString("userEmail"),
+                                rs.getString("userType") != null ? userType.valueOf(rs.getString("userType")) : null,
+                                rs.getString("devType") != null ? devType.valueOf(rs.getString("devType")) : null,
+                                rs.getInt("workTime"),
+                                rs.getInt("team_id")
+                        )
+                        , teamId);
+    }
+
     public void removeTeamMembers(int teamId){
         String sql = "UPDATE USERS SET team_id = NULL WHERE team_id = ?";
         jdbcTemplate.update(sql, teamId);

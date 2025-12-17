@@ -74,12 +74,6 @@ public class TeamRepository {
         return jdbcTemplate.update(sql, teamId);
     }
 
-    // Get teams for a specific user (reverse lookup)
-    public List<Integer> getTeamIdsByUserId(int userId) {
-        String sql = "SELECT team_id FROM USERS WHERE user_id = ?";
-        return jdbcTemplate.queryForList(sql, new Object[]{userId}, Integer.class);
-    }
-
     public List<Team> getTeams(Integer projectId, Integer subProjectId, Integer taskId) {
         String sql = "SELECT * FROM TEAM WHERE project_id = ? OR sub_project_id = ? OR task_id = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) ->
@@ -94,11 +88,6 @@ public class TeamRepository {
                 , projectId
                 , subProjectId
                 , taskId);
-    }
-
-    public void removeProjectTeams(int projectId){
-        String sql = "UPDATE TEAM SET project_id = NULL, sub_project_id = NULL, task_id = NULL WHERE project_id = ?";
-        jdbcTemplate.update(sql, projectId);
     }
 
     public List<Team> allAvailableTeamsFor_Project() {
@@ -126,11 +115,6 @@ public class TeamRepository {
                         rs.getObject("task_id", Integer.class)
                 )
                 , projectId);
-    }
-
-    public void removeSubProjectTeams(int subProjectId){
-        String sql = "UPDATE TEAM SET sub_project_id = NULL, task_id = NULL WHERE sub_project_id = ?";
-        jdbcTemplate.update(sql, subProjectId);
     }
 
     public List<Team> allAvailableTeamsFor_SubProject(int projectId) {
@@ -190,5 +174,17 @@ public class TeamRepository {
                 , subProjectId);
     }
 
-
+    public List<Team> allAvailableTeamsFor_SubTask(int taskId) {
+        String sql = "SELECT * FROM TEAM WHERE task_id = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                        new Team(
+                                rs.getObject("team_id", Integer.class),
+                                rs.getString("teamName"),
+                                rs.getString("teamDescription"),
+                                rs.getObject("project_id", Integer.class),
+                                rs.getObject("sub_project_id", Integer.class),
+                                rs.getObject("task_id", Integer.class)
+                        )
+                , taskId);
+    }
 }
