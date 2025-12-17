@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 public class TaskService {
-    private final SubtaskService subtaskService;
+    SubtaskService subtaskService;
     TaskRepository taskRepository;
 
     public TaskService(TaskRepository taskRepository, SubtaskService subtaskService) {
@@ -21,10 +21,6 @@ public class TaskService {
 
     public int createTask(Task task) {
         return taskRepository.createTask(task);
-    }
-
-    public List<Task> getTasks() {
-        return taskRepository.getTasks();
     }
 
     public Task findTask(int taskId) {

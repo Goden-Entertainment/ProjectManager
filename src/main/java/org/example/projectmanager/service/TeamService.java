@@ -25,20 +25,20 @@ public class TeamService {
         return teamRepository.createTeam(team);
     }
 
-    public List<Team> getTeams() {
-        return teamRepository.getTeams();
-    }
-
-    public Team findTeam(int teamId) {
-        return teamRepository.findTeam(teamId);
-    }
-
     public void editTeam(Team team) {
         teamRepository.editTeam(team);
     }
 
     public int deleteTeam(int teamId) {
         return teamRepository.deleteTeam(teamId);
+    }
+
+    public List<Team> getTeams() {
+        return teamRepository.getTeams();
+    }
+
+    public Team findTeam(int teamId) {
+        return teamRepository.findTeam(teamId);
     }
 
     public List<User> allAvailableDevs(){
@@ -51,10 +51,6 @@ public class TeamService {
         return teamDevs;
     }
 
-    public List<User> getAllDevs() {
-        return userRepository.getAllDevs();
-    }
-
     public List<Team> getTeams(Integer projectId, Integer subProjectId, Integer taskId) {
         return teamRepository.getTeams(projectId, subProjectId, taskId);
     }
@@ -63,9 +59,6 @@ public class TeamService {
         userRepository.removeTeamMembers(teamId);
     }
 
-    public void removeProjectTeams(int projectId){
-        teamRepository.removeProjectTeams(projectId);
-    }
     public List<Team> allAvailableTeamsFor_Project() {
         return teamRepository.allAvailableTeamsFor_Project();
     }
@@ -73,9 +66,6 @@ public class TeamService {
         return teamRepository.allAvailableTeamsFor_Project(projectId);
     }
 
-    public void removeSubProjectTeams(int subProjectId){
-        teamRepository.removeSubProjectTeams(subProjectId);
-    }
     public List<Team> allAvailableTeamsFor_SubProject(int projectId) {
         return teamRepository.allAvailableTeamsFor_SubProject(projectId);
     }
@@ -88,9 +78,5 @@ public class TeamService {
     }
     public List<Team> allAvailableTeamsFor_Task(int subProjectId, int taskid) {
         return teamRepository.allAvailableTeamsFor_Task(subProjectId, taskid);
-    }
-
-    public List<Team> allAvailableTeamsFor_SubTask(int taskId) {
-        return teamRepository.allAvailableTeamsFor_SubTask(taskId);
     }
 }

@@ -8,8 +8,8 @@ import java.util.List;
 
 @Service
 public class SubProjectService {
-    private final TaskService taskService;
     SubProjectRepository subProjectRepository;
+    private final TaskService taskService;
 
     public SubProjectService(SubProjectRepository subProjectRepository, TaskService taskService) {
         this.subProjectRepository = subProjectRepository;

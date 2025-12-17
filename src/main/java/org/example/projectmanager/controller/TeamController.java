@@ -120,9 +120,7 @@ public class TeamController {
         List<User> allAvailableDevs = teamService.allAvailableDevs();
         List<User> allCurrentDevs = teamService.getTeamDevs(team.getTeamId());
 
-        for(User dev : allCurrentDevs){
-            allAvailableDevs.add(dev);
-        }
+        allAvailableDevs.addAll(allCurrentDevs);
 
         model.addAttribute("team", team);
         model.addAttribute("currentMembers", allCurrentDevs);

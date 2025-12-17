@@ -92,7 +92,7 @@ public class TaskRepository {
         return jdbcTemplate.update(sql, taskId);
     }
 
-    // Get tasks for a specific subproject (simplified - no junction table)
+    // Get tasks for a specific subproject
     public List<Task> getTasksBySubProjectId(int subProjectId) {
         String sql = "SELECT * FROM TASK WHERE sub_project_id = ?";
         return jdbcTemplate.query(sql, new Object[]{subProjectId}, (rs, rowNum) ->

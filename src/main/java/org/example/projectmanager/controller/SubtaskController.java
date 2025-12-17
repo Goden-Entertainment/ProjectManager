@@ -107,12 +107,12 @@ public class SubtaskController {
         }
 
         // Create subtask
-        int subTaskId = subtaskService.createSubtask(subtask);
+        int subtaskId = subtaskService.createSubtask(subtask);
 
         // Assign selected users
         if (selectedDevIds != null && !selectedDevIds.isEmpty()) {
             for (int devId : selectedDevIds) {
-                subtaskService.assignDevToSubtask(devId, subTaskId);
+                subtaskService.assignDevToSubtask(devId, subtaskId);
             }
         }
 
@@ -120,8 +120,8 @@ public class SubtaskController {
     }
 
     // EDIT - Show form
-    @GetMapping("/edit/{subTaskId}")
-    public String editSubtask(@PathVariable int subTaskId, HttpSession session, Model model) {
+    @GetMapping("/edit/{subtaskId}")
+    public String editSubtask(@PathVariable int subtaskId, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
@@ -133,12 +133,12 @@ public class SubtaskController {
         }
 
         // Get subtask
-        Subtask subtask = subtaskService.findSubtask(subTaskId);
+        Subtask subtask = subtaskService.findSubtask(subtaskId);
         int taskId = subtask.getTaskId();
         Task task = taskService.findTask(taskId);
 
         // Get currently assigned developer id's
-        List<Integer> currentlyAssignedDevIds = subtaskService.getCurrentlyAssignedDevIds(subTaskId);
+        List<Integer> currentlyAssignedDevIds = subtaskService.getCurrentlyAssignedDevIds(subtaskId);
 
         //AVAILABLE DEVS
         List<User> availableDevs = userService.allAvailableDevsFor_SubTask(subtask);
@@ -172,7 +172,7 @@ public class SubtaskController {
         subtaskService.editSubtask(subtask);
 
         // Remove all old user assignments
-        subtaskService.removeAllUsersFromSubtask(subtask.getSubTaskId());
+        subtaskService.removeAllDevsFromSubtask(subtask.getSubTaskId());
 
         if(selectedDevIds != null && !selectedDevIds.isEmpty()){
             // Add new assignments
@@ -185,8 +185,8 @@ public class SubtaskController {
     }
 
     // DELETE
-    @GetMapping("/delete/{subTaskId}")
-    public String deleteSubtask(@PathVariable int subTaskId, HttpSession session) {
+    @GetMapping("/delete/{subtaskId}")
+    public String deleteSubtask(@PathVariable int subtaskId, HttpSession session) {
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
@@ -197,8 +197,8 @@ public class SubtaskController {
             return "redirect:/user/profile";
         }
 
-        int taskId = subtaskService.getTaskIdBySubtaskId(subTaskId);
-        subtaskService.deleteSubtask(subTaskId);
+        int taskId = subtaskService.getTaskIdBySubtaskId(subtaskId);
+        subtaskService.deleteSubtask(subtaskId);
 
         return "redirect:/subtask/list/" + taskId;
     }

@@ -1,17 +1,16 @@
 package org.example.projectmanager.service;
 
-import org.example.projectmanager.exceptions.DatabaseOperationException;
 import org.example.projectmanager.exceptions.ProfileNotFoundException;
 import org.example.projectmanager.model.Subtask;
 import org.example.projectmanager.model.Team;
 import org.example.projectmanager.model.User;
 import org.example.projectmanager.repository.TeamRepository;
 import org.example.projectmanager.repository.UserRepository;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
 public class UserService {
     UserRepository userRepository;
@@ -46,12 +45,10 @@ public class UserService {
         User user = userRepository.findUser(username);
 
         if (user.getPassword().equals(password)) {
-
             return user;
-        } else if (! user.getPassword().equals(password)){
+        } else if (!user.getPassword().equals(password)){
             throw new ProfileNotFoundException();
         } else{
-
             return null;
         }
     }

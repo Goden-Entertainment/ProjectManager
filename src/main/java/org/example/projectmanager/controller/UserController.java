@@ -19,7 +19,6 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
-    private User user;
 
     public UserController(UserService userService) {
         this.userService = userService;
