@@ -27,6 +27,7 @@ public class UserController {
 
     @GetMapping("/profile")
     public String profile(HttpSession session, Model model) {
+        //Skaber et User objekt til at holde useren hvis du er logget ind og har started en session
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
@@ -40,7 +41,6 @@ public class UserController {
         } else if (user.getUserType().equals(userType.valueOf("PROJECTMANAGER"))) {
             return "pmProfile";
         }
-
         return "redirect:/user/login";
     }
 
